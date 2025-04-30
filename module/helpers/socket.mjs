@@ -1,101 +1,122 @@
 import LOGGER from "./logger.mjs";
+import utils from "./sysUtil.mjs";
+
+/**
+ * @typedef {Object} NewedoEvent
+ * @prop {String} type - The event type to call / trigger
+ * @prop {Object} data - Additional data to be sent
+ * @prop {String[]|null} reciever - The targets to recieve the event, null will broadcast to all other clients
+ * @prop {Boolean} response - If this event needs a response
+ * @prop {Number} timeout - how long to wait before timeing out the request, 0 = no timeout
+ */
+
+/**
+ * @typedef {Object} NotificationData
+ * @prop {String} msg - The data to display
+ * @prop {String} type - the type of notification
+ * @prop {Boolean} localize - Should this message be localized
+ * @prop {Boolean} permanent - Should the notification time out
+ * @prop {Boolean} console - Should the notification time out
+ * @prop {Object} config - Formatting values
+ */
+
+/**
+ * @typedef {Object}  ResolveData
+ * @prop {String} id - ID of the event being resolved
+ * @prop {Boolean} resolved - if the event was completed succesfully or not according to the recievers
+ */
 
 
+/** Socket event manager for Newedo */
 export default class NewedoSocketManager {
 
+    /**
+     * Constructor for the socket manager
+     * intializes the default event handlers
+     */
     constructor() {
         this.identifier = 'system.newedo';
-        this.registerSocketListeners();
+
+        // register socket maps
         this.callbacks = new Map();
+        this.listeners = new Map();
+        this.requests = new Map();
+
+        // register the socket handler
+        game.socket.on(this.identifier, async (event) => {
+            console.log('Recieved event', event)
+            try {
+                // Validate that we are meant to recieve this event
+                if (event.reciever) {
+                    let cancel = true;
+                    if (typeof event.reciever == 'string') event.reciever = [event.reciever];
+                    for (const user of event.reciever) if (user == game.user.id) cancel = false;
+                    if (cancel) return;
+                }
+
+                // Check if we have the called event registered
+                let f = this.listeners.get(event.type);
+                if (!f) throw new Error('No registered listener for type: ' + event.type, event);
+
+                // If there was a registered handler, call it and wait for its result
+                let result = await f(event);
+                if (event.response === false || event.type == 'RESOLVE') return result;
+
+                this.resolve(event);
+
+            } catch (err) {
+                console.error(err);
+                return null;
+            }
+        })
+
+        // call the initial event manager setup
+        this.#initialize();
     }
 
-    registerSocketListeners() {
-        game.socket.on('system.newedo', ({ type, data, target, user, id }) => {
-            // if a target was assigned for the socket, and this isnt them
-            if (target && target != game.userId) return;
+    DEFAULT_EVENTS = {
+        /**
+         * Resolves a previous socket event this client sent out
+         * @param {NewedoEvent} event 
+         * @param {ResolveData} event.data
+         * @returns 
+         */
+        RESOLVE: async (event) => {
+            if (this.callbacks.has(event.data.id)) {
+                const cb = this.callbacks.get(event.data.id);
+                let _d = cb(event);
+                this.callbacks.delete(event.data.id);
+                return _d;
+            } else return event;
+        },
+        NOTIFICATION: async (event) => {
+            const { message = '', type = 'info', ...config } = event.data;
+            ui.notifications.notify(message, type, config);
+        },
+    }
 
-            // Manage the event type
-            switch (type) {
-                /*----------------------------------------------------------------------------*/
-                /*                                USER NOTIFICATIONS                          */
-                /*----------------------------------------------------------------------------*/
-                case 'NOTIFY_INFO':
-                    newedo.utils.info(data.message);
-                    this.emit('RESOLVE', { resolved: true, id: id }, user);
-                    break;
-
-                case 'NOTIFY_WARN':
-                    newedo.utils.warn(data.message);
-                    this.emit('RESOLVE', { resolved: true, id: id }, user);
-                    break;
-
-                case 'NOTIFY_ERROR':
-                    newedo.utils.error(data.message);
-                    this.emit('RESOLVE', { resolved: true, id: id }, user);
-                    break;
-
-                /*----------------------------------------------------------------------------*/
-                /*                            DIALOG POPUPS                                   */
-                /*----------------------------------------------------------------------------*/
-                case 'CONFIRM':
-                    foundry.applications.api.DialogV2.confirm().then(response => {
-                        this.emit('RESOLVE', { resolved: response, id: id }, user);
-                    })
-                    break;
-
-                case 'GIFT':
-                    // confirm dialog always returns true or false, and this is the value of the .then(response)
-                    foundry.applications.api.DialogV2.confirm({
-                        content: `<p>User <b>${game.users.get(user).name}</b> would like to send you: ${data.item.name}</p><p>Do you accept?</p>`,
-                        rejectClose: true,
-                        window: 'NEWEDO.recieveGiftOffer'
-                    }).then(response => {
-                        // if response is true, we agreed to take the item, and create it on the sheet from out own actor
-                        if (response) {
-                            let actor = game.user.character;
-                            if (!actor) {
-                                // no controlled actor, can't do it so we cancel the transaction
-                                newedo.utils.error('NEWEDO.error.noControlledActor');
-                                response = false;
-                            } else {
-                                // we confirmed we want the item and have a controlled actor, so create the item and respond 
-                                // saying that we accepted the item
-                                let newItem = Item.create(data.item, { parent: actor });
-                            }
-                        }
-                        // send back our response
-                        this.emit('RESOLVE', { resolved: response, id: id }, user);
-                    })
-
-                    break;
-
-                case 'RESOLVE':
-                    let cb = this.callbacks.get(data.id);
-                    return cb(data);
-                default:
-                    throw new Error('Recieved unknown socket type', type);
-            }
-        });
+    #initialize() {
+        for (const [EVENT, FN] of Object.entries(this.DEFAULT_EVENTS)) this.registerEvent(EVENT, FN);
     }
 
     /**
-     * Data follows a strict format, it mus include
-     * [type]: String
-     * [target]: user ID or null for all
-     * [data]: object with relevant things
      * 
-     * @param {*} type 
-     * @param {Object} data 
-     * @returns EmitData
+     * @param {String} tag 
+     * @param {Function} fn 
      */
-    async emit(type, data, target = null, callback = null) {
+    registerEvent(tag, fn) {
+        this.listeners.set(tag, fn)
+    }
+
+    async emit(type, data, { recievers = null, callback = null, response = true } = {}) {
 
         const args = {
             type: type,// Event type
             data: data,// Data for this event
-            target: target,// User targeted for this event
-            user: game.userId,// The user who triggered this event
+            reciever: recievers,// User targeted for this event
+            sender: game.userId,// The user who triggered this event
             id: foundry.utils.randomID(),// ID used to watch for this specific event and it's callbacks
+            response: response,
         }
 
         let serverAck = new Promise(resolve => {
@@ -104,22 +125,32 @@ export default class NewedoSocketManager {
             });
         })
 
-        // If this is a resoloution confirmation for a previous event, we dont need to register a callback
-        if (type == 'RESOLVE') return serverAck;
+        // If this is a resoloution confirmation for a previous event, we dont need to register a callback and can just confirm the server recieved our request
+        // Or if the user states they don't need a response, we can also skip it
+        if (type == 'RESOLVE' || !response) return serverAck;
 
         // registers a client callback for when the target has resolved the request
         // and returns a promise that will be resolved when the callback is retrieved
         return new Promise(resolve => {
-
             this.callbacks.set(args.id, (response) => {
                 if (typeof callback == 'function') {
-                    callback()
+                    callback(response)
                     resolve(response);
                 } else resolve(response);
                 this.callbacks.delete(response.id);
             })
         })
     };
+
+    async resolve(event) {
+        this.emit('RESOLVE', {
+            response: false,
+            id: event.id
+
+        }, {
+            reciever: event.sender
+        });
+    }
 
     async request() {
 
