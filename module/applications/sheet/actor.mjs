@@ -2,7 +2,8 @@ import { onManageActiveEffect, prepareActiveEffectCategories } from "../../helpe
 import LOGGER from "../../helpers/logger.mjs";
 import NewedoSheetMixin from "./mixin.mjs";
 import NewedoRoll from "../../helpers/dice.mjs";
-
+import NewedoLedger from "../ledger.mjs";
+import utils from "../../helpers/sysUtil.mjs";
 
 /**
  * Extend the basic ActorSheet with some very simple modifications
@@ -73,20 +74,20 @@ export default class NewedoActorSheet extends NewedoSheetMixin(foundry.applicati
 
         // Localize core traits
         for (let [k, v] of Object.entries(core)) {
-            v.label = newedo.utils.localize(newedo.config.traitsCore[k]);
-            v.abbr = newedo.utils.localize(newedo.config.traitsCoreAbbr[k]);
+            v.label = utils.localize(newedo.config.traitsCore[k]);
+            v.abbr = utils.localize(newedo.config.traitsCoreAbbr[k]);
         }
 
         // Localize Derived traits.
         for (let [k, v] of Object.entries(derived)) {
-            v.label = newedo.utils.localize(newedo.config.traitsDerived[k]);
-            v.abbr = newedo.utils.localize(newedo.config.traitsDerivedAbbr[k]);
+            v.label = utils.localize(newedo.config.traitsDerived[k]);
+            v.abbr = utils.localize(newedo.config.traitsDerivedAbbr[k]);
         }
 
         // Localize armour labels
         for (let [k, v] of Object.entries(context.system.armour)) {
-            v.label = newedo.utils.localize(newedo.config.damageTypes[k]);
-            v.abbr = newedo.utils.localize(newedo.config.damageTypesAbbr[k]);
+            v.label = utils.localize(newedo.config.damageTypes[k]);
+            v.abbr = utils.localize(newedo.config.damageTypesAbbr[k]);
         }
 
         // Prepare item contexts
@@ -96,7 +97,7 @@ export default class NewedoActorSheet extends NewedoSheetMixin(foundry.applicati
         const skills = {};
         for (const [key, value] of Object.entries(newedo.config.traitsCore)) {
             skills[key] = {
-                label: newedo.utils.localize(value),
+                label: utils.localize(value),
                 list: []
             }
         }
@@ -208,13 +209,13 @@ export default class NewedoActorSheet extends NewedoSheetMixin(foundry.applicati
             ledgers = this.document.getFlag('newedo', 'ledger');
         }
 
-        new newedo.application.NewedoLedger(this.document, ledgers[id]).render(true);
+        new NewedoLedger(this.document, ledgers[id]).render(true);
     }
 
     static async _onDeleteItem(event, target) {
         const item = await this.constructor.getTargetItem(target);
         const confirm = await foundry.applications.api.DialogV2.confirm({
-            content: `${newedo.utils.localize(newedo.config.confirm.deleteItem)}: ${item.name}`,
+            content: `${utils.localize(newedo.config.confirm.deleteItem)}: ${item.name}`,
             rejectClose: false,
             modal: true
         });
@@ -292,7 +293,7 @@ export default class NewedoActorSheet extends NewedoSheetMixin(foundry.applicati
         //The description is enrichedHTML and can have inlineroles and UUID links
         return roll.toMessage({
             speaker: ChatMessage.getSpeaker({ actor: this.document }),
-            flavor: `<div style="font-size: 20px; text-align: center;">${newedo.utils.localize(newedo.config.generic.fate)}` + [label] + `</div>`,
+            flavor: `<div style="font-size: 20px; text-align: center;">${utils.localize(newedo.config.generic.fate)}` + [label] + `</div>`,
             content: [render] + "<div>" + [description] + "</div>",
             create: true,
             rollMode: game.settings.get('core', 'rollMode')
@@ -313,9 +314,7 @@ export default class NewedoActorSheet extends NewedoSheetMixin(foundry.applicati
         let effect = await ActiveEffect.create({
             name: 'New Effect',
             type: 'base'
-        }, { parent: this.document });
-
-        effect.sheet.render(true);
+        }, { parent: this.document, renderSheet: true });
     }
 
     static async _onDisableEffect(event, target) {

@@ -4,6 +4,7 @@ import { ItemDataModel } from "../abstract.mjs";
 import { ResourceField, PriceField, GritField } from "../fields.mjs";
 
 import NewedoRoll from "../../helpers/dice.mjs";
+import utils from "../../helpers/sysUtil.mjs";
 
 const {
     ArrayField, BooleanField, IntegerSortField, NumberField, SchemaField, SetField, StringField
@@ -29,7 +30,7 @@ export default class WeaponData extends ItemDataModel {
                 required: true, nullable: false, initial: 'kin',
                 choices: () => {
                     let data = { ...newedo.config.damageTypes };
-                    for (const a in data) data[a] = newedo.utils.localize(data[a]);
+                    for (const a in data) data[a] = utils.localize(data[a]);
                     return data;
                 }
             })
@@ -150,7 +151,7 @@ export default class WeaponData extends ItemDataModel {
             const flag = this.parent.getFlag('newedo', 'burst_fire');
             const ammoUsed = flag ? this.burst.ammo : 1; // get the ammount of ammo to use
             // if we spend the ammo and go under 0, we cant make the attack, reaching 0 means we used last ammo and is fine
-            if (this.ammo.value - ammoUsed < 0) return void newedo.utils.warn('NEWEDO.Warn.NoAmmo'); // if we dont have ammo, cancel by default
+            if (this.ammo.value - ammoUsed < 0) return void utils.warn('NEWEDO.Warn.NoAmmo'); // if we dont have ammo, cancel by default
             this.parent.update({ 'system.ammo.value': this.ammo.value - ammoUsed })
         }
 
@@ -359,8 +360,8 @@ export default class WeaponData extends ItemDataModel {
 
             messageData.content += `
             <div>
-                <input class="apply-damage-all" type="button" value="${newedo.utils.localize('NEWEDO.chat.applyAllDamage')}">
-                <input class="undo-damage-all" type="button" value="${newedo.utils.localize('NEWEDO.chat.undoAllDamage')}">
+                <input class="apply-damage-all" type="button" value="${utils.localize('NEWEDO.chat.applyAllDamage')}">
+                <input class="undo-damage-all" type="button" value="${utils.localize('NEWEDO.chat.undoAllDamage')}">
             </div>
             `;
 

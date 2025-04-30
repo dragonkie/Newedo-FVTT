@@ -2,6 +2,7 @@ import NewedoActorSheet from "../actor.mjs";
 
 import LOGGER from "../../../helpers/logger.mjs";
 import NewedoDialog from "../../dialog.mjs";
+import utils from "../../../helpers/sysUtil.mjs";
 
 export default class CharacterSheet extends NewedoActorSheet {
     static DEFAULT_OPTIONS = {
@@ -49,10 +50,10 @@ export default class CharacterSheet extends NewedoActorSheet {
         context.lineage = this.document.itemTypes.lineage[0];
         context.culture = this.document.itemTypes.culture[0];
         context.path = this.document.itemTypes.path[0];
-
+        
         // Localize backgrounds
         for (let [k, v] of Object.entries(context.system.background)) {
-            v.label = newedo.utils.localize(newedo.config.background[k]);
+            v.label = utils.localize(newedo.config.background[k]);
         }
 
         LOGGER.debug('SHEET | CHARACTER | PREPARE CONTEXT', context);

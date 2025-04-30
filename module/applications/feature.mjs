@@ -1,4 +1,5 @@
 import { FeatureEffectData, FeatureItemData, FeatureTraitData } from "../data/feature.mjs";
+import utils from "../helpers/sysUtil.mjs";
 import NewedoApplication from "./application.mjs";
 import NewedoDialog from "./dialog.mjs";
 
@@ -36,7 +37,7 @@ export class FeatureApplication extends NewedoApplication {
     constructor(document, feature) {
         super();
         if (!document || !feature) {
-            newedo.utils.error(newedo.config.error.noDocument);
+            utils.error(newedo.config.error.noDocument);
             return {};
         }
 

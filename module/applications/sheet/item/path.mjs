@@ -1,4 +1,5 @@
 import { NEWEDO } from "../../../config.mjs";
+import utils from "../../../helpers/sysUtil.mjs";
 
 import NewedoDialog from "../../dialog.mjs";
 import { FeatureApplication } from "../../feature.mjs";
@@ -28,11 +29,11 @@ export default class PathSheet extends NewedoItemSheet {
 
         return context;
     }
-
+    
     static async _onCreateFeature() {
         // Create the feature selection dialog
         const feature = await FeatureApplication.create();
-        const list = newedo.utils.duplicate(this.document.system.features);
+        const list = utils.duplicate(this.document.system.features);
         list.push(feature);
         await this.document.update({ 'system.features': list });
         const app = await new FeatureApplication(this.document, feature).render(true);

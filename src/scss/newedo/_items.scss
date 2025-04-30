@@ -38,14 +38,6 @@
         }
     }
 
-    [data-tab=settings] {
-        .form-group {
-            :not(label) {
-                flex: 1;
-            }
-        }
-    }
-
     .sheet-header {
         padding: 0 12px;
     }

@@ -1,5 +1,6 @@
 import NewedoApplication from "./application.mjs";
 import LOGGER from "../helpers/logger.mjs"
+import utils from "../helpers/sysUtil.mjs";
 
 export default class NewedoLedger extends NewedoApplication {
     // The character responsible for this ledger
@@ -23,7 +24,7 @@ export default class NewedoLedger extends NewedoApplication {
     constructor(document, ledger) {
         super();
         if (!document) {
-            newedo.utils.error(newedo.config.error.noDocument);
+            utils.error(newedo.config.error.noDocument);
             return {};
         }
 
@@ -136,25 +137,23 @@ export default class NewedoLedger extends NewedoApplication {
         });
 
         LOGGER.debug('Updating parent document');
-        this.document.update({ [this.ledger.target]: this.sum }).then(() => {
-            // renders the sheet on screen to match new input
-            this.render(true);
-        });
+        await this.document.update({ [this.ledger.target]: this.sum })
+        this.render(false);
     }
 
     static async _onSortByValue() {
         this.sorting.priority = 'value';
-        this.render(true);
+        this.render(false);
     }
 
     static async _onSortByUser() {
         this.sorting.priority = 'user';
-        this.render(true);
+        this.render(false);
     }
 
     static async _onSortById() {
         this.sorting.priority = 'id';
-        this.render(true);
+        this.render(false);
     }
 
     async _prepareContext() {

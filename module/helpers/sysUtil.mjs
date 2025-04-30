@@ -1,6 +1,7 @@
+import { NEWEDO } from "../config.mjs";
 import LOGGER from "./logger.mjs";
 
-export default {
+export default class utils {
 
     /**
   * Localize a string using internationalization.
@@ -9,66 +10,71 @@ export default {
   * @param {String} txt - The string to localized
   * @returns {String} The localized string
   */
-    localize: (txt) => { return game.i18n.localize(txt) ?? txt },
+    static localize(txt) { return game.i18n.localize(txt) ?? txt }
 
-    getCompendium: async function (name) {
+    static async getCompendium(name) {
         return await game.packs.get(name);
-    },
+    }
 
-    getPackDocs: async function (name) {
-        return await game.packs.get(name).getDocuments();
-    },
+    static async getPackDocs(name) {
+        try {
+            return await game.packs.get(name).getDocuments();
+        } catch (err) {
+            console.error('Missing compendium package', err);
+            return undefined;
+        }
+    }
 
-    getCoreCharDocs: async function () {
+    static async getCoreCharDocs() {
         const documents = [];
         const skills = await this.getCoreSkills();
         const fates = await this.getCoreFates();
         return documents.concat(skills, fates);
-    },
+    }
 
-    getCoreSkills: async function () {
+    static async getCoreSkills() {
         return await this.getPackDocs(`newedo.internal-skills`);
-    },
+    }
 
-    getCoreFates: async function () {
+    static async getCoreFates() {
         return await this.getPackDocs(`newedo.internal-fates`);
-    },
+    }
 
-    backgroundRank: function (value) {
+    static backgroundRank(value) {
         if (value >= 91) return 5;
         else if (value >= 66) return 4;
         else if (value >= 31) return 3;
         else if (value >= 11) return 2;
         // A background cannot drop below one
         return 1;
-    },
+    }
 
-    legendRank: function (value) {
+    static legendRank(value) {
         if (value > 160) return 5;
         if (value > 110) return 4;
         if (value > 75) return 3;
         if (value > 45) return 2;
         return 1;
-    },
+    }
 
-    woundState: function (value) {
-        let label = newedo.config.woundStatus.healthy;
+    static woundState(value) {
+        let label = NEWEDO.woundStatus.healthy;
         let penalty = 0;
 
         if (value <= 0.0) {
-            label = newedo.config.woundStatus.burning;
+            label = NEWEDO.woundStatus.burning;
             penalty = -10;
         } else if (value <= 0.10) {
-            label = newedo.config.woundStatus.beaten;
+            label = NEWEDO.woundStatus.beaten;
             penalty = -7;
         } else if (value <= 0.25) {
-            label = newedo.config.woundStatus.bloody;
+            label = NEWEDO.woundStatus.bloody;
             penalty = -5;
         } else if (value <= 0.75) {
-            label = newedo.config.woundStatus.wounded;
+            label = NEWEDO.woundStatus.wounded;
             penalty = -3;
         } else if (value <= 0.90) {
-            label = newedo.config.woundStatus.grazed;
+            label = NEWEDO.woundStatus.grazed;
             penalty = -1;
         }
 
@@ -76,30 +82,29 @@ export default {
             label: this.localize(label),
             value: penalty
         }
-    },
+    }
 
-    clamp: function (value, min, max) {
+    static clamp(value, min, max) {
         return Math.max(Math.min(value, max), min);
-    },
+    }
 
-    info: function (message, options) {
-        []
+    static info(message, options) {
         ui.notifications.info(this.localize(message), options);
-    },
+    }
 
-    warn: function (message, options) {
+    static warn(message, options) {
         ui.notifications.warn(this.localize(message), options);
-    },
+    }
 
-    error: function (message, options) {
+    static error(message, options) {
         ui.notifications.error(this.localize(message), options);
-    },
+    }
 
-    formulaAdd: function (base, string) {
+    static formulaAdd(base, string) {
         if (base === ``) return string;
         if (string === ``) return base;
         return base + `+` + string;
-    },
+    }
 
     /**
      * 
@@ -107,7 +112,7 @@ export default {
      * @param {*} cost 
      * @returns {String} returns a string of the legend spent, or null if it couldnt be spent
      */
-    spendLegend: function (actor, cost) {
+    static spendLegend(actor, cost) {
         if (cost > 0) {
             if (actor.system.legend.value >= cost) {
                 // Has enough legend to spend
@@ -119,11 +124,11 @@ export default {
             }
         }
         return false;//returns nothing if there was no legend spent
-    },
+    }
 
-    parseDrop: function (event) {
+    static parseDrop(event) {
         return JSON.parse(event.dataTransfer.getData(`text/plain`));
-    },
+    }
 
     /**
      * creates a new data object holding the details of the form passed as an argument
@@ -131,7 +136,7 @@ export default {
      * @param {String} selectors string of selectors to use
      * @returns 
      */
-    getFormData: function (form, selectors) {
+    static getFormData(form, selectors) {
         const matches = form.querySelectorAll(selectors);
         const data = {};
         for (const element of matches) {
@@ -140,9 +145,9 @@ export default {
         }
 
         return data;
-    },
+    }
 
-    parseElementValue: function (element) {
+    static parseElementValue(element) {
         // Parse the input data based on type
         switch (element.type) {
             case 'number':// Converts a string to a number
@@ -153,11 +158,11 @@ export default {
             default:// Other values are taken in as strings
                 return element.value;
         }
-    },
+    }
 
-    duplicate: function (original) {
+    static duplicate(original) {
         return JSON.parse(JSON.stringify(original));
-    },
+    }
 
     /**
      * Creates a roll dialog prompt with the the advantage / disadvantage roll buttons
@@ -165,9 +170,9 @@ export default {
      * @param {*} template  Path to the .html or .hbs file to load in, defaults to a standard roll setup for ease of use
      * @returns 
      */
-    getRollOptions: async function (data, template = `systems/newedo/templates/dialog/roll-default.hbs`) {
+    static async getRollOptions(data, template = `systems/newedo/templates/dialog/roll-default.hbs`) {
         LOGGER.log('Got roll options data', data);
-        const title = data.title ? data.title : newedo.config.generic.roll;
+        const title = data.title ? data.title : NEWEDO.generic.roll;
         const render = await renderTemplate(template, data);
 
         /**
@@ -186,7 +191,7 @@ export default {
 
             // Ensures the number text in the bonus field is valid for the roll
             if (d.bonus && d.bonus != "" && !Roll.validate(d.bonus)) {
-                newedo.utils.warn("NEWEDO.warn.invalidBonus");
+                this.warn("NEWEDO.warn.invalidBonus");
                 d.cancelled = true; // Flags that this roll should be discarded
             }
 
@@ -218,25 +223,25 @@ export default {
             LOGGER.debug('dialog opts', options)
             new foundry.applications.api.DialogV2(options).render(true);
         });
-    },
+    }
 
-    rayCollision: function (a, b) {
+    static rayCollision(a, b) {
         const A = canvas.tokens.placeables.find(t => t.name === a);
         const B = canvas.tokens.placeables.find(t => t.name === b);
 
         const ray = new Ray({ x: A.x, y: A.y }, { x: B.x, y: B.y });
         const collisions = WallsLayer.getWallCollisionsForRay(ray, canvas.walls.blockVision);
         return collisions.length > 0;
-    },
+    }
 
-    deepClone: function (original, { strict = false, _d = 0 } = {}) {
+    static deepClone(original, { strict = false, _d = 0 } = {}) {
         return foundry.utils.deepClone();
-    },
+    }
 
     /**
      * Unit testing to ensure the system is functioning before release
      */
-    async packageCompatabilityTest() {
+    static async packageCompatabilityTest() {
         try {
             console.log('BEGINING UNIT TEST');
             console.log('TESTING DOCUMENT TYPE CREATION');
@@ -267,7 +272,7 @@ export default {
             }
             console.log('REMOVING TEST DOCUMENTS');
             for (const i of cleanupIndex) i.delete();
-            
+
             // test compendium pack data
             console.log('VALIDATING COMPENDIUM REFERENCES');
             if (this.getCoreFates() == undefined) throw new Error('No reference to core fates compendium');
@@ -279,6 +284,4 @@ export default {
         }
         console.log('ALL SYSTEMS READY TO GO!!!');
     }
-
-
 }

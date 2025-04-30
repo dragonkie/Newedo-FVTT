@@ -41,6 +41,8 @@ NEWEDO.traitsAbbr = {
 }
 
 NEWEDO.generic = {
+    cost: "NEWEDO.Generic.Cost",
+    targetNumber: 'NEWEDO.Generic.TargetNumber',
     armour: "NEWEDO.Generic.Armour.long",
     attack: "NEWEDO.Generic.Attack.long",
     background: "NEWEDO.Generic.Background.long",
@@ -61,6 +63,7 @@ NEWEDO.generic = {
     rank: "NEWEDO.Generic.Rank.long",
     rest: "NEWEDO.Generic.Rest.long",
     roll: "NEWEDO.Generic.Roll.long",
+    range: "NEWEDO.Generic.Range.long",
     situational: 'NEWEDO.Generic.Situational.long',
     size: "NEWEDO.Generic.Size.long",
     skill: "NEWEDO.Generic.Skill.long",

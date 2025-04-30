@@ -1,6 +1,7 @@
 
 import { BonusField, ResourceField } from "./fields.mjs"
 import LOGGER from "../helpers/logger.mjs";
+import utils from "../helpers/sysUtil.mjs";
 
 
 const {
@@ -209,7 +210,7 @@ export class ActorDataModel extends SystemDataModel {
         this.rest.total = Math.ceil(this.rest.mod * 5);
 
         // Gets the characters wound state
-        this.wound = newedo.utils.woundState(this.hp.value / this.hp.max);
+        this.wound = utils.woundState(this.hp.value / this.hp.max);
 
         // Totals up the armour soak values
         this.armour.kin.total = this.armour.kin.value + bonus.SoakKin;
@@ -265,7 +266,7 @@ export class ItemDataModel extends SystemDataModel {
 
         const data = {
             ...actorData,
-            ...newedo.utils.duplicate(this)
+            ...utils.duplicate(this)
         }
 
         return data;

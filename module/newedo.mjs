@@ -80,5 +80,5 @@ Hooks.once('init', async function () {
     /* -------------------------------------------- */
     /*  Register users global socket                */
     /* -------------------------------------------- */
-    newedo.socket = new newedo.helper.NewedoSocketManager();
+    newedo.socket = new helpers.NewedoSocketManager();
 });

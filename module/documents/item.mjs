@@ -1,4 +1,5 @@
 import LOGGER from "../helpers/logger.mjs";
+import utils from "../helpers/sysUtil.mjs";
 
 
 /**
@@ -35,7 +36,7 @@ export default class NewedoItem extends Item {
     }
 
     async deleteDialog(options = {}) {
-        const type = newedo.utils.localize(this.constructor.metadata.label);
+        const type = utils.localize(this.constructor.metadata.label);
         let confirm = await foundry.applications.api.DialogV2.confirm({
             title: `${game.i18n.format("DOCUMENT.Delete", { type })}: ${this.name}`,
             content: `<h4>${game.i18n.localize("AreYouSure")}</h4><p>${game.i18n.format("SIDEBAR.DeleteWarning", { type })}</p>`,

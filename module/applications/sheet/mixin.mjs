@@ -1,4 +1,5 @@
 import LOGGER from "../../helpers/logger.mjs";
+import utils from "../../helpers/sysUtil.mjs";
 
 
 export default function NewedoSheetMixin(Base) {
@@ -121,17 +122,17 @@ export default function NewedoSheetMixin(Base) {
             const ele = target.closest('[data-copy]');
 
             if (!ele) {
-                newedo.utils.warn('NEWEDO.Notification.Error.NoCopyElement');
+                utils.warn('NEWEDO.Notification.Error.NoCopyElement');
                 return;
             }
             if (ele.dataset.copy) {
                 navigator.clipboard.writeText(ele.dataset.copy);
-                newedo.utils.info('NEWEDO.Notification.Notify.CopiedToClipboard');
+                utils.info('NEWEDO.Notification.Notify.CopiedToClipboard');
             } else if (ele.value) {
                 navigator.clipboard.writeText(ele.value);
-                newedo.utils.info('NEWEDO.Notification.Notify.CopiedToClipboard');
+                utils.info('NEWEDO.Notification.Notify.CopiedToClipboard');
             } else {
-                newedo.utils.warn('NEWEDO.Notfication.Error.FailedToCopy');
+                utils.warn('NEWEDO.Notfication.Error.FailedToCopy');
             }
         }
 
@@ -141,11 +142,11 @@ export default function NewedoSheetMixin(Base) {
         /*                                                                                        */
         /* -------------------------------------------------------------------------------------- */
 
-        /*
         async render(options, _options) {
+            console.log('Render options', options);
+            console.trace('Render called');
             return super.render(options, _options);
         }
-        */
 
         _configureRenderOptions(options) {
             super._configureRenderOptions(options);
@@ -162,7 +163,7 @@ export default function NewedoSheetMixin(Base) {
             let r = super._onRender(context, options);
 
             // Disables sheet inputs for non owners
-            if (!this.isEditable) this.element.querySelectorAll("input, select, textarea, multi-select").forEach(n => {n.disabled = true;});
+            if (!this.isEditable) this.element.querySelectorAll("input, select, textarea, multi-select").forEach(n => { n.disabled = true; });
 
             this._setupDragAndDrop();
             return r;
@@ -401,7 +402,7 @@ export default function NewedoSheetMixin(Base) {
             const lock = this.window.header.querySelector('.fa-lock, .fa-lock-open');
             lock.classList.toggle('fa-lock');
             lock.classList.toggle('fa-lock-open');
-            this.render(true);
+            this.render(false);
         }
     }
 }

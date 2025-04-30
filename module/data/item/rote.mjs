@@ -1,5 +1,7 @@
+import { NEWEDO } from "../../config.mjs";
 import NewedoRoll from "../../helpers/dice.mjs";
 import LOGGER from "../../helpers/logger.mjs";
+import utils from "../../helpers/sysUtil.mjs";
 
 import { ItemDataModel } from "../abstract.mjs";
 
@@ -11,9 +13,9 @@ export default class RoteData extends ItemDataModel {
     static defineSchema() {
         const schema = super.defineSchema();
 
-        schema.rank = new NumberField({ initial: 1 });
-        schema.range = new NumberField({ initial: 1 });
-        schema.cost = new NumberField({ initial: 1 });
+        schema.rank = new NumberField({ initial: 1, label: NEWEDO.generic.rank });
+        schema.range = new NumberField({ initial: 1, label: NEWEDO.generic.range });
+        schema.cost = new NumberField({ initial: 1, label: NEWEDO.generic.cost });
         schema.duration = new SchemaField({
             value: new NumberField({ initial: 1, required: true, nullable: false }),
             increments: new StringField({ initial: 'instant', required: true, nullable: false })
@@ -22,18 +24,23 @@ export default class RoteData extends ItemDataModel {
             slug: new StringField({ initial: 'arcana' }),
             id: new StringField({ initial: '' })
         });
-        schema.tn = new NumberField({ initial: 5 });
+        schema.tn = new NumberField({ initial: 5, label: NEWEDO.generic.targetNumber });
         schema.action = new StringField({ initial: 'full' });
 
+        // Optional toggles for the different ways a spell can roll its values
+        // in this scenario, value is an additional modifier added to the divider of spells
         schema.rules = new SchemaField({
             rollRange: new SchemaField({
                 active: new BooleanField({ initial: false }),
+                value: new NumberField({ initial: 0 })
             }),
             rollDuration: new SchemaField({
                 active: new BooleanField({ initial: false }),
+                value: new NumberField({ initial: 0 })
             }),
             rollPotency: new SchemaField({
                 active: new BooleanField({ initial: false }),
+                value: new NumberField({ initial: 0 })
             })
         })
 
@@ -95,7 +102,7 @@ export default class RoteData extends ItemDataModel {
 
         roll.AddPart([{
             type: '',
-            label: newedo.config.generic.trait + ":" + newedo.config.traitsCore.shi,
+            label: utils.localize(NEWEDO.generic.trait) + ":" + utils.localize(NEWEDO.traitsCore.shi),
             value: `${actor.system.traits.core.shi.rank}d10`
         }, {
             type: '',
