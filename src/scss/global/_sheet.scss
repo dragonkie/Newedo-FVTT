@@ -3,6 +3,7 @@
 // For now, these styles only apply to actor and item sheets
 .sheet.actor,
 .sheet.item {
+
     // Controls the displaying of the active tab
     .tab[data-tab].active {
         display: flex;

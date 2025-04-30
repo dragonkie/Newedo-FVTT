@@ -7,7 +7,11 @@
         {{#each features as | feature key | }}
             <li class="feature" data-feature-id="{{key}}">
                 <div class="header flexrow">
-                    <a data-action="collapse">{{feature.label}}</a>
+                    <a data-action="collapse">
+                        {{#if (eq feature.type 'trait')}}<i class="fas fa-hand-fist"></i>{{/if}}
+                        {{#if (eq feature.type 'item')}}<i class="fas fa-box"></i>{{/if}}
+                        {{feature.label}}
+                    </a>
                     <span>{{feature.type}}</span>
                     <span>Rank: {{feature.unlock}}</span>
                     <span class="flexrow" style="flex: 0 0; flex-wrap: nowrap; gap: 5px;">

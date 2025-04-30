@@ -2,7 +2,7 @@
  * A specialized subclass of ContextMenu that places the menu in a fixed position.
  * @extends {ContextMenu}
  */
-export default class NewedoContextMenu extends ContextMenu {
+export default class NewedoContextMenu extends foundry.applications.ux.ContextMenu.implementation {
     /** @override */
     _setPosition([html], [target], { event }) {
         document.body.appendChild(html);
@@ -20,7 +20,7 @@ export default class NewedoContextMenu extends ContextMenu {
 
         if (this._expandUp) html.style.bottom = `${clientHeight - clientY}px`;
         else html.style.top = `${clientY + 1}px`;
-        
+
         target.classList.add("context");
         html.style.zIndex = `${_maxZ + 1}`;
     }

@@ -1,4 +1,5 @@
 import LOGGER from "./logger.mjs";
+import utils from "./sysUtil.mjs";
 
 export default function registerHooks() {
 
@@ -10,15 +11,13 @@ export default function registerHooks() {
 
     });
 
-    Hooks.on('renderChatLog', (log, ele, data) => {
-        let list = ele[0].querySelector('#chat-log');
-    });
-
     // Adds functionality to chat message buttons for combat
-    Hooks.on('renderChatMessage', (msg, element, data) => {
+    Hooks.on('renderChatMessageHTML', (msg, element, data) => {
+        console.log('chat message element', element)
+
         // Link damage roll button
-        element[0].querySelector('input.damage-button')?.addEventListener('click', async () => {
-            const item = await fromUuid(element[0].querySelector('input.damage-button').dataset.uuid);
+        element.querySelector('input.damage-button')?.addEventListener('click', async () => {
+            const item = await fromUuid(element.querySelector('input.damage-button').dataset.uuid);
             if (item.type != 'weapon') return;
 
             let attackData = msg.getFlag('newedo', 'attackData');
@@ -26,7 +25,7 @@ export default function registerHooks() {
         });
 
         // Link damage application buttons
-        for (const e of element[0].querySelectorAll('a.apply-damage')) {
+        for (const e of element.querySelectorAll('a.apply-damage')) {
             e.addEventListener('click', async () => {
                 if (!game.user.isGM) return;
                 let target = await fromUuid(e.dataset?.target);
@@ -47,12 +46,20 @@ export default function registerHooks() {
                 let finalDamage = Math.max(damage.total - target.system.armour[damage.type].total, 0);
                 damageCalc.textContent = `${finalDamage}`;
 
-                target.update({'system.hp.value': target.system.hp.value - finalDamage});
+                target.update({ 'system.hp.value': target.system.hp.value - finalDamage });
 
                 e.replaceWith(damageCalc);
             });
         };
-
-
     });
+
+    // Character Creation button
+    Hooks.on('renderActorDirectory', async (directory, element, data) => {
+        console.log('actorDirectory', element)
+        let ele = element.querySelector('.directory-footer.action-buttons');
+        let btn = document.createElement('BUTTON');
+        btn.innerHTML = utils.localize('NEWEDO.Button.CharacterCreator');
+        ele.appendChild(btn);
+        btn.addEventListener('click', async () => { });
+    })
 }

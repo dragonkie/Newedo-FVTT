@@ -61,20 +61,14 @@ Hooks.once('init', async function () {
     helpers.handlebars.registerTemplates();
     helpers.handlebars.registerHelpers();
 
-    /* -------------------------------------------- */
-    /*  Register Document Sheets                    */
-    /* -------------------------------------------- */
-    Actors.unregisterSheet("core", ActorSheet);
-    Items.unregisterSheet("core", ItemSheet);
-
     // register actor sheets
     for (const sheet of applications.sheet.actor.config) {
-        Actors.registerSheet("newedo", sheet.application, sheet.options);
+        foundry.documents.collections.Actors.registerSheet("newedo", sheet.application, sheet.options);
     }
 
     // register item sheets
     for (const sheet of applications.sheet.item.config) {
-        Items.registerSheet("newedo", sheet.application, sheet.options);
+        foundry.documents.collections.Items.registerSheet("newedo", sheet.application, sheet.options);
     }
 
     /* -------------------------------------------- */

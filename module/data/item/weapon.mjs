@@ -5,6 +5,7 @@ import { ResourceField, PriceField, GritField } from "../fields.mjs";
 
 import NewedoRoll from "../../helpers/dice.mjs";
 import utils from "../../helpers/sysUtil.mjs";
+import { NEWEDO } from "../../config.mjs";
 
 const {
     ArrayField, BooleanField, IntegerSortField, NumberField, SchemaField, SetField, StringField
@@ -29,7 +30,7 @@ export default class WeaponData extends ItemDataModel {
             type: new StringField({
                 required: true, nullable: false, initial: 'kin',
                 choices: () => {
-                    let data = { ...newedo.config.damageTypes };
+                    let data = { ...NEWEDO.damageTypes };
                     for (const a in data) data[a] = utils.localize(data[a]);
                     return data;
                 }

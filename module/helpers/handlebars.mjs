@@ -20,7 +20,7 @@ export function registerTemplates() {
         paths[`${id}.${path.split("/").pop().replace(".hbs", "")}`] = path;
     }
 
-    return loadTemplates(paths);
+    return foundry.applications.handlebars.loadTemplates(paths);
 };
 
 export function registerHelpers() {

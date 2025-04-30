@@ -171,77 +171,62 @@
   grid-column-end: span 12;
 }
 
-.flex-group-center,
-.flex-group-left,
-.flex-group-right {
+.newedo .flex-group-center,
+.newedo .flex-group-left,
+.newedo .flex-group-right {
   justify-content: center;
   align-items: center;
   text-align: center;
 }
-
-.flex-group-left {
+.newedo .flex-group-left {
   justify-content: flex-start;
   text-align: left;
 }
-
-.flex-group-right {
+.newedo .flex-group-right {
   justify-content: flex-end;
   text-align: right;
 }
-
-.flexrow {
+.newedo .flexrow {
   display: flex;
   flex-direction: row;
 }
-
-.flexcol {
+.newedo .flexcol {
   display: flex;
   flex-direction: column;
 }
-
-.flexshrink {
+.newedo .flexshrink {
   flex: 0;
 }
-
-.flex {
+.newedo .flex {
   flex: 1;
 }
-
-.flex-between {
+.newedo .flex-between {
   justify-content: space-between;
 }
-
-.flex-start {
+.newedo .flex-start {
   justify-content: flex-start;
 }
-
-.flex-align-start {
+.newedo .flex-align-start {
   align-items: flex-start;
 }
-
-.flex-end {
+.newedo .flex-end {
   justify-content: flex-end;
 }
-
-.flex-align-end {
+.newedo .flex-align-end {
   align-items: flex-end;
 }
-
-.flexlarge {
+.newedo .flexlarge {
   flex: 2;
 }
-
-.align-left {
+.newedo .align-left {
   justify-content: flex-start;
   text-align: left;
 }
-
-.align-right {
+.newedo .align-right {
   justify-content: flex-end;
   text-align: right;
 }
-
-.align-center {
+.newedo .align-center {
   justify-content: center;
   text-align: center;
 }

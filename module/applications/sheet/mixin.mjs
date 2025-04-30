@@ -1,5 +1,6 @@
 import LOGGER from "../../helpers/logger.mjs";
 import utils from "../../helpers/sysUtil.mjs";
+import NewedoContextMenu from "../context-menu.mjs";
 
 
 export default function NewedoSheetMixin(Base) {
@@ -143,8 +144,6 @@ export default function NewedoSheetMixin(Base) {
         /* -------------------------------------------------------------------------------------- */
 
         async render(options, _options) {
-            console.log('Render options', options);
-            console.trace('Render called');
             return super.render(options, _options);
         }
 
@@ -345,7 +344,7 @@ export default function NewedoSheetMixin(Base) {
 
         _setupContextMenu() {
             LOGGER.debug('SHEET | BASE | CONTEXT MENU');
-            new newedo.application.NewedoContextMenu(this.element, "[data-item-uuid]", [], {
+            new NewedoContextMenu(this.element, "[data-item-uuid]", [], {
                 onOpen: element => {
                     const item = fromUuidSync(element.dataset.itemUuid);
                     if (!item) return;

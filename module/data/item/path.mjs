@@ -7,7 +7,7 @@ const {
 export default class PathData extends ItemDataModel {
     static defineSchema() {
         const schema = super.defineSchema();
-        schema.features = new ArrayField(this.FeatureField() , { initial: [] });
+        schema.features = new ArrayField(this.FeatureField(), { initial: [] });
         return schema;
     }
 

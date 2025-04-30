@@ -257,7 +257,7 @@ export class ItemDataModel extends SystemDataModel {
      * @param {ActorDataModel} ActorData The owning NewedoActorDocument
      */
     prepareOwnerData(ActorData) {
-        LOGGER.warn(`Unhandled prepareOwnerData ${this.parent.uuid}: `, ActorData);
+        
     }
 
     getRollData() {
@@ -278,6 +278,6 @@ export class ItemDataModel extends SystemDataModel {
     }
 
     async use(action) {
-        LOGGER.error(`Unhandled use action for id ${this.parent.uuid}:`, action);
+        
     }
 }

@@ -47,7 +47,6 @@ export default class NewedoActor extends Actor {
     prepareData() {
         LOGGER.group(`Document | ${this.isToken ? 'Token Actor' : 'Actor'} | prepareData | ` + this.name);
         LOGGER.debug('Actor:', this);
-        console.trace();
 
         super.prepareData();
 
@@ -77,11 +76,6 @@ export default class NewedoActor extends Actor {
     /*-------------------------------------------------------------------*/
 
     _onUpdate(changed, options, userId) {
-        console.log('Super: ', super._onUpdate);
-        console.log('Changed: ', changed);
-        console.log('Options: ', options);
-        console.log('User ID: ', userId);
-        console.trace('Tracking update');
         //if (game.user.id != userId) return;
         return super._onUpdate(changed, options, userId);
     }

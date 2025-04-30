@@ -144,25 +144,10 @@ export default class NewedoSocketManager {
 
     async resolve(event) {
         this.emit('RESOLVE', {
-            response: false,
             id: event.id
-
         }, {
-            reciever: event.sender
+            reciever: event.sender,
+            response: false,
         });
-    }
-
-    async request() {
-
-    }
-
-    async requestAll() {
-
-    }
-
-    // Includes the client calling this event in the execution, cannot wait for a resoloution
-    emitAll(type, data) {
-        this.eventHandler({ type, data });
-        return this.emit(type, data);
     }
 }

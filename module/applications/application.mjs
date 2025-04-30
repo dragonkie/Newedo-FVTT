@@ -21,9 +21,9 @@ export default class NewedoApplication extends HandlebarsApplicationMixin(Applic
     }
 
     // use a getter to return a parts object instead for dynamic templating
-    static get PARTS() {return {}};
+    static get PARTS() { return {} };
 
-    async _prepareContext(options) {return {}};
+    async _prepareContext(options) { return {} };
 
     _onRender(context, options) {
         super._onRender(context, options);
@@ -37,7 +37,7 @@ export default class NewedoApplication extends HandlebarsApplicationMixin(Applic
     /******************************************************************************************/
 
     _setupDragAndDrop() {
-        const dd = new DragDrop({
+        const dd = new foundry.applications.ux.DragDrop.implementation({
             dragSelector: "[data-item-uuid]",
             dropSelector: ".application",
             permissions: {

@@ -2,6 +2,8 @@ import { ItemDataModel } from "../abstract.mjs";
 
 import LOGGER from "../../helpers/logger.mjs";
 import NewedoRoll from "../../helpers/dice.mjs";
+import { NEWEDO } from "../../config.mjs";
+import utils from "../../helpers/sysUtil.mjs";
 
 const {
     ArrayField, BooleanField, IntegerSortField, NumberField, SchemaField, SetField, StringField
@@ -11,7 +13,14 @@ export default class SkillData extends ItemDataModel {
     static defineSchema() {
         const schema = super.defineSchema();
 
-        schema.trait = new StringField({ initial: 'hrt', required: true, nullable: false });
+        schema.trait = new StringField({
+            initial: 'hrt', required: true, nullable: false, label: NEWEDO.generic.trait, choices: () => {
+                let options = utils.duplicate(NEWEDO.traitsCore);
+                for (const key of Object.keys(options)) options[key] = utils.localize(options[key]);
+                return options;
+            }
+        });
+
         schema.isWeaponSkill = new BooleanField({ initial: false, required: true, nullable: false });
         schema.useTraitRank = new BooleanField({ initial: true, required: true, nullable: false });
         schema.slug = new StringField({ initial: '' });
@@ -153,7 +162,7 @@ export default class SkillData extends ItemDataModel {
 
         await roll.evaluate();
         await roll.toMessage();
-        
+
         return roll;
     }
 
