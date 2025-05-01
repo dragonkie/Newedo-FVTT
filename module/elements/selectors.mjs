@@ -2,7 +2,7 @@
 
 export function DamageTypes(value = '', name = '') {
     const opts = [];
-    for (const [k, v] of Object.entries(newedo.config.damageTypes)) {
+    for (const [k, v] of Object.entries(NEWEDO.damageTypes)) {
         opts.push({ value: k, label: v });
     }
     return foundry.applications.fields.createSelectInput({
@@ -18,7 +18,7 @@ export function DamageTypes(value = '', name = '') {
 
 export function Traits(value = '', name = '') {
     const opts = [];
-    for (const [k, v] of Object.entries(newedo.config.traitsCore)) opts.push({ value: k, label: v });
+    for (const [k, v] of Object.entries(NEWEDO.traitsCore)) opts.push({ value: k, label: v });
     
     return foundry.applications.fields.createSelectInput({
         options: opts,
@@ -32,7 +32,7 @@ export function Traits(value = '', name = '') {
 
 export function Skills(value, name) {
     let opts = [];
-    for (const [key, skill] of Object.entries(newedo.config.skills)) opts.push({ label: skill, value: key });
+    for (const [key, skill] of Object.entries(NEWEDO.skills)) opts.push({ label: skill, value: key });
 
     opts.sort((a, b) => {
         if (a.value > b.value) return 1;
@@ -53,7 +53,7 @@ export function Skills(value, name) {
 
 export function WeaponSkills(value, name) {
     const opts = [];
-    for (const [k, v] of Object.entries(newedo.config.weaponSkills)) opts.push({ value: k, label: v });
+    for (const [k, v] of Object.entries(NEWEDO.weaponSkills)) opts.push({ value: k, label: v });
     return foundry.applications.fields.createSelectInput({
         options: opts,
         value: value,

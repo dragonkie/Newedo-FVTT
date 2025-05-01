@@ -1,10 +1,10 @@
-<div class="tab-content">
+<div class="edo-tab-content">
     {{!-- Ammount of trait noise the character has gathered --}}
     <div>
         <div class="flexrow" style="text-align: center; align-items: center;">
             {{#each system.traits.core as | trait key |}}
                 <div style="align-items: center; min-width: 70px;">
-                    <label class="resource-label flexlarge align-left" data-action="roll" data-roll="{{trait.rank}}d10x10" data-roll-type="{{trait.abbr}}">{{trait.abbr}}</label>
+                    <label class="edo-resource-label flexlarge align-left" data-action="roll" data-roll="{{trait.rank}}d10x10" data-roll-type="{{trait.abbr}}">{{trait.abbr}}</label>
                     <div>{{trait.noise}}</div>
                 </div>
             {{/each}}

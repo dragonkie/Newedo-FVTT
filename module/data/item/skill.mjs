@@ -151,7 +151,7 @@ export default class SkillData extends ItemDataModel {
 
         roll.AddPart([{
             type: '',
-            label: newedo.config.traitsCore[this.trait],
+            label: NEWEDO.traitsCore[this.trait],
             value: `${rollData.trait.rank}d10`,
             active: this.useTraitRank
         }, {

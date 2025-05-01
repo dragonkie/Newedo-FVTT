@@ -57,7 +57,7 @@ export default class NewedoItemSheet extends NewedoSheetMixin(foundry.applicatio
         LOGGER.debug('preparing item sheet context')
         const context = await super._prepareContext(partId, content);
 
-        context.settings = await renderTemplate(`systems/newedo/templates/item/settings/${this.document.type}.hbs`, context);
+        context.settings = await foundry.applications.handlebars.renderTemplate(`systems/newedo/templates/item/settings/${this.document.type}.hbs`, context);
 
         const enrichmentOptions = {
             rollData: context.rollData
@@ -66,7 +66,7 @@ export default class NewedoItemSheet extends NewedoSheetMixin(foundry.applicatio
         context.description = {
             field: this.document.system.schema.getField('description'),
             value: this.document.system.description,
-            enriched: await TextEditor.enrichHTML(context.system.description, enrichmentOptions),
+            enriched: await foundry.applications.ux.TextEditor.enrichHTML(context.system.description, enrichmentOptions),
         }
 
         return context;

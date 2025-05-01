@@ -268,3 +268,11 @@ NEWEDO.sheetParts = {
     npc: {},
     item: {}
 }
+
+NEWEDO.ContextMenu = {
+    Item: {
+        Edit: "NEWEDO.ContextMenu.Item.Edit",
+        Equip: "NEWEDO.ContextMenu.Item.Equip",
+        Delete: "NEWEDO.ContextMenu.Item.Delete",
+    }
+}

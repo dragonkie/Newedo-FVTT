@@ -1,6 +1,7 @@
 import NewedoApplication from "./application.mjs";
 import LOGGER from "../helpers/logger.mjs"
 import utils from "../helpers/sysUtil.mjs";
+import { NEWEDO } from "../config.mjs";
 
 export default class NewedoLedger extends NewedoApplication {
     // The character responsible for this ledger
@@ -24,7 +25,7 @@ export default class NewedoLedger extends NewedoApplication {
     constructor(document, ledger) {
         super();
         if (!document) {
-            utils.error(newedo.config.error.noDocument);
+            utils.error(NEWEDO.error.noDocument);
             return {};
         }
 

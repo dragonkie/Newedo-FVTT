@@ -162,7 +162,7 @@ export default class WeaponData extends ItemDataModel {
         LOGGER.debug('attack data', rollData)
 
         const roll = new NewedoRoll({
-            title: newedo.config.generic.attack,
+            title: NEWEDO.generic.attack,
             document: this.parent,
             raise: true,
             rollData: rollData
@@ -178,7 +178,7 @@ export default class WeaponData extends ItemDataModel {
             value: skill.system.getRanks()
         }, {
             type: '',
-            label: newedo.config.generic.attack,
+            label: NEWEDO.generic.attack,
             value: this.grit.atk
         }]);
 
@@ -296,7 +296,7 @@ export default class WeaponData extends ItemDataModel {
         // add grit damage
         roll.AddPart({
             type: '',
-            label: newedo.config.generic.grit,
+            label: NEWEDO.generic.grit,
             value: this.grit.dmg
         })
 
@@ -314,7 +314,7 @@ export default class WeaponData extends ItemDataModel {
 
         const roll = new NewedoRoll({
             legend: false,
-            title: newedo.config.generic.damage,
+            title: NEWEDO.generic.damage,
             document: this.parent,
             rollData: rollData
         });
@@ -326,7 +326,7 @@ export default class WeaponData extends ItemDataModel {
         if (attack?.raises > 0) {
             roll.AddPart({
                 type: '',
-                label: newedo.config.generic.raise,
+                label: NEWEDO.generic.raise,
                 value: `${attack.raises}d10`
             })
         } else {

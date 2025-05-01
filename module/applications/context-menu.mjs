@@ -4,24 +4,26 @@
  */
 export default class NewedoContextMenu extends foundry.applications.ux.ContextMenu.implementation {
     /** @override */
-    _setPosition([html], [target], { event }) {
+    _setPosition(html, target, { event } = {}) {
+        // Sets up the positioning
         document.body.appendChild(html);
         const { clientWidth, clientHeight } = document.documentElement;
         const { width, height } = html.getBoundingClientRect();
         const { clientX, clientY } = event;
         const left = Math.min(clientX, clientWidth - width) + 1;
+        const direction = clientY + height > clientHeight;
 
-        this._expandUp = clientY + height > clientHeight;
+        // Adds classes to match the given position
         html.classList.add("newedo");
-        html.classList.toggle("expand-up", this._expandUp);
-        html.classList.toggle("expand-down", !this._expandUp);
+        html.classList.toggle("expand-up", direction);
+        html.classList.toggle("expand-down", !direction);
         html.style.visibility = "";
         html.style.left = `${left}px`;
 
-        if (this._expandUp) html.style.bottom = `${clientHeight - clientY}px`;
+        if (direction) html.style.bottom = `${clientHeight - clientY}px`;
         else html.style.top = `${clientY + 1}px`;
 
         target.classList.add("context");
-        html.style.zIndex = `${_maxZ + 1}`;
+        html.style.zIndex = `${foundry.applications.api.ApplicationV2._maxZ + 1}`;
     }
 }

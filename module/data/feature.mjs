@@ -1,3 +1,5 @@
+import { NEWEDO } from "../config.mjs";
+
 export class FeatureData {
     constructor() {
         this.id = foundry.utils.randomID();
@@ -38,10 +40,10 @@ export class FeatureTraitData extends FeatureData {
         this.label = 'New Trait Feature';
         this.data = {
             groups: [
-                { name: 'core', label: newedo.config.generic.core },
-                { name: 'derived', label: newedo.config.generic.derived },
-                { name: 'mod', label: newedo.config.generic.mod },
-                { name: 'background', label: newedo.config.generic.background },
+                { name: 'core', label: NEWEDO.generic.core },
+                { name: 'derived', label: NEWEDO.generic.derived },
+                { name: 'mod', label: NEWEDO.generic.mod },
+                { name: 'background', label: NEWEDO.generic.background },
             ],
             traits: [
                 // Derived Modifiers
@@ -56,17 +58,17 @@ export class FeatureTraitData extends FeatureData {
         }
 
         // Add core traits
-        for (const [key, value] of Object.entries(newedo.config.traitsCore)) {
+        for (const [key, value] of Object.entries(NEWEDO.traitsCore)) {
             this.data.traits.push(this.CreateValue('core', key, value))
         }
 
         // Add Derived traits
-        for (const [key, value] of Object.entries(newedo.config.traitsDerived)) {
+        for (const [key, value] of Object.entries(NEWEDO.traitsDerived)) {
             this.data.traits.push(this.CreateValue('derived', key, value))
         }
 
         // Add Derived traits
-        for (const [key, value] of Object.entries(newedo.config.background)) {
+        for (const [key, value] of Object.entries(NEWEDO.background)) {
             this.data.traits.push(this.CreateValue('background', key, value))
         }
     }

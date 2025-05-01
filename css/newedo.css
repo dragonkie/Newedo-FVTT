@@ -230,6 +230,15 @@
   justify-content: center;
   text-align: center;
 }
+.newedo .flex-gap-s {
+  gap: 4px;
+}
+.newedo .flex-gap-m {
+  gap: 8px;
+}
+.newedo .flex-gap-l {
+  gap: 12px;
+}
 
 .sheet.actor .tab[data-tab].active,
 .sheet.item .tab[data-tab].active {
@@ -261,7 +270,7 @@
   color: var(--colour-nav-active);
 }
 
-.resource-label {
+.edo-resource-label {
   font-weight: bold;
 }
 
@@ -401,11 +410,6 @@ ol.items-list .item-delete {
   overflow: hidden;
   display: flex;
   flex-direction: row;
-  /* ------------------------------------------------------------------- */
-  /*                                                                     */
-  /*                         TAB SPECIFIC STYLES                         */
-  /*                                                                     */
-  /* ------------------------------------------------------------------- */
 }
 .sheet.character .window-content header > *,
 .sheet.npc .window-content header > * {
@@ -420,16 +424,16 @@ ol.items-list .item-delete {
 .sheet.npc .window-content .origins > * {
   display: inline-block;
 }
-.sheet.character .window-content .derived-traits,
-.sheet.npc .window-content .derived-traits {
+.sheet.character .window-content .edo-derived-traits,
+.sheet.npc .window-content .edo-derived-traits {
   display: block;
 }
-.sheet.character .window-content .derived-traits > *,
-.sheet.npc .window-content .derived-traits > * {
+.sheet.character .window-content .edo-derived-traits > *,
+.sheet.npc .window-content .edo-derived-traits > * {
   display: inline-block;
 }
-.sheet.character .window-content .derived-traits > * input,
-.sheet.npc .window-content .derived-traits > * input {
+.sheet.character .window-content .edo-derived-traits > * input,
+.sheet.npc .window-content .edo-derived-traits > * input {
   width: 2.5rem;
   height: 1rem;
   text-align: center;
@@ -492,6 +496,10 @@ ol.items-list .item-delete {
 .sheet.npc .window-content .panel .fate-card .fate-list :last-child {
   border: 0;
 }
+.sheet.character .window-content .edo-tab-traits input,
+.sheet.npc .window-content .edo-tab-traits input {
+  text-align: center;
+}
 .sheet.character .window-content .body,
 .sheet.npc .window-content .body {
   padding: 10px;
@@ -505,17 +513,6 @@ ol.items-list .item-delete {
 .sheet.character .window-content .skill-lists li.item,
 .sheet.npc .window-content .skill-lists li.item {
   padding: 1px 0 0 0;
-}
-.sheet.character .window-content .tab-content.traits .group-row,
-.sheet.npc .window-content .tab-content.traits .group-row {
-  text-align: center;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 12px;
-}
-.sheet.character .window-content .tab-content.traits .trait-box,
-.sheet.npc .window-content .tab-content.traits .trait-box {
-  align-items: center;
 }
 
 .sheet.item .tab {

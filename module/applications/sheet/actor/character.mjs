@@ -3,6 +3,7 @@ import NewedoActorSheet from "../actor.mjs";
 import LOGGER from "../../../helpers/logger.mjs";
 import NewedoDialog from "../../dialog.mjs";
 import utils from "../../../helpers/sysUtil.mjs";
+import { NEWEDO } from "../../../config.mjs";
 
 export default class CharacterSheet extends NewedoActorSheet {
     static DEFAULT_OPTIONS = {
@@ -50,10 +51,10 @@ export default class CharacterSheet extends NewedoActorSheet {
         context.lineage = this.document.itemTypes.lineage[0];
         context.culture = this.document.itemTypes.culture[0];
         context.path = this.document.itemTypes.path[0];
-        
+
         // Localize backgrounds
         for (let [k, v] of Object.entries(context.system.background)) {
-            v.label = utils.localize(newedo.config.background[k]);
+            v.label = utils.localize(NEWEDO.background[k]);
         }
 
         LOGGER.debug('SHEET | CHARACTER | PREPARE CONTEXT', context);
@@ -62,14 +63,14 @@ export default class CharacterSheet extends NewedoActorSheet {
 
     static async _onRest(event, target) {
         let heal = this.document.system.rest.total;
-        let msg = await NewedoDialog.confirm({
+        let confirm = await NewedoDialog.confirm({
             content: `
             <p>Are you sure you would like to rest?</p>
             <p>This will restore ${heal} health and all temp legend.</p>
             `
         });
 
-        if (msg) {
+        if (confirm) {
             this.document.update({
                 'system.hp.value': this.document.system.hp.value + heal,
                 'system.legend.value': this.document.system.legend.max

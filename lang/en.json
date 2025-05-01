@@ -80,7 +80,8 @@
       "Item": {
         "Edit": "Edit",
         "Equip": "Equip",
-        "Delete": "Delete"
+        "Delete": "Delete",
+        "Gift": "Gift"
       },
       "Feature": { },
       "Actor": { }

@@ -173,7 +173,7 @@ export default class utils {
     static async getRollOptions(data, template = `systems/newedo/templates/dialog/roll-default.hbs`) {
         LOGGER.log('Got roll options data', data);
         const title = data.title ? data.title : NEWEDO.generic.roll;
-        const render = await renderTemplate(template, data);
+        const render = await foundry.applications.handlebars.renderTemplate(template, data);
 
         /**
          * Small internal function to handel the data form we recieve

@@ -13,8 +13,6 @@ export default function registerHooks() {
 
     // Adds functionality to chat message buttons for combat
     Hooks.on('renderChatMessageHTML', (msg, element, data) => {
-        console.log('chat message element', element)
-
         // Link damage roll button
         element.querySelector('input.damage-button')?.addEventListener('click', async () => {
             const item = await fromUuid(element.querySelector('input.damage-button').dataset.uuid);
@@ -36,10 +34,6 @@ export default function registerHooks() {
                 let attacker = await fromUuid(damageData.dataset.attacker);
                 damage.total = +damageData.dataset.damageTotal;
                 damage.type = damageData.dataset.damageType;
-
-                LOGGER.debug('target', target);
-                LOGGER.debug('damage', damage);
-                LOGGER.debug('attacker', attacker);
 
                 let damageCalc = document.createElement("div");
                 damageCalc.style.display = "inline";

@@ -65,11 +65,10 @@ export default class NewedoApplication extends HandlebarsApplicationMixin(Applic
     }
 
     async _onDrop(event) {
-        console.log('Got a drop')
         event.preventDefault();
+        if (!this.isEditable) return;
         const target = event.target;
-        const { type, uuid } = TextEditor.getDragEventData(event);
-        if (!uuid) return;
+        const { type, uuid } = foundry.applications.ux.TextEditor.getDragEventData(event);
         const item = await fromUuid(uuid);
         const itemData = item.toObject();
 
@@ -81,43 +80,19 @@ export default class NewedoApplication extends HandlebarsApplicationMixin(Applic
             "-=sort": null
         };
 
+        if (item.parent === this.document) return this._onSortItem(item, target);
+
         switch (type) {
-            case "Item":
-                await this._onDropItem(event, item);
-                break;
-            case "Actor":
-                await this._onDropActor(event, item);
-                break;
-            case "ActiveEffect":
-                // Specific data to overide for active effects
-                foundry.utils.mergeObject(modification, {
-                    "duration.-=combat": null,
-                    "duration.-=startRound": null,
-                    "duration.-=startTime": null,
-                    "duration.-=startTurn": null,
-                    "system.source": null
-                });
-                await this._onDropActiveEffect(event, item);
-                break;
+            case "ActiveEffect": return this._onDropActiveEffect(event, item);
+            case "Item": return this._onDropItem(event, item);
+            case "Actor": return this._onDropActor(event, item);
             default: return;
         }
-        // gets the new stuffs
-        //foundry.utils.mergeObject(itemData, modification, { performDeletions: true });
-        // gets the document class, then creats a new copy of it
-        //getDocumentClass(type).create(itemData, { parent: this.document });
     }
 
-    async _onDropItem(event, item) {
-
-    }
-
-    async _onDropActor(event, actor) {
-
-    }
-
-    async _onDropActiveEffect(event, effect) {
-
-    }
+    async _onDropItem(event, item) {}
+    async _onDropActor(event, actor) {}
+    async _onDropActiveEffect(event, effect) {}
 
     async _onSortItem(item, target) {
         if (item.documentName !== "Item") return;

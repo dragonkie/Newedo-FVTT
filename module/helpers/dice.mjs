@@ -1,3 +1,5 @@
+import NewedoDialog from "../applications/dialog.mjs";
+import { NEWEDO } from "../config.mjs";
 import LOGGER from "./logger.mjs";
 import utils from "./sysUtil.mjs";
 
@@ -109,14 +111,14 @@ export default class NewedoRoll {
 
         if (this.wounds && this.rollData?.wound) {
             this.AddPart({
-                label: newedo.config.generic.wound + ':' + this.rollData.wound.label,
+                label: NEWEDO.generic.wound + ':' + this.rollData.wound.label,
                 value: this.rollData.wound.value,
                 type: ''
             })
         }
 
-        const title = utils.localize(newedo.config.generic.roll) + ": " + utils.localize(this.title);
-        const render = await renderTemplate(this.constructor.template, this);
+        const title = utils.localize(NEWEDO.generic.roll) + ": " + utils.localize(this.title);
+        const render = await foundry.applications.handlebars.renderTemplate(this.constructor.template, this);
 
         /**
          * Small internal function to handel the data form we recieve
@@ -124,9 +126,11 @@ export default class NewedoRoll {
          * @param {*} method 
          * @returns 
          */
-        const handler = (html, method) => {
+        const handler = (dialog, method) => {
+            console.log(dialog)
+            console.log(method)
             // Gets all the pieces of the formula
-            const formulaParts = html.querySelectorAll("[data-formula]");
+            const formulaParts = dialog.element.querySelectorAll("[data-formula]");
             this.options.pieces = [];
             this.options.raise = 0;
             // Get the data from the formula pieces
@@ -205,11 +209,14 @@ export default class NewedoRoll {
                     callback: (event, button, dialog) => resolve(handler(dialog, "adv"))
                 }],
                 close: () => resolve({ cancelled: true }),
-                submit: (result) => resolve(result)
+                submit: (result) => {
+                    console.log('Roll submitted with: ', result)
+                    resolve(result)
+                }
             }
 
             // Link up buttons if any and set up sheet
-            const app = new foundry.applications.api.DialogV2(options, null);
+            const app = new NewedoDialog(options, null);
             app.render(true).then(() => {
                 let el = app.element;
                 let clickers = el.querySelectorAll('[name=clicker]');

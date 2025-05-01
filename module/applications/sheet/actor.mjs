@@ -4,6 +4,7 @@ import NewedoSheetMixin from "./mixin.mjs";
 import NewedoRoll from "../../helpers/dice.mjs";
 import NewedoLedger from "../ledger.mjs";
 import utils from "../../helpers/sysUtil.mjs";
+import { NEWEDO } from "../../config.mjs";
 
 /**
  * Extend the basic ActorSheet with some very simple modifications
@@ -74,20 +75,20 @@ export default class NewedoActorSheet extends NewedoSheetMixin(foundry.applicati
 
         // Localize core traits
         for (let [k, v] of Object.entries(core)) {
-            v.label = utils.localize(newedo.config.traitsCore[k]);
-            v.abbr = utils.localize(newedo.config.traitsCoreAbbr[k]);
+            v.label = utils.localize(NEWEDO.traitsCore[k]);
+            v.abbr = utils.localize(NEWEDO.traitsCoreAbbr[k]);
         }
 
         // Localize Derived traits.
         for (let [k, v] of Object.entries(derived)) {
-            v.label = utils.localize(newedo.config.traitsDerived[k]);
-            v.abbr = utils.localize(newedo.config.traitsDerivedAbbr[k]);
+            v.label = utils.localize(NEWEDO.traitsDerived[k]);
+            v.abbr = utils.localize(NEWEDO.traitsDerivedAbbr[k]);
         }
 
         // Localize armour labels
         for (let [k, v] of Object.entries(context.system.armour)) {
-            v.label = utils.localize(newedo.config.damageTypes[k]);
-            v.abbr = utils.localize(newedo.config.damageTypesAbbr[k]);
+            v.label = utils.localize(NEWEDO.damageTypes[k]);
+            v.abbr = utils.localize(NEWEDO.damageTypesAbbr[k]);
         }
 
         // Prepare item contexts
@@ -95,7 +96,7 @@ export default class NewedoActorSheet extends NewedoSheetMixin(foundry.applicati
 
         // Initialize containers.
         const skills = {};
-        for (const [key, value] of Object.entries(newedo.config.traitsCore)) {
+        for (const [key, value] of Object.entries(NEWEDO.traitsCore)) {
             skills[key] = {
                 label: utils.localize(value),
                 list: []
@@ -215,7 +216,7 @@ export default class NewedoActorSheet extends NewedoSheetMixin(foundry.applicati
     static async _onDeleteItem(event, target) {
         const item = await this.constructor.getTargetItem(target);
         const confirm = await foundry.applications.api.DialogV2.confirm({
-            content: `${utils.localize(newedo.config.confirm.deleteItem)}: ${item.name}`,
+            content: `${utils.localize(NEWEDO.confirm.deleteItem)}: ${item.name}`,
             rejectClose: false,
             modal: true
         });
@@ -293,7 +294,7 @@ export default class NewedoActorSheet extends NewedoSheetMixin(foundry.applicati
         //The description is enrichedHTML and can have inlineroles and UUID links
         return roll.toMessage({
             speaker: ChatMessage.getSpeaker({ actor: this.document }),
-            flavor: `<div style="font-size: 20px; text-align: center;">${utils.localize(newedo.config.generic.fate)}` + [label] + `</div>`,
+            flavor: `<div style="font-size: 20px; text-align: center;">${utils.localize(NEWEDO.generic.fate)}` + [label] + `</div>`,
             content: [render] + "<div>" + [description] + "</div>",
             create: true,
             rollMode: game.settings.get('core', 'rollMode')
@@ -345,12 +346,4 @@ export default class NewedoActorSheet extends NewedoSheetMixin(foundry.applicati
     /*                                  DRAG & DROP                                           */
     /*                                                                                        */
     /* -------------------------------------------------------------------------------------- */
-    async _onDrop(event) {
-        if (!this.document.isOwner) return false;// Disables drops if you dont own this sheet
-        super._onDrop(event);
-    }
-
-    async _onDropItem(event, item) {
-        return 'default'; // Tells sheet to use default item drop handler
-    }
 }

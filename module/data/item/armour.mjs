@@ -1,5 +1,6 @@
 import { PriceField } from "../fields.mjs";
 import { ItemDataModel } from "../abstract.mjs";
+import { NEWEDO } from "../../config.mjs";
 
 
 const {
@@ -13,13 +14,13 @@ export default class ArmourData extends ItemDataModel {
         schema.quality = new NumberField({ initial: 1 });
         schema.price = new PriceField();
 
-        schema.equipped = new BooleanField({ initial: false, required: true, label: newedo.config.generic.equipped });
+        schema.equipped = new BooleanField({ initial: false, required: true, label: NEWEDO.generic.equipped });
 
         schema.soak = new SchemaField({
-            kin: new NumberField({ initial: 0, required: true, nullable: false, label: newedo.config.damageTypes.kin }),
-            ele: new NumberField({ initial: 0, required: true, nullable: false, label: newedo.config.damageTypes.ele }),
-            bio: new NumberField({ initial: 0, required: true, nullable: false, label: newedo.config.damageTypes.bio }),
-            arc: new NumberField({ initial: 0, required: true, nullable: false, label: newedo.config.damageTypes.arc })
+            kin: new NumberField({ initial: 0, required: true, nullable: false, label: NEWEDO.damageTypes.kin }),
+            ele: new NumberField({ initial: 0, required: true, nullable: false, label: NEWEDO.damageTypes.ele }),
+            bio: new NumberField({ initial: 0, required: true, nullable: false, label: NEWEDO.damageTypes.bio }),
+            arc: new NumberField({ initial: 0, required: true, nullable: false, label: NEWEDO.damageTypes.arc })
         }, {}, { name: 'TestArmour' });
 
         schema.conceal = new BooleanField({ initial: false });

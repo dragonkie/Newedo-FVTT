@@ -1,10 +1,10 @@
-<div class="tab-content" style="text-align: center;">
+<div class="edo-tab-content" style="text-align: center;">
     <div style="margin: 10px 0;">
         <label><b>Core Traits:</b></label>
         <div class="traits-core flexrow" style="gap: 4px; flex: 1 0 auto; flex-wrap: nowrap; text-align: center;">
             {{#each system.traits.core as | trait key | }}
                 <div class="flexcol" style="align-items: center; min-width: 70px;">
-                    <label class="resource-label flexlarge align-left">{{key}}</label>
+                    <label class="edo-resource-label flexlarge align-left">{{key}}</label>
                     <input name="system.traits.core.{{key}}" value="{{trait}}" type="number" style="padding: 0;" />
                 </div>
             {{/each}}
@@ -16,7 +16,7 @@
         <div class="traits-derived flexrow" style="gap: 4px; flex: 1 0 auto; flex-wrap: nowrap; text-align: center;">
             {{#each system.traits.derived as | trait key | }}
                 <div class="flexcol" style="align-items: center; min-width: 70px; gap: 8px;">
-                    <label class="resource-label flexlarge align-left">{{key}}</label>
+                    <label class="edo-resource-label flexlarge align-left">{{key}}</label>
                     <input name="system.traits.core.{{key}}.value" value="{{trait.value}}" type="number" style="padding: 0;" />
                 </div>
             {{/each}}
@@ -37,7 +37,7 @@
         <div class="armour-soaks flexrow" style="gap: 4px; flex: 1 0 auto; flex-wrap: nowrap; text-align: center;">
             {{#each system.armour as | soak key | }}
                 <div class="flexcol" style="align-items: center; min-width: 70px;">
-                    <label class="resource-label flexlarge align-left">{{key}}</label>
+                    <label class="edo-resource-label flexlarge align-left">{{key}}</label>
                     <input name="system.armour.{{key}}.value" value="{{soak.value}}" type="number" style="padding: 0;" />
                 </div>
             {{/each}}

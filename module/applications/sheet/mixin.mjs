@@ -1,3 +1,4 @@
+import { NEWEDO } from "../../config.mjs";
 import LOGGER from "../../helpers/logger.mjs";
 import utils from "../../helpers/sysUtil.mjs";
 import NewedoContextMenu from "../context-menu.mjs";
@@ -62,7 +63,7 @@ export default function NewedoSheetMixin(Base) {
             const context = {
                 document: doc,
                 actor: doc.actor,
-                config: newedo.config,
+                config: NEWEDO,
                 system: doc.system,
                 flags: doc.flags,
                 userFlags: game.user.flags,
@@ -92,11 +93,9 @@ export default function NewedoSheetMixin(Base) {
             }, {});
         }
 
-        /* -------------------------------------------------------------------------------------- */
-        /*                                                                                        */
-        /*                                   SHEET ACTIONS                                        */
-        /*                                                                                        */
-        /* -------------------------------------------------------------------------------------- */
+        //======================================================================================================
+        // Sheet Actions
+        //======================================================================================================
         getRollData() {
             return this.document.getRollData();
         }
@@ -135,6 +134,15 @@ export default function NewedoSheetMixin(Base) {
             } else {
                 utils.warn('NEWEDO.Notfication.Error.FailedToCopy');
             }
+        }
+
+        static _onToggleMode() {
+            if (this.isPlayMode) this._sheetMode = this.constructor.SHEET_MODES.EDIT;
+            else this._sheetMode = this.constructor.SHEET_MODES.PLAY;
+            const lock = this.window.header.querySelector('.fa-lock, .fa-lock-open');
+            lock.classList.toggle('fa-lock');
+            lock.classList.toggle('fa-lock-open');
+            this.render(false);
         }
 
         /* -------------------------------------------------------------------------------------- */
@@ -187,13 +195,11 @@ export default function NewedoSheetMixin(Base) {
             return frame;
         }
 
-        /* -------------------------------------------------------------------------------------- */
-        /*                                                                                        */
-        /*                                   DRAG N DROP                                          */
-        /*                                                                                        */
-        /* -------------------------------------------------------------------------------------- */
+        //=======================================================================================================================
+        // Drag and Drop
+        //=======================================================================================================================
         _setupDragAndDrop() {
-            const dd = new DragDrop({
+            const dd = new foundry.applications.ux.DragDrop.implementation({
                 dragSelector: "[data-item-uuid]",
                 dropSelector: ".application",
                 permissions: {
@@ -229,64 +235,48 @@ export default function NewedoSheetMixin(Base) {
         }
 
         async _onDrop(event) {
-            LOGGER.debug('SHEET | BASE | Drop Recieved:', event);
             event.preventDefault();
-
-            const target = event.target;
-            const { type, uuid } = TextEditor.getDragEventData(event);
-
             if (!this.isEditable) return;
-
+            const target = event.target;
+            const { type, uuid } = foundry.applications.ux.TextEditor.getDragEventData(event);
             const item = await fromUuid(uuid);
-            const itemData = item.toObject();
 
-            // Disallow dropping invalid document types.
-            if (!Object.keys(this.document.constructor.metadata.embedded).includes(type)) {
-                LOGGER.debug("Invalid Drop doc type");
-                return;
-            }
-
-            // If dropped onto self, perform sorting.
             if (item.parent === this.document) return this._onSortItem(item, target);
 
-            // Removes these values from the data, preppoing the drop to be added to the reciever
+            switch (type) {
+                case "ActiveEffect": return this._onDropActiveEffect(event, item);
+                case "Item": return this._onDropItem(event, item);
+                case "Actor": return this._onDropActor(event, item);
+                default: return;
+            }
+        }
+
+        //=========================================================================================
+        // Drop Handlers
+        //=========================================================================================
+        async _onDropItem(event, item) {
+            const { type, uuid } = foundry.applications.ux.TextEditor.getDragEventData(event);
+            if (!Object.keys(this.document.constructor.metadata.embedded).includes(type)) return;
+            const itemData = item.toObject();
             const modification = {
                 "-=_id": null,
                 "-=ownership": null,
                 "-=folder": null,
                 "-=sort": null
             };
-
-            switch (type) {
-                case "ActiveEffect": {
-                    // Specific data to overide for active effects
-                    foundry.utils.mergeObject(modification, {
-                        "duration.-=combat": null,
-                        "duration.-=startRound": null,
-                        "duration.-=startTime": null,
-                        "duration.-=startTurn": null,
-                        "system.source": null
-                    });
-                    break;
-                }
-                case "Item": {
-                    // Checks to see if the sheet overides item drops
-                    if (await this._onDropItem(event, item) != 'default') return;
-                    break;
-                }
-                default: return;
-            }
             foundry.utils.mergeObject(itemData, modification, { performDeletions: true });
             getDocumentClass(type).create(itemData, { parent: this.document });
         }
 
-        async _onDropItem(event, item) {
-            // Item drops can be intercepted by overiding this function and returning any other value
-            return 'default';
-        }
-
-        async _onDropActor() {
-            LOGGER.error(`Unhandled actor drop`, this);
+        async _onDropActor(event, actor) { }
+        async _onDropActiveEffect(event, effect) {
+            // Clears meta data from owned items if neccesary
+            const modification = {
+                "-=_id": null,
+                "-=ownership": null,
+                "-=folder": null,
+                "-=sort": null
+            };
         }
 
         async _onSortItem(item, target) {
@@ -336,20 +326,23 @@ export default function NewedoSheetMixin(Base) {
             }
         }
 
-        /* -------------------------------------------------------------------------------------- */
-        /*                                                                                        */
-        /*                                   CONTEXT MENU                                         */
-        /*                                                                                        */
-        /* -------------------------------------------------------------------------------------- */
-
+        //====================================================================================================================
+        // Context Menu
+        //====================================================================================================================
+        context_menu = undefined;
         _setupContextMenu() {
-            LOGGER.debug('SHEET | BASE | CONTEXT MENU');
-            new NewedoContextMenu(this.element, "[data-item-uuid]", [], {
-                onOpen: element => {
+            if (!this.isOwner) return;
+            this.context_menu = new NewedoContextMenu(this.element, "[data-item-uuid]", [], {
+                jQuery: false,
+                onOpen: (element) => {
                     const item = fromUuidSync(element.dataset.itemUuid);
-                    if (!item) return;
-                    if (item.documentName === "ActiveEffect") ui.context.menuItems = this._getEffectContextOptions(item);
-                    else if (item.documentName === "Item") ui.context.menuItems = this._getItemContextOptions(item);
+                    switch (item.documentName) {
+                        case "ActiveEffect": ui.context.menuItems = this._getEffectContextOptions(item); break;
+                        case "Item": ui.context.menuItems = this._getItemContextOptions(item); break;
+                    }
+                },
+                onClose: (element) => {
+
                 }
             });
         }
@@ -358,26 +351,42 @@ export default function NewedoSheetMixin(Base) {
             const isOwner = item.isOwner;
             const isEquipped = item.isEquipped;
 
+            // lists of item types for specifying different item types
+            const giftable = ['ammo', 'augment', 'armour', 'weapon', 'upgrade'];
+            const equippable = ['armour', 'augment', 'weapon'];
+
+            // Generic options available to all item types
             let options = [{
-                name: "NEWEDO.ContextMenu.item.edit",
+                name: "NEWEDO.ContextMenu.Item.Edit",
                 icon: "<i class='fa-solid fa-edit'></i>",
-                condition: () => isOwner,
+                group: "common",
+                condition: isOwner,
                 callback: () => item.sheet.render(true)
             }, {
-                name: "NEWEDO.ContextMenu.item.delete",
+                name: "NEWEDO.ContextMenu.Item.Delete",
                 icon: "<i class='fa-solid fa-trash'></i>",
-                condition: () => isOwner,
+                group: "common",
+                condition: isOwner,
                 callback: () => item.delete()
+            }, {
+                name: "NEWEDO.ContextMenu.Item.Gift",
+                icon: '<i class="fa-solid fa-gift"></i>',
+                group: 'gear',
+                condition: isOwner && giftable.includes(item.type),
+                callback: () => LOGGER.debug('sending away item')
+            }, {
+                name: "NEWEDO.ContextMenu.Item.Equip",
+                icon: '<i class="fa-solid fa-hand-rock"></i>',
+                group: 'gear',
+                condition: isOwner && equippable.includes(item.type) && !item.system.equipped,
+                callback: () => { item.update({ system: { equipped: !item.system.equipped } }) }
+            }, {
+                name: "NEWEDO.ContextMenu.Item.Unequip",
+                icon: '<i class="fa-solid fa-hand-paper"></i>',
+                group: 'gear',
+                condition: isOwner && equippable.includes(item.type) && item.system.equipped,
+                callback: () => { item.update({ system: { equipped: !item.system.equipped } }) }
             }]
-
-            if (item.type != "fate" && item.type != "skill") {
-                options.push({
-                    name: "Gift",
-                    icon: "<i class='fa-solid fa-gift'></i>",
-                    condition: () => isOwner,
-                    callback: () => LOGGER.debug('sending away item')
-                })
-            }
 
             return options;
         }
@@ -393,15 +402,6 @@ export default function NewedoSheetMixin(Base) {
             // swap the enable / disable effect option
 
             return options;
-        }
-
-        static _onToggleMode() {
-            if (this.isPlayMode) this._sheetMode = this.constructor.SHEET_MODES.EDIT;
-            else this._sheetMode = this.constructor.SHEET_MODES.PLAY;
-            const lock = this.window.header.querySelector('.fa-lock, .fa-lock-open');
-            lock.classList.toggle('fa-lock');
-            lock.classList.toggle('fa-lock-open');
-            this.render(false);
         }
     }
 }

@@ -20,7 +20,7 @@
         }
     }
 
-    .derived-traits {
+    .edo-derived-traits {
         display: block;
 
         &>* {
@@ -93,6 +93,15 @@
         }
     }
 
+    //===========================================================
+    // Traits tab
+    //===========================================================
+    .edo-tab-traits {
+        input {
+            text-align: center;
+        }
+    }
+
     .body {
         padding: 10px;
         flex: 1;
@@ -104,26 +113,6 @@
 
         li.item {
             padding: 1px 0 0 0;
-        }
-    }
-
-    /* ------------------------------------------------------------------- */
-    /*                                                                     */
-    /*                         TAB SPECIFIC STYLES                         */
-    /*                                                                     */
-    /* ------------------------------------------------------------------- */
-    .tab-content {
-        &.traits {
-            .group-row {
-                text-align: center;
-                align-items: center;
-                gap: 8px;
-                margin-bottom: 12px;
-            }
-
-            .trait-box {
-                align-items: center;
-            }
         }
     }
 }

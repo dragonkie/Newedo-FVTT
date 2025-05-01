@@ -1,3 +1,4 @@
+import { NEWEDO } from "../config.mjs";
 import { FeatureEffectData, FeatureItemData, FeatureTraitData } from "../data/feature.mjs";
 import utils from "../helpers/sysUtil.mjs";
 import NewedoApplication from "./application.mjs";
@@ -37,7 +38,7 @@ export class FeatureApplication extends NewedoApplication {
     constructor(document, feature) {
         super();
         if (!document || !feature) {
-            utils.error(newedo.config.error.noDocument);
+            utils.error(NEWEDO.error.noDocument);
             return {};
         }
 
@@ -56,7 +57,7 @@ export class FeatureApplication extends NewedoApplication {
             // creates the dialog input
             const app = await new NewedoDialog({
                 window: { title: 'Create New Feature' },
-                content: await renderTemplate(this.TEMPLATES.CREATE),
+                content: await foundry.applications.handlebars.renderTemplate(this.TEMPLATES.CREATE),
                 buttons: [{
                     label: 'Cancel',
                     action: 'cancel',
@@ -101,7 +102,7 @@ export class FeatureApplication extends NewedoApplication {
         if (this.feature.type == "item") {
             context.itemLinks = [];
             for (const i of this.feature.data.items) {
-                context.itemLinks.push(await TextEditor.enrichHTML(`@UUID[${i.uuid}]{${i.name}}`));
+                context.itemLinks.push(await foundry.applications.ux.TextEditor.enrichHTML(`@UUID[${i.uuid}]{${i.name}}`));
             }
         }
         return context;
