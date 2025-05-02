@@ -8,15 +8,17 @@ import { NEWEDO } from "../../../config.mjs";
 export default class CharacterSheet extends NewedoActorSheet {
     static DEFAULT_OPTIONS = {
         classes: ["character"],
-        position: { height: 680, width: 840, top: 60, left: 125 },
+        position: { height: 740, width: 860, top: 60, left: 100 },
         actions: {
             rest: this._onRest
-        }
+        },
+        resizeable: false
+
     }
 
     static get PARTS() {
         return {
-            panel: { template: "systems/newedo/templates/actor/character/panel.hbs" },
+            panel: { template: "systems/newedo/templates/actor/shared/panel.hbs" },
             body: { template: "systems/newedo/templates/actor/character/body.hbs" },
             header: { template: "systems/newedo/templates/actor/character/header.hbs" },
             traits: { template: "systems/newedo/templates/actor/character/traits.hbs" },
@@ -56,25 +58,24 @@ export default class CharacterSheet extends NewedoActorSheet {
         for (let [k, v] of Object.entries(context.system.background)) {
             v.label = utils.localize(NEWEDO.background[k]);
         }
-
-        LOGGER.debug('SHEET | CHARACTER | PREPARE CONTEXT', context);
         return context;
     }
 
     static async _onRest(event, target) {
         let heal = this.document.system.rest.total;
-        let confirm = await NewedoDialog.confirm({
+        await NewedoDialog.confirm({
             content: `
             <p>Are you sure you would like to rest?</p>
             <p>This will restore ${heal} health and all temp legend.</p>
-            `
+            `,
+            submit: (result) => {
+                if (result) {
+                    this.document.update({
+                        'system.hp.value': Math.min(this.document.system.hp.value + heal, this.document.system.hp.max),
+                        'system.legend.value': this.document.system.legend.max
+                    })
+                }
+            }
         });
-
-        if (confirm) {
-            this.document.update({
-                'system.hp.value': this.document.system.hp.value + heal,
-                'system.legend.value': this.document.system.legend.max
-            })
-        }
     }
 }

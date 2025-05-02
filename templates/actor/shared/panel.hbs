@@ -1,0 +1,103 @@
+<section class="panel">
+    {{!-- Newedo banner rendered at the top of the screen--}}
+    <img class="banner-newedo" src="systems/newedo/assets/images/banner-newedo.svg">
+    <div class="portrait" style="border: 0;" data-action="editImage">
+        <img class="profile-img" src="{{document.img}}" title="{{actor.name}}" height="175px" width="175px" style="object-fit: cover; border: 0; object-position: 50% 0%" />
+    </div>
+
+    {{!-- Health container--}}
+    {{ localize 'NEWEDO.Trait.Derived.Hp.long' }}: {{ system.wound.label }}
+    <div class="bar">
+        <div class="fill" style="width: {{ percent system.hp.value system.hp.max }}%;"></div>
+        <div class="value flexrow">
+            <input class="align-center" type="number" name="system.hp.value" value="{{system.hp.value}}" />
+            /
+            <input class="align-center" type="number" value="{{system.hp.max}}" disabled />
+        </div>
+    </div>
+
+    {{!-- Legend container --}}
+    {{#if (eq document.type 'character')}}
+        <div>
+            <div>
+                {{{ledger 'system.legend.max' 'legend' 'NEWEDO.ledger.legend'}}}
+                {{ localize 'NEWEDO.Generic.Legend.long' }}
+            </div>
+            <div class="bar">
+                <div class="fill blue" style="width: {{ percent system.legend.value system.legend.max }}%;"></div>
+                <div class="value">
+                    <input class="align-center" type="number" name="system.legend.value" value="{{system.legend.value}}" />
+                    /
+                    <input class="align-center" type="number" name="system.legend.max" value="{{system.legend.max}}" disabled />
+                </div>
+            </div>
+        </div>
+    {{/if}}
+
+    {{!-- Armour values --}}
+    <div class="edo-soak-container">
+        <b>
+            {{#if isEditMode}}<a class="fas fa-cog" data-action="configSoaks" title="NEWEDO.Button.ConfigSoaks"></a>{{/if}}
+            {{ localize 'NEWEDO.Generic.Soak.long' }}
+        </b>
+        <div class="flexrow" style="gap: 4px;">
+            {{#each system.armour as | soak key |}}
+                <div>
+                    <div class="name">{{ soak.abbr }}</div>
+                    <input type="number" class="score" value="{{soak.total}}" disabled>
+                </div>
+            {{/each}}
+        </div>
+    </div>
+
+    {{#if (eq document.type 'character')}}
+        {{!-- Character XP tracker --}}
+        <div class="flexrow" style="gap: 4px;">
+            <div class="flexrow">
+                {{{ledger 'system.xp.value' 'xp' 'NEWEDO.ledger.exp'}}}
+                <span>{{localize 'NEWEDO.Generic.Experience.abbr'}}:</span>
+            </div>
+            <input type="number" value="{{system.xp.value}}" disabled />
+        </div>
+
+        {{!-- Character money tracker --}}
+        <div class="flexrow" style="gap: 4px;">
+            <div class="flexrow">
+                {{{ledger 'system.money.value' 'money' 'NEWEDO.ledger.money'}}}
+                <span>{{localize 'NEWEDO.Generic.Money.long'}}:</span>
+            </div>
+            <input type="number" value="{{system.money.value}}" disabled />
+        </div>
+
+        {{!-- Fate card container --}}
+        <div class="fate-card flexcol">
+            <div class="flexrow">
+                <a data-action="fateDisplay" class="fate-switch">
+                    {{#if (eq userFlags.newedo.settings.fateDisplay '%')}}
+                        <i class="fa-solid fa-toggle-on"></i>
+                    {{/if}}
+                    {{#unless (eq userFlags.newedo.settings.fateDisplay '%')}}
+                        <i class="fa-solid fa-toggle-off"></i>
+                    {{/unless}}
+                </a>
+                <a data-action="rollFate" class="fate-title"><b>{{localize 'NEWEDO.Generic.Fate.long'}} Card</b></a>
+            </div>
+            <ol class="fate-list flexcol scrollable">
+                {{!-- Loops through the characters list of fate card options--}}
+                {{#each fates as |fate key|}}
+                    <li class="item flexrow" data-item-uuid="{{fate.uuid}}">
+
+                        {{#if (eq ../userFlags.newedo.settings.fateDisplay '%')}}
+                            <div>{{fate.system.chance}}%</div>
+                        {{/if}}
+                        {{#if (eq ../userFlags.newedo.settings.fateDisplay 'range')}}
+                            <div>{{fate.system.end}}/{{fate.system.start}}</div>
+                        {{/if}}
+
+                        <a class="item-edit" data-action="editItem" draggable="true"><b>{{fate.name}}</b></a>
+                    </li>
+                {{/each}}
+            </ol>
+        </div>
+    {{/if}}
+</section>

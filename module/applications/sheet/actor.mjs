@@ -1,10 +1,10 @@
-import { onManageActiveEffect, prepareActiveEffectCategories } from "../../helpers/effects.mjs";
 import LOGGER from "../../helpers/logger.mjs";
 import NewedoSheetMixin from "./mixin.mjs";
 import NewedoRoll from "../../helpers/dice.mjs";
 import NewedoLedger from "../ledger.mjs";
 import utils from "../../helpers/sysUtil.mjs";
 import { NEWEDO } from "../../config.mjs";
+import NewedoDialog from "../dialog.mjs";
 
 /**
  * Extend the basic ActorSheet with some very simple modifications
@@ -27,7 +27,10 @@ export default class NewedoActorSheet extends NewedoSheetMixin(foundry.applicati
             createEffect: this._onCreateEffect,
             disableEffect: this._onDisableEffect,
             toggleWeaponBurst: this._onToggleWeaponBurst,
-            reloadWeapon: this._onReloadWeapon
+            reloadWeapon: this._onReloadWeapon,
+            // actions that open configuration windows
+            configSoaks: this._onConfigureSoaks,
+            configDerived: this._onConfigureTraitsDerived
         }
     }
 
@@ -67,9 +70,6 @@ export default class NewedoActorSheet extends NewedoSheetMixin(foundry.applicati
         context.items = this.document.items;
         context.itemTypes = this.document.itemTypes;
         context.editable = this.isEditable && (this._mode === this.constructor.SHEET_MODES.EDIT);
-
-        // Prepare active effects
-        context.effects = prepareActiveEffectCategories(this.document.effects);
 
         const { core, derived } = context.system.traits;
 
@@ -138,30 +138,17 @@ export default class NewedoActorSheet extends NewedoSheetMixin(foundry.applicati
                 });
             }
         }
-
-        LOGGER.debug('SHEET | ACTOR | PREPARE CONTEXT', context);
         return context;
     }
 
-    /* -------------------------------------------------------------------------------------- */
-    /*                                                                                        */
-    /*                                   SHEET ACTIONS                                        */
-    /*                                                                                        */
-    /* -------------------------------------------------------------------------------------- */
-
-    /**================================================
-     * Helper functions
-     * ================================================
-     */
+    //==========================================================================================
+    // Sheet Action functions
+    //==========================================================================================
     static async getTargetItem(target) {
-        const uuid = target.closest(".item[data-item-uuid]").dataset.itemUuid;
+        let uuid = target.closest(".item[data-item-uuid]").dataset.itemUuid;
+        if (!uuid) return undefined;
         return fromUuid(uuid);
     }
-
-    /**================================================
-     * Action functions
-     * ================================================
-     */
 
     static async _onEditItem(event, target) {
         const item = await this.constructor.getTargetItem(target);
@@ -339,6 +326,112 @@ export default class NewedoActorSheet extends NewedoSheetMixin(foundry.applicati
         await item.update({ 'system.ammo.value': max });
         this.render(false);
         item.sheet.render(false);
+    }
+
+    //=====================================================================
+    // Configuration windows
+    //=====================================================================
+    static async _onConfigureSoaks(event, target) {
+        let content = `<p><b>Base Soak Values</b></p>`;
+        for (const [key, soak] of Object.entries(this.document.system.armour)) {
+            let field = new foundry.data.fields.NumberField();
+            content += field.toFormGroup({
+                label: utils.localize(NEWEDO.damageTypes[key])
+            }, {
+                name: `system.armour.${key}.value`,
+                value: soak.value
+            }
+            ).outerHTML;
+        }
+
+        const app = await new NewedoDialog({
+            content: content,
+            window: {
+                resizeable: false,
+                minimizable: false,
+                title: 'NEWEDO.Dialog.SoakConfig'
+            },
+            buttons: [{
+                action: 'confirm',
+                label: 'Confirm',
+                icon: 'fas fa-check',
+                default: true
+            }, {
+                action: 'cancel',
+                label: 'Cancel',
+                icon: 'fas fa-xmark'
+            }],
+            submit: (result) => {
+                if (result !== 'confirm') return;
+                let data = {};
+                for (const input of app.element.querySelectorAll('input[name]')) {
+                    data[input.name] = input.value;
+                }
+                this.document.update(data);
+            }
+        }).render(true);
+    }
+
+    static async _onConfigureTraitsDerived(event, target) {
+        let system = this.document.system;
+        // Add in the derived traits
+        let content = `<b>Derived Traits</b>`;
+        content += `<div class="items-header flexrow"><div>Trait</div><div>Flat</div><div>Modifier</div></div>`;
+        for (const [key, trait] of Object.entries(this.document.system.traits.derived)) {
+            let field = new foundry.data.fields.NumberField();
+
+            content += `<div class="form-group"><label>${utils.localize(NEWEDO.traitsDerived[key])}</label><div class="form-fields">`;
+            content += this.document.system.schema.getField(`traits.derived.${key}.flat`).toInput({ value: trait.flat }).outerHTML;
+            content += this.document.system.schema.getField(`traits.derived.${key}.mod`).toInput({ value: trait.mod }).outerHTML;
+            content += `</div></div>`;
+        }
+
+        content += `<div class="form-group"><label>${utils.localize(NEWEDO.traitsDerived.hp)}</label><div class="form-fields">`;
+        content += this.document.system.schema.getField(`hp.flat`).toInput({ value: system.hp.flat }).outerHTML;
+        content += this.document.system.schema.getField(`hp.mod`).toInput({ value: system.hp.mod }).outerHTML;
+        content += `</div></div>`;
+
+        content += `<div class="form-group"><label>${utils.localize(NEWEDO.generic.lift)}</label><div class="form-fields">`;
+        content += this.document.system.schema.getField(`lift.flat`).toInput({ value: system.lift.flat }).outerHTML;
+        content += this.document.system.schema.getField(`lift.mod`).toInput({ value: system.lift.mod }).outerHTML;
+        content += `</div></div>`;
+
+        content += `<div class="form-group"><label>${utils.localize(NEWEDO.generic.rest)}</label><div class="form-fields">`;
+        content += this.document.system.schema.getField(`rest.flat`).toInput({ value: system.rest.flat }).outerHTML;
+        content += this.document.system.schema.getField(`rest.mod`).toInput({ value: system.rest.mod }).outerHTML;
+        content += `</div></div>`;
+
+        const app = await new NewedoDialog({
+            id: `${this.id}-dialog-config-traits-derived`,
+            modal: true,
+            content: content,
+            window: {
+                resizeable: false,
+                minimizable: false,
+                title: 'NEWEDO.Dialog.DerivedTraits'
+            },
+            position: {
+                width: 500,
+            },
+            buttons: [{
+                action: 'confirm',
+                label: 'Confirm',
+                icon: 'fas fa-check',
+                default: true
+            }, {
+                action: 'cancel',
+                label: 'Cancel',
+                icon: 'fas fa-xmark'
+            }],
+            submit: (result) => {
+                if (result !== 'confirm') return;
+                let data = {};
+                for (const input of app.element.querySelectorAll('input[name]')) {
+                    data[input.name] = input.value;
+                }
+                this.document.update(data);
+            }
+        }).render(true);
     }
 
     /* -------------------------------------------------------------------------------------- */

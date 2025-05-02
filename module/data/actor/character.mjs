@@ -46,13 +46,10 @@ export default class CharacterDataModel extends ActorDataModel {
     }
 
     prepareBaseData() {
-        LOGGER.group('CharacterDataModel | prepareBaseData')
         super.prepareBaseData();
-        LOGGER.groupEnd();
     }
 
     prepareDerivedData() {
-        LOGGER.group('CharacterDataModel | prepareDerivedData')
         /* ----------------------------------------------------------- */
         /* Background Ranks                                            */
         /* ----------------------------------------------------------- */
@@ -84,7 +81,5 @@ export default class CharacterDataModel extends ActorDataModel {
         /* Generic Actor Super                                         */
         /* ----------------------------------------------------------- */
         super.prepareDerivedData();
-
-        LOGGER.groupEnd();
     }
 }

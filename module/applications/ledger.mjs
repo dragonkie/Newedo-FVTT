@@ -106,12 +106,10 @@ export default class NewedoLedger extends NewedoApplication {
                 this.ledger.transactions.push(newRecord)
 
                 // Push the updated ledger to the right flag
-                LOGGER.debug('Updating document flag')
                 await this.document.setFlag('newedo', 'ledger', {
                     [this.ledger.id]: this.ledger
                 });
                 // update the local and database actors targeted value to the new sum
-                LOGGER.debug('Updating parent document');
                 await this.document.update({ [this.ledger.target]: this.sum });
                 // renders the sheet on screen to match new input
                 this.render(true);
@@ -130,14 +128,12 @@ export default class NewedoLedger extends NewedoApplication {
 
     static async _onDeleteIndex(event, target) {
         const index = 1 * target.closest('[data-index]').dataset.index - 1;
-        LOGGER.debug('Removing index', index);
         this.ledger.transactions.splice(index, 1);
 
         this.document.setFlag('newedo', 'ledger', {
             [this.ledger.id]: this.ledger
         });
 
-        LOGGER.debug('Updating parent document');
         await this.document.update({ [this.ledger.target]: this.sum })
         this.render(false);
     }
@@ -158,7 +154,6 @@ export default class NewedoLedger extends NewedoApplication {
     }
 
     async _prepareContext() {
-        LOGGER.debug('ledger context', this);
         const context = await super._prepareContext();
 
         context.app = this;

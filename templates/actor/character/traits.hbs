@@ -24,33 +24,22 @@
             </div>
         {{/each}}
     </div>
-    {{!-- Derived trait modifiers --}}
-    <div class="flexrow flex-gap-m">
-        {{#each system.traits.derived as | trait key |}}
-            <div class="trait-box align-center">
-                <label class="edo-resource-label flexlarge align-left">{{trait.label}}</label>
-                <input name="system.traits.derived{{key}}.mod" type="number" value="{{trait.total}}" disabled>
-                {{#if ../isEditMode}}
-                    <input style="width: 75%; height: 1.5rem; border-radius: 0px 0px 5px 5px;" name="system.traits.derived.{{key}}.mod" value="{{trait.mod}}" type="number" />
-                {{/if}}
-            </div>
-        {{/each}}
-    </div>
+
     {{!-- Additional modifiers --}}
     <div class="flexrow flex-gap-m">
         <div class="trait-box align-center">
             <label class="edo-resource-label flexlarge align-left">{{localize config.generic.rest}} {{localize "NEWEDO.Generic.Mod.abbr"}}</label>
-            <input name="system.rest.mod" value="{{system.rest.mod}}" type="number" {{disabled isPlayMode}}>
+            <input value="{{system.rest.mod}}" type="number" disabled>
             <a data-action="rest">Heal {{system.rest.total}}</a>
         </div>
         <div class="trait-box align-center">
             <label class="edo-resource-label flexlarge align-left">{{localize config.generic.lift}} {{localize "NEWEDO.Generic.Mod.abbr"}}</label>
-            <input name="system.lift.mod" value="{{system.lift.mod}}" type="number" {{disabled isPlayMode}}>
+            <input value="{{system.lift.mod}}" type="number" disabled>
             <div>Carry {{multiply system.traits.core.pow.total system.lift.mod}}kg</div>
         </div>
         <div class="trait-box align-center">
             <label class="edo-resource-label flexlarge align-left">{{localize "NEWEDO.Trait.Derived.Hp.long"}} {{localize "NEWEDO.Generic.Mod.abbr"}}</label>
-            <input name="system.hp.mod" value="{{system.hp.mod}}" type="number" {{disabled isPlayMode}}>
+            <input value="{{system.hp.mod}}" type="number" disabled>
             <div>+{{ceil (subtraction (multiply system.traits.core.hrt.total system.hp.mod) system.traits.core.hrt.total)}} Hp</div>
         </div>
     </div>

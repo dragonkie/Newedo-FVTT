@@ -53,14 +53,20 @@ export class ActorDataModel extends SystemDataModel {
 
         schema.hp = new SchemaField({
             min: new NumberField({ initial: 0 }),
-            value: new NumberField({ initial: 15, min: 0 }),
-            max: new NumberField({ initial: 15 }),
+            value: new NumberField({ initial: 20, min: 0 }),
             mod: new NumberField({ initial: 1.5 }),
+            flat: new NumberField({ initial: 0 }),
         });
 
         schema.size = this.AddValueField('value', 5);
-        schema.lift = this.AddValueField('mod', 3.0);// mod * pow kg
-        schema.rest = this.AddValueField('mod', 2.0);// 5 * rest hp healed on nap
+        schema.lift = new SchemaField({
+            mod: new NumberField({ initial: 3.0 }),
+            flat: new NumberField({ initial: 0 }),
+        });// mod * pow kg
+        schema.rest = new SchemaField({
+            mod: new NumberField({ initial: 2.0 }),
+            flat: new NumberField({ initial: 0 }),
+        });// 5 * rest hp healed on nap
 
         schema.traits = new SchemaField({
             core: new SchemaField({
@@ -73,10 +79,26 @@ export class ActorDataModel extends SystemDataModel {
                 shi: this.AddValueField('value', 0),
             }),
             derived: new SchemaField({
-                init: this.AddValueField('mod', 1.0),
-                move: this.AddValueField('mod', 1.0),
-                def: this.AddValueField('mod', 0.4),
-                res: this.AddValueField('mod', 0.4)
+                init: new SchemaField({
+                    mod: new NumberField({ initial: 1.0 }),
+                    flat: new NumberField({ initial: 0 }),
+                }),
+                init: new SchemaField({
+                    mod: new NumberField({ initial: 1.0 }),
+                    flat: new NumberField({ initial: 0 }),
+                }),
+                move: new SchemaField({
+                    mod: new NumberField({ initial: 1.0 }),
+                    flat: new NumberField({ initial: 0 }),
+                }),
+                def: new SchemaField({
+                    mod: new NumberField({ initial: 1.0 }),
+                    flat: new NumberField({ initial: 0 }),
+                }),
+                res: new SchemaField({
+                    mod: new NumberField({ initial: 1.0 }),
+                    flat: new NumberField({ initial: 0 }),
+                }),
             })
         });
 
@@ -88,7 +110,7 @@ export class ActorDataModel extends SystemDataModel {
         });
 
         schema.bonus = new SchemaField({
-            // Bonus to core trait totals
+            // Bonus to core trait totals, added after all other modifiers
             PowTotal: new NumberField({ initial: 0 }),
             PerTotal: new NumberField({ initial: 0 }),
             PreTotal: new NumberField({ initial: 0 }),
@@ -96,6 +118,10 @@ export class ActorDataModel extends SystemDataModel {
             RefTotal: new NumberField({ initial: 0 }),
             SavTotal: new NumberField({ initial: 0 }),
             ShiTotal: new NumberField({ initial: 0 }),
+            DefTotal: new NumberField({ initial: 0 }),
+            InitTotal: new NumberField({ initial: 0 }),
+            MoveTotal: new NumberField({ initial: 0 }),
+            ResTotal: new NumberField({ initial: 0 }),
 
             // Bonus to core trait ranks, very op
             PowRank: new NumberField({ initial: 0 }),
@@ -105,12 +131,6 @@ export class ActorDataModel extends SystemDataModel {
             RefRank: new NumberField({ initial: 0 }),
             SavRank: new NumberField({ initial: 0 }),
             ShiRank: new NumberField({ initial: 0 }),
-
-            // Bonus to derived trait totals
-            DefTotal: new NumberField({ initial: 0 }),
-            InitTotal: new NumberField({ initial: 0 }),
-            MoveTotal: new NumberField({ initial: 0 }),
-            ResTotal: new NumberField({ initial: 0 }),
 
             // Bonus to derived trait base values (these bonuses are applied before the modifier is calculated)
             DefBase: new NumberField({ initial: 0 }),
@@ -165,13 +185,10 @@ export class ActorDataModel extends SystemDataModel {
      */
 
     prepareBaseData() {
-        LOGGER.group("ActorDataModel | prepareBaseData");
         super.prepareBaseData();
-        LOGGER.groupEnd();
     }
 
     prepareDerivedData() {
-        LOGGER.group("ActorDataModel | prepareDerivedData");
         super.prepareDerivedData();
         const { core, derived } = this.traits;
         const bonus = this.bonus;
@@ -197,17 +214,17 @@ export class ActorDataModel extends SystemDataModel {
         }
 
         // Calculates derived traits for initative, move, defence, resolve, and max health
-        derived.init.total = Math.ceil((core.sav.total + core.ref.total + bonus.InitBase) * (derived.init.mod + bonus.InitMod)) + bonus.InitTotal;
-        derived.move.total = Math.ceil((((core.hrt.total + core.ref.total) / this.size.value) + bonus.MoveBase) * (derived.move.mod + bonus.MoveMod)) + bonus.MoveTotal;
-        derived.def.total = Math.ceil((core.pow.total + core.ref.total + bonus.DefBase) * (derived.def.mod + bonus.DefMod)) + bonus.DefTotal;
-        derived.res.total = Math.ceil((core.hrt.total + core.pre.total + bonus.ResBase) * (derived.res.mod + bonus.ResMod)) + bonus.ResTotal;
+        derived.init.total = derived.init.flat + Math.ceil((core.sav.total + core.ref.total + bonus.InitBase) * (derived.init.mod + bonus.InitMod)) + bonus.InitTotal;
+        derived.move.total = derived.move.flat + Math.ceil((((core.hrt.total + core.ref.total) / this.size.value) + bonus.MoveBase) * (derived.move.mod + bonus.MoveMod)) + bonus.MoveTotal;
+        derived.def.total = derived.def.flat + Math.ceil((core.pow.total + core.ref.total + bonus.DefBase) * (derived.def.mod + bonus.DefMod)) + bonus.DefTotal;
+        derived.res.total = derived.res.flat + Math.ceil((core.hrt.total + core.pre.total + bonus.ResBase) * (derived.res.mod + bonus.ResMod)) + bonus.ResTotal;
 
         // Sets health range, MIN is included for use with the token resource bars and is always 0
-        this.hp.max = Math.ceil(core.hrt.total * (this.hp.mod + bonus.HpMod)) + bonus.HpTotal;
+        this.hp.max = Math.ceil(core.hrt.total * (this.hp.mod + bonus.HpMod)) + bonus.HpTotal + this.hp.flat;
         this.hp.min = 0;
 
         // calculates the ammount of health healed by resting
-        this.rest.total = Math.ceil(this.rest.mod * 5);
+        this.rest.total = Math.ceil(this.rest.mod * 5) + this.rest.flat;
 
         // Gets the characters wound state
         this.wound = utils.woundState(this.hp.value / this.hp.max);
@@ -217,8 +234,6 @@ export class ActorDataModel extends SystemDataModel {
         this.armour.ele.total = this.armour.ele.value + bonus.SoakEle;
         this.armour.bio.total = this.armour.bio.value + bonus.SoakBio;
         this.armour.arc.total = this.armour.arc.value + bonus.SoakArc;
-
-        LOGGER.groupEnd();
     }
 
     getRollData() {
@@ -257,7 +272,7 @@ export class ItemDataModel extends SystemDataModel {
      * @param {ActorDataModel} ActorData The owning NewedoActorDocument
      */
     prepareOwnerData(ActorData) {
-        
+
     }
 
     getRollData() {
@@ -278,6 +293,6 @@ export class ItemDataModel extends SystemDataModel {
     }
 
     async use(action) {
-        
+
     }
 }

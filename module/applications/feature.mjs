@@ -109,11 +109,7 @@ export class FeatureApplication extends NewedoApplication {
     }
 
     async _onDropItem(event, item) {
-        console.log("Item drop gotten");
-        if (this.feature.type == 'item') {
-            console.log("item added", item);
-            this.feature.data.items.push({ uuid: item.uuid, name: item.name });
-        }
+        if (this.feature.type == 'item') this.feature.data.items.push({ uuid: item.uuid, name: item.name });
         this.render(true);
     }
 
@@ -130,11 +126,9 @@ export class FeatureApplication extends NewedoApplication {
             }
         }
         await this.document.update({ "system.features": list });
-        console.log(this.document);
     }
 
     static async _onCancelChange(event, target) {
-        console.log('cancel');
         this.close();
     }
 }

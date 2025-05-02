@@ -9,7 +9,7 @@ export default class NpcSheet extends NewedoActorSheet {
     }
 
     static PARTS = {
-        panel: { template: "systems/newedo/templates/actor/npc/panel.hbs" },
+        panel: { template: "systems/newedo/templates/actor/shared/panel.hbs" },
         body: { template: "systems/newedo/templates/actor/npc/body.hbs" },
         header: { template: "systems/newedo/templates/actor/character/header.hbs" },
         traits: { template: "systems/newedo/templates/actor/npc/traits.hbs" },
@@ -31,7 +31,7 @@ export default class NpcSheet extends NewedoActorSheet {
 
     async _prepareContext() {
         const context = await super._prepareContext();
-        
+
         return context;
     }
 }    

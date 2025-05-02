@@ -45,30 +45,19 @@ export default class NewedoActor extends Actor {
     /* ----------------------------------------------------------------- */
 
     prepareData() {
-        LOGGER.group(`Document | ${this.isToken ? 'Token Actor' : 'Actor'} | prepareData | ` + this.name);
-        LOGGER.debug('Actor:', this);
-
         super.prepareData();
-
-        LOGGER.groupEnd();
     }
 
     prepareBaseData() {
-        LOGGER.group('Document | prepareBaseData');
         super.prepareBaseData();
-        LOGGER.groupEnd();
     }
 
     prepareEmbeddedDocuments() {
-        LOGGER.group(`Document | prepareEmbeddedDocuments`);
         super.prepareEmbeddedDocuments();
-        LOGGER.groupEnd();
     }
 
     prepareDerivedData() {
-        LOGGER.group('Document | prepareDerivedData');
         super.prepareDerivedData();
-        LOGGER.groupEnd();
     }
 
     /*-------------------------------------------------------------------*/
@@ -98,9 +87,7 @@ export default class NewedoActor extends Actor {
      * @Override getRollData() that's supplied to rolls.
      */
     getRollData() {
-        LOGGER.debug('Document | Actor | getRollData');
         const data = this.system.getRollData();
-
         return data;
     }
 

@@ -75,7 +75,6 @@ export default function NewedoSheetMixin(Base) {
                 isPlayMode: this.isPlayMode,
                 isEditable: this.isEditable
             }
-            LOGGER.debug('SHEET | MIXIN | PREPARE CONTEXT', context);
             return context;
 
         }
@@ -118,7 +117,6 @@ export default function NewedoSheetMixin(Base) {
         }
 
         static _onCopyToClipboard(event, target) {
-            console.log('Copying to clipboard')
             const ele = target.closest('[data-copy]');
 
             if (!ele) {
@@ -188,7 +186,7 @@ export default function NewedoSheetMixin(Base) {
             if (this.isEditable && !this.document.getFlag("core", "sheetLock")) {
                 const label = game.i18n.localize("NEWEDO.Generic.LockToggle");
                 const icon = this.isEditMode ? 'fa-lock-open' : 'fa-lock';
-                const sheetConfig = `<button type="button" class="header-control fa-solid ${icon}" data-action="toggleMode" data-tooltip="${label}" aria-label="${label}"></button>`;
+                const sheetConfig = `<button type="button" class="header-control fa-solid ${icon} icon" data-action="toggleMode" data-tooltip="${label}" aria-label="${label}"></button>`;
                 this.window.close.insertAdjacentHTML("beforebegin", sheetConfig);
             }
 
@@ -331,11 +329,12 @@ export default function NewedoSheetMixin(Base) {
         //====================================================================================================================
         context_menu = undefined;
         _setupContextMenu() {
-            if (!this.isOwner) return;
+            if (!this.isEditable) return;
             this.context_menu = new NewedoContextMenu(this.element, "[data-item-uuid]", [], {
                 jQuery: false,
                 onOpen: (element) => {
                     const item = fromUuidSync(element.dataset.itemUuid);
+                    if (!item) return;
                     switch (item.documentName) {
                         case "ActiveEffect": ui.context.menuItems = this._getEffectContextOptions(item); break;
                         case "Item": ui.context.menuItems = this._getItemContextOptions(item); break;
@@ -349,7 +348,6 @@ export default function NewedoSheetMixin(Base) {
 
         _getItemContextOptions(item) {
             const isOwner = item.isOwner;
-            const isEquipped = item.isEquipped;
 
             // lists of item types for specifying different item types
             const giftable = ['ammo', 'augment', 'armour', 'weapon', 'upgrade'];

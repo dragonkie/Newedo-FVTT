@@ -35,10 +35,7 @@ export default class NewedoRoll {
     /**Accepts an optional list of dice objects to pre populate the tray */
     constructor(_data) {
         for (const [k, v] of Object.entries(_data)) {
-            console.log('this', this[k])
-            console.log('data', _data[k])
             if (Object.hasOwn(this, k)) this[k] = v;
-            console.log('final', this[k])
         }
         console.log('Roll constructor data', _data)
         console.log('Roll object format', JSON.parse(JSON.stringify(this)));
@@ -106,8 +103,6 @@ export default class NewedoRoll {
         if (this.document != null) {
             if (!this.rollData) this.rollData = this.document.getRollData();
         }
-
-        console.log('rolldata', this.rollData)
 
         if (this.wounds && this.rollData?.wound) {
             this.AddPart({
@@ -210,7 +205,6 @@ export default class NewedoRoll {
                 }],
                 close: () => resolve({ cancelled: true }),
                 submit: (result) => {
-                    console.log('Roll submitted with: ', result)
                     resolve(result)
                 }
             }

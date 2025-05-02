@@ -1,16 +1,133 @@
 @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap");
-.theme-light {
-  --colour-nav: var(--color-dark-3);
-  --colour-nav-active: var(--color-dark-1);
-  --colour-bar-bg: var(--color-cool-5-75);
-  --colour-bar-input: var(--color-light-2);
+.newedo {
+  --edo-size-xs: 4px;
+  --edo-size-s: 6px;
+  --edo-size-m: 12px;
+  --edo-size-l: 18px;
+  --edo-size-xl: 24px;
+  --edo-font-size-xs: 0.6em;
+  --edo-font-size-s: 0.8em;
+  --edo-font-size-m: 1em;
+  --edo-font-size-l: 1.2em;
+  --edo-font-size-xl: 2em;
+  --edo-font-size-header: 4em;
+  --edo-colour-light-1: #f7f3e8;
+  --edo-colour-light-2: #f1e8d0;
+  --edo-colour-light-3: #d6c3a3;
+  --edo-colour-light-4: #b89873;
+  --edo-colour-light-5: #a58e74;
+  --edo-colour-light-6: #836953;
+  --edo-colour-dark-1: #111;
+  --edo-colour-dark-2: #222;
+  --edo-colour-dark-3: #444;
+  --edo-colour-dark-4: #555;
+  --edo-colour-dark-5: #666;
+  --edo-colour-dark-6: #777;
+  --edo-colour-warm-1: #e8ca66;
+  --edo-colour-warm-2: #ee9b3a;
+  --edo-colour-warm-3: #ec682f;
+  --edo-colour-warm-4: #a90b19;
+  --edo-colour-cool-5: #813a5e;
+  --edo-colour-cool-4: #82497a;
+  --edo-colour-cool-3: #362733;
+  --edo-colour-cool-2: #272128;
+  --edo-colour-cool-1: rgb(21, 15 24);
+  --edo-colour-cool-1-25: rgba(21, 15, 24, 0.25);
+  --edo-colour-cool-1-50: rgba(21, 15, 24, 0.5);
+  --edo-colour-cool-1-75: rgba(21, 15, 24, 0.75);
+  --edo-colour-cool-1-90: rgba(21, 15, 24, 0.9);
+  --edo-input-bg: rgba(0, 0, 0, 0);
+  --edo-input-c: rgba(0, 0, 0, 1);
+  --edo-margin: var(--edo-size-m);
+  --edo-padding: var(--edo-size-m);
+  --edo-background-pearlescent:
+      radial-gradient(ellipse at 100% 0%, #80e6ff, transparent),
+      radial-gradient(ellipse at 100% 90%, #ff63d5, transparent),
+      radial-gradient(ellipse at 100% 180%, #f94c4c, transparent),
+      radial-gradient(ellipse at 100% 270%, #5ed000, transparent);
+  --edo-background-watermelon:
+      radial-gradient(ellipse at top, #ff63d5, transparent),
+      radial-gradient(ellipse at bottom, #5ed000, transparent);
 }
 
-.theme-dark {
-  --colour-nav: var(--color-light-3);
-  --colour-nav-active: var(--color-light-1);
-  --colour-bar-bg: var(--color-dark-1);
-  --colour-bar-input: var(--color-light-3);
+.newedo {
+  --edo-colour-1: var(--edo-colour-light-2);
+  --edo-colour-2: var(--edo-colour-light-4);
+  --edo-colour-3: var(--edo-colour-light-6);
+  --edo-colour-border: var(--edo-colour-light-6);
+  --edo-colour-text-selection-bg: var(--edo-colour-warm-4);
+  --edo-colour-text-selection: var(--edo-colour-light-3);
+  --edo-colour-text-shadow: var(--edo-colour-cool-1-25);
+  --edo-colour-text: var(--edo-colour-dark-1);
+  --edo-sheet-background: var(--edo-colour-light-2);
+  --edo-background-1: var(--edo-colour-light-2);
+  --edo-background-2: var(--edo-colour-light-4);
+  --edo-background-3: var(--edo-colour-light-6);
+}
+.newedo input {
+  --edo-input-background-colour: var(--edo-colour-light-3);
+}
+.newedo input:disabled {
+  --edo-input-background-colour: var(--edo-colour-light-6);
+}
+.newedo img {
+  --edo-background-1: var(--edo-colour-light-4);
+}
+.newedo .edo-bar {
+  --edo-bar-bg: var(--edo-colour-cool-1-50);
+}
+
+.theme-dark .newedo {
+  --edo-colour-1: var(--edo-colour-cool-1);
+  --edo-colour-2: var(--edo-colour-cool-2);
+  --edo-colour-3: var(--edo-colour-cool-3);
+  --edo-colour-text: var(--edo-colour-light-3);
+  --edo-colour-text-selection: var(--edo-colour-light-3);
+  --edo-colour-text-selection-bg: var(--edo-colour-cool-2);
+  --edo-colour-border: var(--edo-colour-light-2);
+  --edo-sheet-background: var(--edo-colour-cool-1-90);
+  --edo-background-1: var(--edo-colour-cool-1-90);
+  --edo-background-2: var(--edo-colour-cool-2);
+  --edo-background-3: var(--edo-colour-cool-1);
+}
+.theme-dark .newedo input {
+  --edo-input-background-colour: var(--edo-colour-cool-3);
+}
+.theme-dark .newedo input:disabled {
+  --edo-input-background-colour: var(--edo-colour-cool-2);
+}
+.theme-dark .newedo .edo-bar {
+  --edo-bar-bg: var(--edo-colour-cool-1) ;
+}
+
+.edo-xs {
+  --edo-margin: var(--edo-size-xs);
+  --edo-padding: var(--edo-size-xs);
+  --edo-font-size: var(--edo-font-size-xs);
+}
+
+.edo-s {
+  --edo-margin: var(--edo-size-s);
+  --edo-padding: var(--edo-size-s);
+  --edo-font-size: var(--edo-font-size-s);
+}
+
+.edo-m {
+  --edo-margin: var(--edo-size-m);
+  --edo-padding: var(--edo-size-m);
+  --edo-font-size: var(--edo-font-size-m);
+}
+
+.edo-l {
+  --edo-margin: var(--edo-size-l);
+  --edo-padding: var(--edo-size-l);
+  --edo-font-size: var(--edo-font-size-l);
+}
+
+.edo-xl {
+  --edo-margin: var(--edo-size-xl);
+  --edo-padding: var(--edo-size-xl);
+  --edo-font-size: var(--edo-font-size-xl);
 }
 
 /* Global styles */
@@ -544,7 +661,7 @@ ol.items-list .item-delete {
   flex: 2;
 }
 .sheet.item .sheet-header {
-  padding: 0 12px;
+  padding: var(--edo-padding);
 }
 
 .bar {
@@ -613,6 +730,119 @@ ol.items-list .item-delete {
 
 .newedo#context-menu {
   width: auto;
+}
+
+/*
+|| Collapsible items
+
+.collapsible - Repersents a container with collapsible elements inside of it
+.collapsible-content - a container to be shrunk down when the container is collapsed
+.wrapper - the actual content being shrunk down
+*/
+.collapsible .fa-caret-down {
+  transition: all 0.3s ease-in-out;
+}
+.collapsible.collapsed .fa-caret-down {
+  transform: rotate(-90deg);
+}
+.collapsible.collapsed .collapsible-content {
+  grid-template-rows: 0fr;
+}
+.collapsible .collapsible-content {
+  display: grid;
+  grid-template-rows: 1fr;
+  transition: all 0.3s ease-in-out;
+}
+.collapsible .collapsible-content > .wrapper {
+  overflow: hidden;
+}
+
+/*
+|| Fillable bars
+.bar - main wrapper
+.bar
+.bar.fill
+*/
+.edo-bar {
+  padding: 4px;
+  --edo-bar-size: 8px;
+  --edo-bar-colour: green;
+  --edo-bar-bg: black;
+  --edo-bar-padding: 2px;
+}
+.edo-bar.edo-l {
+  --edo-bar-size: 12px;
+}
+.edo-bar.edo-s {
+  --edo-bar-size: 4px;
+}
+.edo-bar > .wrapper {
+  background-color: var(--edo-bar-bg);
+  border-radius: calc((var(--edo-bar-size) + var(--edo-bar-padding)) / 2);
+  height: calc(var(--edo-bar-size) + var(--edo-bar-padding));
+  padding: var(--edo-bar-padding);
+}
+.edo-bar > .wrapper .fill {
+  background-color: var(--edo-bar-colour);
+  border-radius: calc(var(--edo-bar-size) / 2);
+  height: 100%;
+  max-width: 100%;
+  min-width: 0%;
+}
+
+.edo-inline-bar {
+  --edo-bar-size: 1.4rem;
+}
+.edo-inline-bar.edo-s {
+  --edo-bar-size: 1rem;
+}
+.edo-inline-bar.edo-l {
+  --edo-bar-size: 1.8rem;
+}
+.edo-inline-bar > .wrapper {
+  overflow: hidden;
+  background-color: var(--edo-bar-bg);
+  border-radius: calc((var(--edo-bar-size) + var(--edo-bar-padding)) / 2);
+  height: auto;
+  padding: var(--edo-bar-padding);
+  display: grid;
+  grid-template-columns: 1fr;
+}
+.edo-inline-bar > .wrapper > * {
+  grid-row-start: 1;
+  grid-column-start: 1;
+}
+.edo-inline-bar > .wrapper .fill {
+  background-color: var(--edo-bar-colour);
+  border-radius: calc(var(--edo-bar-size) / 2);
+  height: 100%;
+  max-width: 100%;
+  min-width: 0%;
+}
+.edo-inline-bar > .wrapper .bar-inputs {
+  display: flex;
+  flex-direction: row;
+}
+.edo-inline-bar > .wrapper .bar-inputs > * {
+  flex: 1;
+}
+.edo-inline-bar > .wrapper .bar-inputs input {
+  height: var(--edo-bar-size);
+  font-size: calc(var(--edo-bar-size) - 0.2em);
+  border: 0px solid;
+  background: rgba(0, 0, 0, 0);
+  text-align: center;
+  border: 0;
+}
+.edo-inline-bar > .wrapper .bar-inputs input:focus {
+  box-shadow: none;
+  outline-style: none;
+  font-weight: 1.1em;
+  color: white;
+}
+
+.edo-input-bar {
+  padding: 5px;
 }
 
 /*# sourceMappingURL=newedo.css.map */
