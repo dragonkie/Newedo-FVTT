@@ -403,7 +403,6 @@ export default class NewedoActorSheet extends NewedoSheetMixin(foundry.applicati
 
         const app = await new NewedoDialog({
             id: `${this.id}-dialog-config-traits-derived`,
-            modal: true,
             content: content,
             window: {
                 resizeable: false,

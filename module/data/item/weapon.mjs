@@ -164,25 +164,25 @@ export default class WeaponData extends ItemDataModel {
         const roll = new NewedoRoll({
             title: NEWEDO.generic.attack,
             document: this.parent,
-            raise: true,
             rollData: rollData
         });
 
         roll.AddPart([{
-            type: '',
             label: `${rollData.trait.label}`,
             value: `${rollData.trait.rank}d10`
         }, {
-            type: '',
             label: skill.name,
             value: skill.system.getRanks()
         }, {
-            type: '',
-            label: NEWEDO.generic.attack,
+            label: NEWEDO.generic.grit,
             value: this.grit.atk
         }]);
 
-        await roll.evaluate();
+        roll.AddWounds(this.actor);
+        roll.AddLegend(this.actor);
+        roll.AddRaise();
+
+        const result = await roll.evaluate();
 
         LOGGER.debug('Roll options: ', roll);
         if (roll.cancelled) return;
@@ -192,26 +192,27 @@ export default class WeaponData extends ItemDataModel {
         const scene = game.scenes.get(game.user.viewedScene);
         let targets = [];
 
-        let attacker = this.actor.token;
-        if (!attacker) {
+        let attacker = this.actor;
+        let attacker_token = this.actor.token;
+        if (!attacker_token) {
             for (let t of scene.tokens.contents) {
                 if (t.actorId == this.actor.id) {
-                    attacker = t;
+                    attacker_token = t;
                     break;
                 }
             }
         }
 
-        if (attacker && game.user.targets.size > 0) {
-            for (const a of userTargets.entries()) {
+        if (attacker_token && game.user.targets.size > 0) {
+            for (const [token, t] of userTargets.entries()) {
                 // prep a data object releveant to how we hit the target
                 let data = {
                     hit: false,
-                    name: a[0].actor.name,
-                    uuid: a[0].actor.uuid,
-                    def: a[0].actor.system.traits.derived.def.total,
-                    size: a[0].actor.system.size.value,
-                    dist: Math.sqrt(Math.pow(attacker.x - a[0].x, 2) + Math.pow(attacker.y - a[0].y, 2)) / scene.grid.size,
+                    name: token.actor.name,
+                    uuid: token.actor.uuid,
+                    def: token.actor.system.traits.derived.def.total,
+                    size: token.actor.system.size.value,
+                    dist: Math.sqrt(Math.pow(attacker_token.x - token.x, 2) + Math.pow(attacker_token.y - token.y, 2)) / scene.grid.size,
                     range: "short",
                     tn: 0,
                     raise: roll.options.raise * 5
@@ -219,8 +220,8 @@ export default class WeaponData extends ItemDataModel {
 
                 // Checks if the attack hits
                 if (this.ranged) {
-                    data.tn = a[0].actor.system.size.value * this.range.modShort;
-                    if (data.dist > this.range.short) data.tn = a[0].actor.system.size.value * this.range.modLong;
+                    data.tn = token.actor.system.size.value * this.range.modShort;
+                    if (data.dist > this.range.short) data.tn = token.actor.system.size.value * this.range.modLong;
                 } else data.tn = data.def;
 
                 if (roll.total >= data.tn + data.raise) data.hit = true;
@@ -261,10 +262,22 @@ export default class WeaponData extends ItemDataModel {
         const parts = [];
 
         msg.setFlag('newedo', 'attackData', {
+            attacker: {
+                actor: this.actor.uuid,
+                token: this.actor.token
+            },
             targets: targets,
             roll_parts: [],
             raises: roll.options.raise,
         })
+
+        console.log('Final attack roll', roll);
+
+        // if the user called an attack raise, we store the value in a flag so this weapons next damage roll recieves the boost
+        // raise can also be stored in the data for an attack rolls message flag
+        if (roll.options.raise > 0) {
+            this.parent.setFlag(game.system.id, 'raised', roll.options.raise)
+        }
 
         return roll;
     }
@@ -277,8 +290,8 @@ export default class WeaponData extends ItemDataModel {
 
         // Add trait dice for non ranged attacks 
         if (!this.isRanged) parts.push({
-            group: 'NEWEDO.Generic.WeaponDamage',
-            type: '',
+            group: '',
+            type: this.damageParts[0].type,
             label: rollData.trait.label,
             value: `${rollData.trait.rank}d10`
         })
@@ -287,15 +300,15 @@ export default class WeaponData extends ItemDataModel {
         for (const p of this.damageParts) {
             parts.push({
                 group: 'NEWEDO.Generic.WeaponDamage',
-                type: '',
-                label: this.parent.name,
+                type: p.type,
+                label: 'Weapon',
                 value: p.value
             })
         }
 
         // add grit damage
-        roll.AddPart({
-            type: '',
+        parts.push({
+            type: this.damageParts[0].type,
             label: NEWEDO.generic.grit,
             value: this.grit.dmg
         })
@@ -316,11 +329,11 @@ export default class WeaponData extends ItemDataModel {
             legend: false,
             title: NEWEDO.generic.damage,
             document: this.parent,
-            rollData: rollData
+            rollData: rollData,
         });
 
         // add standard damage dice
-        roll.AddPart(this.getDamageParts);
+        roll.AddPart(this.getDamageParts());
 
         // adds raise dice if a raise was called
         if (attack?.raises > 0) {
@@ -344,7 +357,7 @@ export default class WeaponData extends ItemDataModel {
         // If we have data passed into the argument, that means this was called with targeting data
         if (attack.targets && Array.isArray(attack.targets) && attack.targets.length > 0) {
             const targets = [];
-            messageData.content += `<div class="damage-data" data-attacker="${this.actor?.uuid}" data-damage-total="${roll.total}" data-damage-type="${this.damage.type}">`;
+            messageData.content += `<div class="damage-data" data-attacker_token="${this.actor?.uuid}" data-damage-total="${roll.total}" data-damage-type="${this.damage.type}">`;
 
             for (const t of attack.targets) {
                 targets.push(await fromUuid(t.uuid));

@@ -4,45 +4,36 @@ TODO:
     style the sheet to keep it more compact compared to the bulky box it is now
 --}}
 
-<form class="roll-dialog">
-    {{#each parts as | part | }}
-        <div class="form-group" data-formula="main">
-            {{!-- Get the parts type and label --}}
-            <label><b>{{localize part.label}}</b></label>
-            <div class="flexrow" style="gap: 0.5rem;">
-                <input type="checkbox" name="active" {{checked part.active}} style="flex: 0;">
-                <input type="text" name="value" value="{{part.value}}" disabled>
+<div class="flexcol flex-gap-m">
+    {{#each parts as | part key |}}
+        {{#if (not part.stepper)}}
+            <div class="edo-formula-group form-group" data-formula-type="{{part.type}}">
+                {{!-- Get the parts type and label --}}
+                <label><b>{{localize part.label}}</b></label>
+                <div class="flexrow flex-gap-s">
+                    <input type="checkbox" name="active" class="flexshrink" {{checked part.active}}>
+                    <input type="text" name="value" value="{{part.value}}" disabled>
+                </div>
             </div>
-        </div>
+        {{/if}}
     {{/each}}
 
-    {{!-- if raises are enabled for this roll --}}
-    {{#if (gt raise 0)}}
-        <div class="form-group" data-formula="raise">
-            <label>{{localize 'NEWEDO.Generic.Raise.long'}}:</label>
-            <div class="flexrow" name="clicker" style="justify-content: center; gap: 0.5rem;">
-                <button type="button" name="decrease" style="flex: 0;"><i class="fa-solid fa-minus"></i></button>
-                <input type="number" name="value" value="0" disabled style="text-align: center;" />
-                <button type="button" name="increase" style="flex: 0;"><i class="fa-solid fa-plus"></i></button>
+    {{#each parts as | part key |}}
+        {{#if part.stepper}}
+            <div class="edo-formula-group form-group" data-formula-type="{{part.type}}">
+                <label>{{localize part.label}}</label>
+                <div class="flexrow clicker flex-group-center flex-gap-s" name="clicker">
+                    <button type="button" name="decrease" class="flexshrink"><i class="fa-solid fa-minus"></i></button>
+                    <input type="number" name="value" class="align-center" value="{{part.value}}" disabled />
+                    <button type="button" name="increase" class="flexshrink"><i class="fa-solid fa-plus"></i></button>
+                </div>
             </div>
-        </div>
-    {{/if}}
-
-    {{!-- Place to optionally spend legend, eventually will be a clickable button set instead of a slider --}}
-    {{#if (and actor legend)}}
-        <div class="form-group" data-formula="legend">
-            <label>{{localize 'NEWEDO.Generic.Legend.long'}}:</label>
-            <div class="flexrow" name="clicker" style="justify-content: center; gap: 0.5rem;">
-                <button style="flex: 0;" type="button" name="decrease"><i class="fa-solid fa-minus"></i></button>
-                <input style="text-align: center;" type="number" name="value" value="0" min="0" max="5" disabled />
-                <button style="flex: 0;" type="button" name="increase"><i class="fa-solid fa-plus"></i></button>
-            </div>
-        </div>
-    {{/if}}
+        {{/if}}
+    {{/each}}
 
     {{!-- Optional roll modifiers, anything that isnt accounted for can be manually done here --}}
     <div class="form-group" data-formula="extra">
-        <label>{{localize 'NEWEDO.Generic.Situational.long'}} {{localize 'NEWEDO.Generic.Bonus.plural'}}:</label>
+        <label>{{localize 'NEWEDO.Generic.Situational.long'}}</label>
         <input type="text" name="value" />
     </div>
-</form>
+</div>

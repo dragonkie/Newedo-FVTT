@@ -15,42 +15,40 @@ export default class NewedoRoll {
 
     _ready = false;
     _roll = null;
-    document = null;// an owning actor if needed
     actor = null;
     cancelled = false;
+    document = null;// an owning actor if needed
     rollData = null;// Roll data to use
-    legend = true; // can you spend legend on this (Requires actor)
-    wounds = true;
+    parts = [];// pieces of the roll formula
+    prompt = true;// if you should prompt the user or skip that step and just roll
+    title = 'NEWEDO.Generic.Roll';// popup window title
+
+    // Final values from this roll, usually all these details are specified after
+    // the roll has been prompted and confirmed by the player
     options = {
         advantage: false,
         disadvantage: false,
         pieces: [],
         raise: 0,
-    };// filled out when gathering roll data from the user
-    parts = [];// pieces of the roll formula
-    prompt = true;// if you should prompt the user or skip that step and just roll
-    raise = false;// can you call raises
-    title = 'NEWEDO.Generic.Roll';// popup window title
+    };
 
     /**Accepts an optional list of dice objects to pre populate the tray */
     constructor(_data) {
-        for (const [k, v] of Object.entries(_data)) {
-            if (Object.hasOwn(this, k)) this[k] = v;
-        }
-        console.log('Roll constructor data', _data)
-        console.log('Roll object format', JSON.parse(JSON.stringify(this)));
+        for (const [k, v] of Object.entries(_data)) if (Object.hasOwn(this, k)) this[k] = v;
 
         // prepare implied data
-        if (this.document?.documentName === `Actor`) this.actor = this.document;
+        if (!this.actor && this.document?.documentName === `Item`) this.actor = this.document.actor;
+        if (!this.actor && this.document?.documentName === `Actor`) this.actor = this.document;
     }
 
     /**
      * @typedef {Object} RollPart
-     * @property {String|Array<String>} label - localizeable string or array of them to appear on the roll popup
-     * @property {String} group - The roll grouping to place this part in
-     * @property {String|Number} value - Inputs value field and must be valid roll format
-     * @property {String|Array<String>} type - Additional tags to identify what this roll does for effects
-     * @property {Boolean} active - Whether this will actually be used in the roll
+     * @prop {String|Array<String>} label - localizeable string or array of them to appear on the roll popup
+     * @prop {String} group - The roll grouping to place this part in
+     * @prop {String|Number} value - Inputs value field and must be valid roll format
+     * @prop {String|Array<String>} type - Additional tags to identify what this roll does for effects
+     * @prop {Boolean} active - Whether this will actually be used in the roll
+     * @prop {Boolean} stepper - Is this a stepper value?
      */
 
     /**
@@ -60,39 +58,80 @@ export default class NewedoRoll {
     static getPartSchema() {
         return {
             group: '',
-            type: '',
+            type: 'formula',
             label: 'MISSING_LABEL',
             value: 0,
             active: true,
+            stepper: false
         }
     }
 
+    //=================================================================================================================
+    // Roll part methods
+    //=================================================================================================================
     /** 
-     * @param {RollPart|Array<RollPart>} parts 
+     * @param {RollPart|RollPart[]} parts 
      * @example
-     * AddPart([{
+     * AddPart({
      *  label:"Strength", 
      *  value:"1d20+5"
-     * }, {
-     *  label:"Enchantment", 
-     *  value:"+1"
-     * }])
+     * })
      */
     AddPart(parts) { // Function for assigning data parts, means I dont have to worry about fucking up templates again
+        console.log('adding parts', parts)
         if (!Array.isArray(parts)) parts = [parts];
         for (const i of parts) {
+            if (!i.value) continue;
             if (typeof i.value !== 'string') i.value = `${i.value}`;
             i.value = i.value.replaceAll(/\s/gm, '');
             i.value = i.value.replaceAll(/[\+\-\*\/]?0+d[\d]+/gm, '');
-            if (i.value == '' || i.value == '0') continue;
+            if (i.value == '' || (i.value == '0' && !i.stepper)) continue;
             this.parts.push(Object.assign(this.constructor.getPartSchema(), i))
         }
     }
 
+    AddWounds(actor) {
+        console.log('Adding wounds')
+        if ((!actor && !this.actor) || actor.documentName !== 'Actor') throw new Error('Cant add wounds to roll without an actor');
+        if (actor) this.actor = actor;
+        this.AddPart({
+            label: actor.system.wound.label,
+            value: actor.system.wound.value,
+            type: 'wound'
+        })
+    }
+
+    AddLegend(actor) {
+        console.log('Adding legend')
+        if ((!actor && !this.actor) || actor.documentName !== 'Actor') throw new Error('Cant add legend to roll without an actor');
+        if (actor) this.actor = actor;
+        this.AddPart({
+            label: NEWEDO.generic.legend,
+            value: '0',
+            type: 'legend',
+            stepper: true,
+        })
+    }
+
+    AddRaise() {
+        console.log('Adding raises')
+        this.AddPart({
+            label: NEWEDO.generic.raise,
+            value: '0',
+            type: 'raise',
+            stepper: true,
+        })
+    }
+
+    //=================================================================================================================
+    // Popup button controls
+    //=================================================================================================================
+
+
     static template = 'systems/newedo/templates/dialog/roll-v2.hbs';
 
     async getRollOptions() {
-
+        console.log(this.parts)
         // prepare contexual parts
         if (this.parts.length == 0) {
             utils.warn("NEWEDO.warn.NoDiceToRoll");
@@ -100,132 +139,111 @@ export default class NewedoRoll {
             return { cancelled: true };
         }
 
-        if (this.document != null) {
-            if (!this.rollData) this.rollData = this.document.getRollData();
-        }
+        // if there is no roll data attached, but we have an option to get it
+        if (this.document != null && !this.rollData) this.rollData = this.document?.getRollData() || {};
 
-        if (this.wounds && this.rollData?.wound) {
-            this.AddPart({
-                label: NEWEDO.generic.wound + ':' + this.rollData.wound.label,
-                value: this.rollData.wound.value,
-                type: ''
-            })
-        }
+        const groups = [];
+        for (const part of this.parts) if (!groups.includes(part.group) && part.group != '' && part.group) groups.push(part.group);
 
         const title = utils.localize(NEWEDO.generic.roll) + ": " + utils.localize(this.title);
-        const render = await foundry.applications.handlebars.renderTemplate(this.constructor.template, this);
-
-        /**
-         * Small internal function to handel the data form we recieve
-         * @param {*} html 
-         * @param {*} method 
-         * @returns 
-         */
-        const handler = (dialog, method) => {
-            console.log(dialog)
-            console.log(method)
-            // Gets all the pieces of the formula
-            const formulaParts = dialog.element.querySelectorAll("[data-formula]");
-            this.options.pieces = [];
-            this.options.raise = 0;
-            // Get the data from the formula pieces
-            for (let element of formulaParts) {
-                let v = element.querySelector('[name=value]');
-                let a = element.querySelector('[name=active]');
-
-                // validates the user input to make sure the formula is valid, or aborts
-                if (element.dataset['formula'] == 'extra') {
-                    // Ensures the number text in the bonus field is valid for the roll
-                    if (v.value != "" && !Roll.validate(v.value)) {
-                        utils.warn("NEWEDO.warn.invalidBonus");
-                        this.options.cancelled = true; // Flags that this roll should be discarded
-                        return this.options;
-                    } else {
-                        this.options.pieces.push({
-                            type: element.dataset['formula'],
-                            value: v.value,
-                            active: true,
-                        });
-                        continue;
-                    }
-                }
-
-                // adds raise value if we used any
-                if (element.dataset['formula'] == 'raise' && v.value > 0) this.options.raise = v.value;
-
-                if (element.dataset['formula'] == 'legend' && this.actor && v.value != '0') {
-                    // special handling for the legend option since it spends a resource
-                    if (utils.spendLegend(this.actor, utils.parseElementValue(v))) {
-                        // spent legend properly
-                        this.options.pieces.push({
-                            type: element.dataset['formula'],
-                            value: v.value,
-                            active: true,
-                        })
-                    } else {
-                        // ran out of legend so abort, they should be alerted by the spend legend function already
-                        this.options.cancelled = true;
-                        return this.options;
-                    }
-                } else {
-                    // Parses all common roll values
-                    if (v && a && v.value != '' && v.value != '0') {
-                        this.options.pieces.push({
-                            type: element.dataset['formula'],
-                            value: v.value,
-                            active: a ? a.checked : true,
-                        })
-                    }
-                }
-            }
-            this.options.advantage = method == 'adv' ? true : false;
-            this.options.disadvantage = method == 'dis' ? true : false;
-            this._ready = true;
-            return this.options;
-        }
-
-        // the promise constructor provides the resolve and reject functions
-        // You can call the resolve or reject function to return the promise with the value provided to the resolve / reject
-        this.options = await new Promise((resolve, reject) => {
-            const options = {
-                window: { title: title },
-                content: render,
-                buttons: [{
-                    label: "Disadvantage",
-                    action: 'dis',
-                    callback: (event, button, dialog) => resolve(handler(dialog, "dis"))
-                }, {
-                    label: "Normal",
-                    action: 'norm',
-                    callback: (event, button, dialog) => resolve(handler(dialog, "normal"))
-                }, {
-                    label: "Advantage",
-                    action: 'adv',
-                    callback: (event, button, dialog) => resolve(handler(dialog, "adv"))
-                }],
-                close: () => resolve({ cancelled: true }),
-                submit: (result) => {
-                    resolve(result)
-                }
-            }
-
-            // Link up buttons if any and set up sheet
-            const app = new NewedoDialog(options, null);
-            app.render(true).then(() => {
-                let el = app.element;
-                let clickers = el.querySelectorAll('[name=clicker]');
-                for (const c of clickers) {
-                    let btn_i = c.querySelector('[name=increase]');
-                    let btn_d = c.querySelector('[name=decrease]');
-                    let val = c.querySelector('input[name=value]');
-
-                    btn_i.addEventListener('click', () => val.value = +val.value + 1);
-                    btn_d.addEventListener('click', () => val.value = +val.value - 1);
-                }
-            });
+        const render = await foundry.applications.handlebars.renderTemplate(this.constructor.template, {
+            ...this.rollData,
+            groups: groups,
+            parts: utils.duplicate(this.parts)
         });
 
-        return this.options;
+        //==========================================================================================
+        // Creates the proper roll dialog, returning a promise we can get results from
+        //==========================================================================================
+        return new Promise(async (resolve, reject) => {
+            const app = await new NewedoDialog({
+                window: { title: title },
+                classes: ['newedo'],
+                position: {
+                    width: 500
+                },
+                content: render,
+                buttons: [{
+                    label: "Advantage",
+                    action: 'advantage',
+                }, {
+                    label: "Normal",
+                    action: 'normal',
+                }, {
+                    label: "Disadvantage",
+                    action: 'disadvantage',
+                },],
+                close: () => resolve({ cancelled: true }),
+                submit: (result) => {
+                    //===================================================================
+                    // Roll submission handler
+                    //===================================================================
+
+                    // Gets all the pieces of the formula
+                    const formulaParts = app.element.querySelectorAll(".edo-formula-group");
+                    this.options.pieces = [];
+                    this.options.raise = 0;
+
+                    // Loops through the submitted form to gather the parts of the roll
+                    for (const element of formulaParts) {
+                        const input = element.querySelector('[name=value]');
+                        const formula = input.value;
+                        const active = element.querySelector('[name=active]');
+
+                        // Raises are special depending on how their used
+                        // Usually they repersent either additional difficulty to a roll
+                        // for a future benefit to the next one, specifically they're used
+                        // like this for attack + damage rolls
+                        // but similar behaviour can be observed in casting where you
+                        // can take a stacking penalty to increase the effects of the rote
+                        // in either case, this value is simply stored with the roll
+                        // for future use
+                        if (element.dataset.formulaType == 'raise' && +input.value > 0) {
+                            this.options.raise = +input.value;
+                            continue;
+                        }
+
+                        // Handles the spending of legend
+                        if (element.dataset.formulaType == 'legend' && this.actor && +input.value > 0) {
+                            console.log('spending legend');
+                            // special handling for the legend option since it spends a resource
+                            if (utils.spendLegend(this.actor, utils.parseElementValue(input))) {
+                                // spent legend properly
+                                this.options.pieces.push({
+                                    value: input.value,
+                                    active: true,
+                                })
+                            } else reject('Actor doesnt have enough legend for this roll');
+                        }
+
+                        // Catch any other roll parts to be added
+                        if (Roll.validate(formula) && active && +input.value != 0) {
+                            this.options.pieces.push({
+                                value: input.value,
+                                active: active.checked || true
+                            })
+                        } else if (!Roll.validate(formula) && active) reject(`Invalid formula piece: ${formula}`);
+
+                    }
+
+                    this.options.advantage = result == 'advantage';
+                    this.options.disadvantage = result == 'disadvantage';
+                    this._ready = true;
+                    resolve(result);
+                }
+            }).render(true);
+
+            // Hook up stepper elements in the roll dialog
+            let clickers = app.element.querySelectorAll('.clicker');
+            for (const c of clickers) {
+                let btn_i = c.querySelector('button[name=increase]');
+                let btn_d = c.querySelector('button[name=decrease]');
+                let val = c.querySelector('input[name=value]');
+
+                btn_i.addEventListener('click', () => val.value = +val.value + 1);
+                btn_d.addEventListener('click', () => val.value = +val.value - 1);
+            };
+        });
     }
 
     // Pointer to the evaluate function, maintains parity with foundry rolls
@@ -238,6 +256,17 @@ export default class NewedoRoll {
      */
     async evaluate() {
         if (!this._ready && this.prompt) await this.getRollOptions();
+        else if (!this._ready) {
+            // assemble the roll without prompting the user
+            for (const part of this.parts) {
+                if (part.value == 0 || part.value == '' || part.value == '0') continue;
+                this.options.pieces.push({
+                    value: part.value,
+                    active: part.active
+                })
+            }
+        }
+
         if (this.options.cancelled) return null;
 
         // Handle the advantage / disadvantage roll first and foremost
