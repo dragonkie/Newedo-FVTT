@@ -1,29 +1,29 @@
-<div class="edo-tab-content">
-    <div class="form-group">
-        <label>Skill:</label>
-        {{{ selector.skill }}}
-    </div>
+<div class="edo-tab-content edo-item-settings edo-weapon-settings flex-gap-s">
+    
+    {{{ selector.skill }}}
 
-    <div><b>Damage Parts:</b></div>
-    {{#each damageParts as | dmg key |}}
-        <div class="flexrow" style="gap: 10px; margin: 3px 0" data-part-index="{{key}}">
-            {{!-- damage formula --}}
-            {{formInput dmg.formula.field value=dmg.formula.value name=dmg.formula.path}}
-            {{!-- damage type --}}
-            <div class="flexrow" style="gap: 5px">
-                {{formInput dmg.type.field value=dmg.type.value name=dmg.type.path}}
-                {{#unless (eq key 0)}}
-                    <a data-action="deleteDamagePart" style="flex: 0;">
-                        <i class="fa-solid fa-trash"></i>
-                    </a>
-                {{/unless}}
+    <div class="flexcol flex-gap-s">
+        <div><b>Damage Parts:</b></div>
+        {{#each damageParts as | dmg key |}}
+            <div class="flexrow" style="gap: 10px; margin: 3px 0" data-part-index="{{key}}">
+                {{!-- damage formula --}}
+                {{formInput dmg.formula.field value=dmg.formula.value name=dmg.formula.path}}
+                {{!-- damage type --}}
+                <div class="flexrow" style="gap: 5px">
+                    {{formInput dmg.type.field value=dmg.type.value name=dmg.type.path}}
+                    {{#unless (eq key 0)}}
+                        <a data-action="deleteDamagePart" style="flex: 0;">
+                            <i class="fa-solid fa-trash"></i>
+                        </a>
+                    {{/unless}}
+                </div>
             </div>
+        {{/each}}
+        <div>
+            <a data-action="createDamagePart" style="float: right;">
+                Add new damage part <i class="fa-solid fa-plus fa-l"></i>
+            </a>
         </div>
-    {{/each}}
-    <div>
-        <a data-action="createDamagePart" style="float: right;">
-            Add new damage part <i class="fa-solid fa-plus fa-l"></i>
-        </a>
     </div>
 
     {{toFieldGroup system.schema 'quality.value' value=system.quality.value label='Quality'}}
@@ -31,7 +31,7 @@
 
     <div class="form-group">
         <label>Grit attack / damage bonus:</label>
-        <div class="flexrow">
+        <div class="form-fields flexrow">
             <input type="number" name="system.grit.atk" value="{{system.grit.atk}}">
             /
             <input type="number" name="system.grit.dmg" value="{{system.grit.dmg}}">
@@ -44,7 +44,7 @@
     <div class="form-group">
         {{#if system.ranged}}<label>Close / Long range:</label>{{/if}}
         {{#if (not system.ranged)}}<label>Reach / thrown range:</label>{{/if}}
-        <div class="flexrow">
+        <div class="form-fields flexrow">
             <input type="number" name="system.range.short" value="{{system.range.short}}">
             /
             <input type="number" name="system.range.long" value="{{system.range.long}}">

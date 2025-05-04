@@ -63,6 +63,8 @@ export default class WeaponData extends ItemDataModel {
         return schema;
     }
 
+    _calledRaise = 0;
+
     prepareBaseData() {
         super.prepareBaseData();
     }
@@ -141,6 +143,9 @@ export default class WeaponData extends ItemDataModel {
         await this.parent.update({ 'system.equipped': !this.equipped });
     }
 
+    //======================================================================================================
+    //> Attack action
+    //======================================================================================================
     async _onAttack() {
         // if there isnt an owning actor
         const actor = this.actor;
@@ -164,7 +169,10 @@ export default class WeaponData extends ItemDataModel {
         const roll = new NewedoRoll({
             title: NEWEDO.generic.attack,
             document: this.parent,
-            rollData: rollData
+            rollData: rollData,
+            wound: true,
+            legend: true,
+            raise: true,
         });
 
         roll.AddPart([{
@@ -177,10 +185,6 @@ export default class WeaponData extends ItemDataModel {
             label: NEWEDO.generic.grit,
             value: this.grit.atk
         }]);
-
-        roll.AddWounds(this.actor);
-        roll.AddLegend(this.actor);
-        roll.AddRaise();
 
         const result = await roll.evaluate();
 
@@ -275,9 +279,11 @@ export default class WeaponData extends ItemDataModel {
 
         // if the user called an attack raise, we store the value in a flag so this weapons next damage roll recieves the boost
         // raise can also be stored in the data for an attack rolls message flag
-        if (roll.options.raise > 0) {
-            this.parent.setFlag(game.system.id, 'raised', roll.options.raise)
-        }
+        if (roll.options.raise > 0) this._calledRaise = roll.options.raise;
+
+        //===============================================================================
+        //>- Generate attack data
+        //===============================================================================
 
         return roll;
     }
@@ -317,7 +323,23 @@ export default class WeaponData extends ItemDataModel {
     }
 
     // newer version of the attack roll
-    async _onDamage(attack = {}) {
+
+    /**
+     * @typedef {Object} AttackData
+     * @prop {Number} [raises=0] - The number of raises called on the previous roll
+     * @prop {}
+     */
+
+    //======================================================================================================
+    //> Damage action
+    //======================================================================================================
+    /**
+     * 
+     * @param {*} attack 
+     * @returns 
+     */
+    async _onDamage({ raises = 1 } = {}) {
+        let attack = { ...arguments };
         // if there isnt an owning actor
         const actor = this.actor;
         if (!actor) return;
@@ -338,7 +360,6 @@ export default class WeaponData extends ItemDataModel {
         // adds raise dice if a raise was called
         if (attack?.raises > 0) {
             roll.AddPart({
-                type: '',
                 label: NEWEDO.generic.raise,
                 value: `${attack.raises}d10`
             })

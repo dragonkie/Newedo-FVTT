@@ -30,11 +30,9 @@ export default class NewedoApplication extends HandlebarsApplicationMixin(Applic
         this._setupDragAndDrop();
     }
 
-    /******************************************************************************************/
-    /*                                                                                        */
-    /*                                   DRAG N DROP                                          */
-    /*                                                                                        */
-    /******************************************************************************************/
+    //==========================================================================================
+    //> Drag and Drop
+    //==========================================================================================
 
     _setupDragAndDrop() {
         const dd = new foundry.applications.ux.DragDrop.implementation({
@@ -90,9 +88,9 @@ export default class NewedoApplication extends HandlebarsApplicationMixin(Applic
         }
     }
 
-    async _onDropItem(event, item) {}
-    async _onDropActor(event, actor) {}
-    async _onDropActiveEffect(event, effect) {}
+    async _onDropItem(event, item) { }
+    async _onDropActor(event, actor) { }
+    async _onDropActiveEffect(event, effect) { }
 
     async _onSortItem(item, target) {
         if (item.documentName !== "Item") return;

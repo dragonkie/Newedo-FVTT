@@ -3,14 +3,17 @@ import utils from "./sysUtil.mjs";
 
 export default function registerHooks() {
 
-    /* -------------------------------------------- */
-    /*  Ready Hook                                  */
-    /* -------------------------------------------- */
+    //==========================================================================================
+    //> Hook once 'ready'
+    //==========================================================================================
     Hooks.once("ready", async () => {
         // Wait to register hotbar drop hook on ready so that modules could register earlier if they want to
 
     });
 
+    //==========================================================================================
+    //> Hook 'renderChatMessageHTML'
+    //==========================================================================================
     // Adds functionality to chat message buttons for combat
     Hooks.on('renderChatMessageHTML', (msg, element, data) => {
         // Link damage roll button
@@ -47,7 +50,9 @@ export default function registerHooks() {
         };
     });
 
-    // Character Creation button
+    //==========================================================================================
+    //> Hook 'renderActorDirectory'
+    //==========================================================================================
     Hooks.on('renderActorDirectory', async (directory, element, data) => {
         console.log('actorDirectory', element)
         let ele = element.querySelector('.directory-footer.action-buttons');

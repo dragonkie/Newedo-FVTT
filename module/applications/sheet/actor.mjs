@@ -56,11 +56,9 @@ export default class NewedoActorSheet extends NewedoSheetMixin(foundry.applicati
         return `systems/${game.system.id}/templates/actor/actor-${this.document.type}-sheet.hbs`;
     }
 
-    /* -------------------------------------------------------------------------------------- */
-    /*                                                                                        */
-    /*                                   DATA PREPERATION                                     */
-    /*                                                                                        */
-    /* -------------------------------------------------------------------------------------- */
+    //==========================================================================================
+    //> Data preparation
+    //==========================================================================================
 
     /** @override */
     async _prepareContext() {
@@ -142,7 +140,7 @@ export default class NewedoActorSheet extends NewedoSheetMixin(foundry.applicati
     }
 
     //==========================================================================================
-    // Sheet Action functions
+    //> Sheet Actions
     //==========================================================================================
     static async getTargetItem(target) {
         let uuid = target.closest(".item[data-item-uuid]").dataset.itemUuid;
@@ -237,6 +235,8 @@ export default class NewedoActorSheet extends NewedoSheetMixin(foundry.applicati
             wounds: false
         });
 
+        roll.AddLegend(this.document);
+
         roll.AddPart({
             type: '',
             label: ele.dataset?.rollLabel,
@@ -329,7 +329,7 @@ export default class NewedoActorSheet extends NewedoSheetMixin(foundry.applicati
     }
 
     //=====================================================================
-    // Configuration windows
+    //> Configuration windows
     //=====================================================================
     static async _onConfigureSoaks(event, target) {
         let content = `<p><b>Base Soak Values</b></p>`;
@@ -433,9 +433,7 @@ export default class NewedoActorSheet extends NewedoSheetMixin(foundry.applicati
         }).render(true);
     }
 
-    /* -------------------------------------------------------------------------------------- */
-    /*                                                                                        */
-    /*                                  DRAG & DROP                                           */
-    /*                                                                                        */
-    /* -------------------------------------------------------------------------------------- */
+    //==========================================================================================
+    //> Drag and Drop
+    //==========================================================================================
 }

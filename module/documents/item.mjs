@@ -9,9 +9,9 @@ import utils from "../helpers/sysUtil.mjs";
 export default class NewedoItem extends Item {
 
 
-    /* ----------------------------------------------------------------- */
-    /*                    DATA PREPERATION                               */
-    /* ----------------------------------------------------------------- */
+    //==========================================================================================
+    //> Data Preparation
+    //==========================================================================================
     prepareData() {
         // As with the actor class, items are documents that can have their data
         // preparation methods overridden (such as prepareBaseData()).
@@ -48,11 +48,6 @@ export default class NewedoItem extends Item {
             return true;
         } else return false;
     }
-
-    /* ----------------------------------- Actions ---------------------------------------------------- */
-
-
-    /* ----------------------------------- Item prep functions ---------------------------------------------- */
 
     /**
      * Prepare a data object which is passed to any Roll formulas which are related to this Item

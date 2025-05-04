@@ -6,7 +6,7 @@ import sysUtil from "../helpers/sysUtil.mjs";
  * Extend the base Actor document by defining a custom roll data structure which is ideal for the Simple system.
  * @extends {Actor}
  */
-export default class NewedoActor extends Actor {
+export default class NewedoActor extends foundry.documents.Actor {
 
     /**
      * @override
@@ -40,9 +40,9 @@ export default class NewedoActor extends Actor {
         return actor;
     }
 
-    /* ----------------------------------------------------------------- */
-    /*                    DATA PREPERATION                               */
-    /* ----------------------------------------------------------------- */
+    //==========================================================================================
+    //> Data Preperation
+    //==========================================================================================
 
     prepareData() {
         super.prepareData();
@@ -60,9 +60,9 @@ export default class NewedoActor extends Actor {
         super.prepareDerivedData();
     }
 
-    /*-------------------------------------------------------------------*/
-    /*                         UPDATE FUNCTIONS                          */
-    /*-------------------------------------------------------------------*/
+    //==========================================================================================
+    //> Document Updating
+    //==========================================================================================
 
     _onUpdate(changed, options, userId) {
         //if (game.user.id != userId) return;

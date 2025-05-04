@@ -41,4 +41,10 @@
     .sheet-header {
         padding: var(--edo-padding);
     }
+
+    .edo-tab-content {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5em;
+    }
 }

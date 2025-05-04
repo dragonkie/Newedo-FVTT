@@ -149,6 +149,8 @@ export default class SkillData extends ItemDataModel {
             rollData: rollData
         });
 
+        roll.AddLegend(this.actor);
+
         roll.AddPart([{
             type: '',
             label: NEWEDO.traitsCore[this.trait],

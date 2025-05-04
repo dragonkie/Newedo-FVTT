@@ -11,3 +11,16 @@
     color: var(--colour-nav-active);
   }
 }
+
+.form-group {
+  display: flex;
+  flex-direction: row;
+
+  label {
+    flex: 1;
+  }
+
+  .form-fields {
+    flex: 2;
+  }
+}

@@ -25,9 +25,9 @@ import * as dataModels from "./data/_module.mjs"
 
 LOGGER.log('⛩️ Traveling to NewEdo ⛩️');
 
-/* -------------------------------------------- */
-/*  Init Hook                                   */
-/* -------------------------------------------- */
+//==========================================================================================
+//> Init Hook
+//==========================================================================================
 Hooks.once('init', async function () {
     LOGGER.log(`🌸🌸🌸 WELCOME TO NEWEDO SAMURAI 🌸🌸🌸`);
 
@@ -71,8 +71,8 @@ Hooks.once('init', async function () {
         foundry.documents.collections.Items.registerSheet("newedo", sheet.application, sheet.options);
     }
 
-    /* -------------------------------------------- */
-    /*  Register users global socket                */
-    /* -------------------------------------------- */
+    //==========================================================================================
+    //> Register Socket Manager
+    //==========================================================================================
     newedo.socket = new helpers.NewedoSocketManager();
 });

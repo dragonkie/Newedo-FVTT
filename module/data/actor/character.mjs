@@ -50,18 +50,17 @@ export default class CharacterDataModel extends ActorDataModel {
     }
 
     prepareDerivedData() {
-        /* ----------------------------------------------------------- */
-        /* Background Ranks                                            */
-        /* ----------------------------------------------------------- */
+        //==========================================================================================
+        //> Derived Background Ranks
+        //==========================================================================================
         for (let [key, bg] of Object.entries(this.background)) {
             bg.value = utils.clamp(bg.value, 0, 100);// Clamps the value to its range
             bg.rank = utils.backgroundRank(bg.value);// Calculates the rank of the background
         }
 
-        /* ----------------------------------------------------------- */
-        /* Background Bonuses                                          */
-        /* ----------------------------------------------------------- */
-
+        //==========================================================================================
+        //> Soul rank bonuses
+        //==========================================================================================
         if (this.background.soul.rank >= 1) this.bonus.HrtTotal += 3;
         if (this.background.soul.rank >= 2) this.bonus.PreTotal += 3;
         if (this.background.soul.rank >= 3) this.bonus.PerTotal += 3;
@@ -73,13 +72,10 @@ export default class CharacterDataModel extends ActorDataModel {
             this.bonus.SavTotal += 5;
             this.bonus.PowTotal += 5;
         }
-        
+
         //calculates characters legend rank
         this.legend.rank = utils.legendRank(this.legend.max);
 
-        /* ----------------------------------------------------------- */
-        /* Generic Actor Super                                         */
-        /* ----------------------------------------------------------- */
         super.prepareDerivedData();
     }
 }

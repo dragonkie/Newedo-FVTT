@@ -47,8 +47,6 @@ export default class NewedoItemSheet extends NewedoSheetMixin(foundry.applicatio
         return `${path}/item-${this.item.type}-sheet.hbs`;
     }
 
-    /* -------------------------------------------- */
-
     /**
      * @override 
      * Passes the context data used to render the HTML template

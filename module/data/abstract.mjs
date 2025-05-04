@@ -47,6 +47,9 @@ export class SystemDataModel extends foundry.abstract.TypeDataModel {
     }
 }
 
+//======================================================================================
+//> Actor Data Model
+//======================================================================================
 export class ActorDataModel extends SystemDataModel {
     static defineSchema() {
         const schema = {};
@@ -169,9 +172,9 @@ export class ActorDataModel extends SystemDataModel {
         return schema;
     }
 
-    /* ---------------------------------------------------- */
-    /* Data preparation                                     */
-    /* ---------------------------------------------------- */
+    //==========================================================================================
+    //>- Data Preparation
+    //==========================================================================================
     /**
      * Foundry data preperation goes as follows
      * DataModel prepareBaseData();
@@ -193,11 +196,10 @@ export class ActorDataModel extends SystemDataModel {
         const { core, derived } = this.traits;
         const bonus = this.bonus;
 
-        /* ----------------------------------------------------------- */
-        /* Equipped item modifiers                                     */
-        /* ----------------------------------------------------------- */
+        //============================================================
+        //>-- Modify owning Actor
+        //============================================================
         for (const item of this.parent.items.contents) item.prepareOwnerData(this);
-
 
         // Totals up core stats
         core.hrt.total = core.hrt.value + bonus.HrtTotal;
@@ -250,6 +252,9 @@ export class ActorDataModel extends SystemDataModel {
     }
 }
 
+//======================================================================================
+//>- Item Data Model
+//======================================================================================
 export class ItemDataModel extends SystemDataModel {
     static defineSchema() {
         const schema = {};

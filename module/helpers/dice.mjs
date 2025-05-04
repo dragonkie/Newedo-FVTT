@@ -32,13 +32,25 @@ export default class NewedoRoll {
         raise: 0,
     };
 
+    useWounds = false;
+    useLegend = false;
+    useRaises = false; // Not directly used, raises are parsed externally on a seperate basis later on
+
     /**Accepts an optional list of dice objects to pre populate the tray */
-    constructor(_data) {
-        for (const [k, v] of Object.entries(_data)) if (Object.hasOwn(this, k)) this[k] = v;
+    constructor(data) {
+        console.log(data)
+
+        for (const [k, v] of Object.entries(data)) if (Object.hasOwn(this, k)) this[k] = v;
 
         // prepare implied data
-        if (!this.actor && this.document?.documentName === `Item`) this.actor = this.document.actor;
-        if (!this.actor && this.document?.documentName === `Actor`) this.actor = this.document;
+        if (!this.actor && data.document?.documentName == `Item`) this.actor = data.document.actor;
+        if (!this.actor && data.document?.documentName == `Actor`) this.actor = data.document;
+
+        if (!this.rollData) this.rollData = this.document.getRollData() || this.actor.getRollData();
+
+        this.useWounds = data.wound;
+        this.useLegend = data.legend;
+        this.useRaises = data.raise;
     }
 
     /**
@@ -67,7 +79,7 @@ export default class NewedoRoll {
     }
 
     //=================================================================================================================
-    // Roll part methods
+    //> Roll part methods
     //=================================================================================================================
     /** 
      * @param {RollPart|RollPart[]} parts 
@@ -92,18 +104,19 @@ export default class NewedoRoll {
 
     AddWounds(actor) {
         console.log('Adding wounds')
-        if ((!actor && !this.actor) || actor.documentName !== 'Actor') throw new Error('Cant add wounds to roll without an actor');
+        if ((!actor || actor?.documentName !== 'Actor') && !this.actor) throw new Error('Cant add wounds to roll without an actor');
         if (actor) this.actor = actor;
         this.AddPart({
-            label: actor.system.wound.label,
-            value: actor.system.wound.value,
+            label: this.actor.system.wound.label,
+            value: this.actor.system.wound.value,
             type: 'wound'
         })
     }
 
     AddLegend(actor) {
-        console.log('Adding legend')
-        if ((!actor && !this.actor) || actor.documentName !== 'Actor') throw new Error('Cant add legend to roll without an actor');
+        console.log('Adding legend', this)
+        console.log(!actor && !this.actor)
+        if ((!actor || actor?.documentName !== 'Actor') && !this.actor) throw new Error('Cant add legend to roll without an actor');
         if (actor) this.actor = actor;
         this.AddPart({
             label: NEWEDO.generic.legend,
@@ -124,7 +137,7 @@ export default class NewedoRoll {
     }
 
     //=================================================================================================================
-    // Popup button controls
+    //> Popup button controls
     //=================================================================================================================
 
 
@@ -138,6 +151,10 @@ export default class NewedoRoll {
             this.cancelled = true;
             return { cancelled: true };
         }
+
+        if (this.useWounds) this.AddWounds();
+        if (this.useLegend) this.AddLegend();
+        if (this.useRaises) this.AddRaise();
 
         // if there is no roll data attached, but we have an option to get it
         if (this.document != null && !this.rollData) this.rollData = this.document?.getRollData() || {};
@@ -153,7 +170,7 @@ export default class NewedoRoll {
         });
 
         //==========================================================================================
-        // Creates the proper roll dialog, returning a promise we can get results from
+        //> Creates Roll dialog, returning a promise
         //==========================================================================================
         return new Promise(async (resolve, reject) => {
             const app = await new NewedoDialog({
@@ -176,7 +193,7 @@ export default class NewedoRoll {
                 close: () => resolve({ cancelled: true }),
                 submit: (result) => {
                     //===================================================================
-                    // Roll submission handler
+                    //> Roll submission handler
                     //===================================================================
 
                     // Gets all the pieces of the formula

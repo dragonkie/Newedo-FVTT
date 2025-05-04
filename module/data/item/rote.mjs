@@ -110,6 +110,8 @@ export default class RoteData extends ItemDataModel {
             value: skill.system.getRanks()
         }]);
 
+        roll.AddLegend(this.actor);
+
         await roll.evaluate();
 
         let messageData = { content: `` };

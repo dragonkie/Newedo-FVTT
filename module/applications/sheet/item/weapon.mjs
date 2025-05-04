@@ -1,6 +1,8 @@
 import NewedoItemSheet from "../item.mjs";
 import { elements } from "../../../elements/_module.mjs"
 import NewedoDialog from "../../dialog.mjs";
+import { NEWEDO } from "../../../config.mjs";
+import utils from "../../../helpers/sysUtil.mjs";
 
 export default class WeaponSheet extends NewedoItemSheet {
     static DEFAULT_OPTIONS = {
@@ -52,7 +54,7 @@ export default class WeaponSheet extends NewedoItemSheet {
                     path: `system.damageParts.${a}.type`
                 }
             })
-        }
+        } 
 
         // Selector lists to be rendered dynamically, others can use default handlebars templates
         const actor = this.document.actor;
@@ -63,23 +65,22 @@ export default class WeaponSheet extends NewedoItemSheet {
 
         // Prepares the dropdown selector for skills
         if (actor) {
-            // if this item is owned, the skill list is generated from their available skills
-            // this allows custom skills to be added
-            // Only skills toggled as weapon skills will appear here to prevent bloat
-            let skills = [];
-            for (const skill of actor.itemTypes.skill) {
-                if (skill.system.isWeaponSkill) skills.push({ value: skill.id, label: skill.name });
-            }
-
-            context.selector.skill = foundry.applications.fields.createSelectInput({
-                options: skills,
-                value: this.document.system.skill.id,
-                valueAttr: "value",
-                labelAttr: "label",
-                localize: true,
-                sort: true,
-                name: 'system.skill.id'
+            context.selector.skill = new foundry.data.fields.StringField({
+                blank: false,
+                nullable: false,
+                required: true,
+                initial: this.document.system.skill.slug,
+                choices: () => {
+                    let options = {};
+                    for (const skill of actor.itemTypes.skill) {
+                        if (skill.system.isWeaponSkill) options[skill.id] = skill.name;
+                    }
+                    return options;
+                }
+            }).toFormGroup({ label: utils.localize(NEWEDO.generic.skill) }, {
+                value: this.document.system.skill.slug
             }).outerHTML;
+
         } else {
             context.selector.skill = elements.select.WeaponSkills(this.document.system.skill.slug, 'system.skill.slug');
         }
