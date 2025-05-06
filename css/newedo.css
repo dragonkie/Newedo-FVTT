@@ -289,17 +289,17 @@
 }
 
 .newedo .flex-group-center,
-.newedo .flex-group-left,
-.newedo .flex-group-right {
+.newedo .flex-group-start,
+.newedo .flex-group-end {
   justify-content: center;
   align-items: center;
   text-align: center;
 }
-.newedo .flex-group-left {
+.newedo .flex-group-start {
   justify-content: flex-start;
   text-align: left;
 }
-.newedo .flex-group-right {
+.newedo .flex-group-end {
   justify-content: flex-end;
   text-align: right;
 }
@@ -545,42 +545,34 @@ ol.items-list .item-delete {
   border: 0;
 }
 
-.sheet.character .window-content,
-.sheet.npc .window-content {
+.sheet.actor .window-content {
   overflow: hidden;
   display: flex;
   flex-direction: row;
 }
-.sheet.character .window-content header > *,
-.sheet.npc .window-content header > * {
+.sheet.actor .window-content header > * {
   margin-bottom: 5px;
 }
-.sheet.character .window-content .origins,
-.sheet.npc .window-content .origins {
+.sheet.actor .window-content .origins {
   display: block;
   font-size: 1.2em;
 }
-.sheet.character .window-content .origins > *,
-.sheet.npc .window-content .origins > * {
+.sheet.actor .window-content .origins > * {
   display: inline-block;
 }
-.sheet.character .window-content .edo-derived-traits,
-.sheet.npc .window-content .edo-derived-traits {
+.sheet.actor .window-content .edo-derived-traits {
   display: block;
 }
-.sheet.character .window-content .edo-derived-traits > *,
-.sheet.npc .window-content .edo-derived-traits > * {
+.sheet.actor .window-content .edo-derived-traits > * {
   display: inline-block;
 }
-.sheet.character .window-content .edo-derived-traits > * input,
-.sheet.npc .window-content .edo-derived-traits > * input {
+.sheet.actor .window-content .edo-derived-traits > * input {
   width: 2.5rem;
   height: 1rem;
   text-align: center;
   padding: 0;
 }
-.sheet.character .window-content .panel,
-.sheet.npc .window-content .panel {
+.sheet.actor .window-content .edo-panel {
   display: flex;
   flex: 0 0 200px;
   flex-direction: column;
@@ -589,69 +581,56 @@ ol.items-list .item-delete {
   text-align: center;
   overflow: auto;
 }
-.sheet.character .window-content .panel > *,
-.sheet.npc .window-content .panel > * {
+.sheet.actor .window-content .edo-panel > * {
   margin-bottom: 5px;
 }
-.sheet.character .window-content .panel .fate-card,
-.sheet.npc .window-content .panel .fate-card {
+.sheet.actor .window-content .edo-panel .fate-card {
   flex: 0;
   width: 100%;
   font-size: 14px;
 }
-.sheet.character .window-content .panel .fate-card .fate-switch,
-.sheet.npc .window-content .panel .fate-card .fate-switch {
+.sheet.actor .window-content .edo-panel .fate-card .fate-switch {
   flex: 1 1;
   align-items: right;
   text-align: right;
   padding-right: 12px;
 }
-.sheet.character .window-content .panel .fate-card .fate-title,
-.sheet.npc .window-content .panel .fate-card .fate-title {
+.sheet.actor .window-content .edo-panel .fate-card .fate-title {
   text-align: left;
   flex: 2;
 }
-.sheet.character .window-content .panel .fate-card .fate-list,
-.sheet.npc .window-content .panel .fate-card .fate-list {
+.sheet.actor .window-content .edo-panel .fate-card .fate-list {
   width: 100%;
   padding: 0;
   margin: 0;
 }
-.sheet.character .window-content .panel .fate-card .fate-list > *,
-.sheet.npc .window-content .panel .fate-card .fate-list > * {
+.sheet.actor .window-content .edo-panel .fate-card .fate-list > * {
   border-bottom: 1px solid gray;
   gap: 5px;
 }
-.sheet.character .window-content .panel .fate-card .fate-list > * :first-child,
-.sheet.npc .window-content .panel .fate-card .fate-list > * :first-child {
+.sheet.actor .window-content .edo-panel .fate-card .fate-list > * :first-child {
   text-align: right;
   flex: 1;
 }
-.sheet.character .window-content .panel .fate-card .fate-list > * :last-child,
-.sheet.npc .window-content .panel .fate-card .fate-list > * :last-child {
+.sheet.actor .window-content .edo-panel .fate-card .fate-list > * :last-child {
   text-align: left;
   flex: 2;
 }
-.sheet.character .window-content .panel .fate-card .fate-list :last-child,
-.sheet.npc .window-content .panel .fate-card .fate-list :last-child {
+.sheet.actor .window-content .edo-panel .fate-card .fate-list :last-child {
   border: 0;
 }
-.sheet.character .window-content .edo-tab-traits input,
-.sheet.npc .window-content .edo-tab-traits input {
+.sheet.actor .window-content .edo-tab-traits input {
   text-align: center;
 }
-.sheet.character .window-content .body,
-.sheet.npc .window-content .body {
+.sheet.actor .window-content .body {
   padding: 10px;
   flex: 1;
 }
-.sheet.character .window-content .skill-lists,
-.sheet.npc .window-content .skill-lists {
+.sheet.actor .window-content .skill-lists {
   align-items: start;
   gap: 8px;
 }
-.sheet.character .window-content .skill-lists li.item,
-.sheet.npc .window-content .skill-lists li.item {
+.sheet.actor .window-content .skill-lists li.item {
   padding: 1px 0 0 0;
 }
 
@@ -692,23 +671,30 @@ ol.items-list .item-delete {
   gap: 0.5em;
 }
 
-.bar {
+.edo-resource-bar {
   --padding: 2px;
   --height: 24px;
+  --edo-colour-bar: green;
+  --edo-colour-bar-bg: black;
   width: 100%;
   display: grid;
   flex: 0;
-  background-color: var(--colour-bar-bg);
-  color: var(--colour-bar-input);
+  color: var(--colour-bar-input, rgb(237, 232, 211));
   border-radius: calc(var(--height) / 2 + var(--padding));
   padding: var(--padding);
 }
-.bar > * {
-  grid-column-start: 1;
-  grid-row-start: 1;
+.edo-resource-bar .edo-wrapper {
+  background-color: var(--edo-colour-bar-bg);
+  border-radius: calc(var(--height) / 2 + var(--padding));
+  display: grid;
+  grid-template-columns: 1fr;
 }
-.bar .fill {
-  background-color: rgb(0, 162, 30);
+.edo-resource-bar .edo-wrapper > * {
+  grid-row-start: 1;
+  grid-column-start: 1;
+}
+.edo-resource-bar .edo-wrapper .fill {
+  background-color: var(--edo-colour-bar, green);
   width: 50%;
   height: var(--height);
   border-radius: calc(var(--height) / 2 + var(--padding));
@@ -716,25 +702,51 @@ ol.items-list .item-delete {
   max-width: 100%;
   min-width: 0%;
 }
-.bar .fill.blue {
-  background-color: rgb(24, 136, 255);
-}
-.bar .value {
+.edo-resource-bar .value {
   text-align: center;
   display: flex;
   flex-direction: row;
 }
-.bar .value > * {
+.edo-resource-bar .value > * {
   font-weight: bold;
   padding: 0;
   font-size: 1.2em;
   flex: 1;
 }
-.bar .value input {
+.edo-resource-bar .value input {
   height: var(--height);
   color: var(--colour-bar-input);
   background: transparent;
   border: 0;
+  outline: none;
+}
+
+.edo-green {
+  --edo-colour-bar: rgb(46, 164, 46);
+}
+
+.edo-blue {
+  --edo-colour-bar: rgb(44, 87, 173);
+}
+
+.edo-red {
+  --edo-colour-bar: rgb(202, 47, 47);
+}
+
+.edo-pink {
+  --edo-colour-bar: rgb(223, 70, 95);
+}
+
+.edo-orange {
+  --edo-colour-bar: rgb(222, 99, 22);
+}
+
+.edo-purple {
+  --edo-colour-bar: rgb(135, 55, 172);
+}
+
+.edo-gold {
+  --edo-colour-bar: rgb(179, 122, 0);
 }
 
 .feature-list {

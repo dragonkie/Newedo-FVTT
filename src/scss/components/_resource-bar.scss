@@ -1,0 +1,88 @@
+@use '../utils/variables';
+
+.edo-resource-bar {
+    --padding: 2px;
+    --height: 24px;
+    --edo-colour-bar: green;
+    --edo-colour-bar-bg: black;
+
+    width: 100%;
+    display: grid;
+    flex: 0;
+
+    color: var(--colour-bar-input, rgb(237, 232, 211));
+    border-radius: calc(var(--height) / 2 + var(--padding));
+    padding: var(--padding);
+
+    .edo-wrapper {
+        // All children of the hp bar are set to start in the same row / column
+        background-color: var(--edo-colour-bar-bg);
+        border-radius: calc(var(--height) / 2 + var(--padding));
+        display: grid;
+        grid-template-columns: 1fr;
+
+        >* {
+            grid-row-start: 1;
+            grid-column-start: 1;
+        }
+
+        .fill {
+            background-color: var(--edo-colour-bar, green);
+            width: 50%;
+            height: var(--height);
+            border-radius: calc(var(--height) / 2 + var(--padding));
+            transition: width 1s ease-out;
+            max-width: 100%;
+            min-width: 0%;
+        }
+    }
+
+    .value {
+        text-align: center;
+        display: flex;
+        flex-direction: row;
+
+        >* {
+            font-weight: bold;
+            padding: 0;
+            font-size: 1.2em;
+            flex: 1;
+        }
+
+        input {
+            height: var(--height);
+            color: var(--colour-bar-input);
+            background: transparent;
+            border: 0;
+            outline: none;
+        }
+    }
+}
+
+.edo-green {
+    --edo-colour-bar: rgb(46, 164, 46);
+}
+
+.edo-blue {
+    --edo-colour-bar: rgb(44, 87, 173);
+}
+
+.edo-red {
+    --edo-colour-bar: rgb(202, 47, 47);
+}
+
+.edo-pink {
+    --edo-colour-bar: rgb(223, 70, 95);
+}
+
+.edo-orange {
+    --edo-colour-bar: rgb(222, 99, 22);
+}
+
+.edo-purple {
+    --edo-colour-bar: rgb(135, 55, 172);
+}
+
+.edo-gold {
+    --edo-colour-bar: rgb(179, 122, 0);
+}

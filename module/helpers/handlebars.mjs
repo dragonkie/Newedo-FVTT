@@ -5,10 +5,20 @@ export function registerTemplates() {
     const id = game.system.id;
     const path = `systems/${id}/templates`;
     const partials = [
+        // Components
+        `${path}/shared/resource-bar-inline.hbs`,
+        `${path}/shared/resource-bar.hbs`,
 
-        //Sheet Partials
+        // Sheet Partials
         `${path}/shared/tabs-nav.hbs`,
         `${path}/shared/tabs-content.hbs`,
+
+        // Actor Partials
+        `${path}/actor/shared/armour-soaks.hbs`,
+        `${path}/actor/shared/backgrounds.hbs`,
+        `${path}/actor/shared/traits-attributes.hbs`,
+        `${path}/actor/shared/traits-core.hbs`,
+        `${path}/actor/shared/traits-derived.hbs`,
 
         // Dialog popups
         `${path}/dialog/parts/roll-options.hbs`,

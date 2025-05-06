@@ -1,0 +1,25 @@
+{{!-- 
+    > 'newedo.resource-bar-inline'
+    classes - additional tags added to the main bar wrapper
+    label - tag that can be localized into a label above the bar
+    value - value to fill the bar by
+    valueName - system path for the value
+    maxValue - value to be the full end of the bar
+    maxValueName - system path for the max value
+    fill - overided to fill the bar with
+ --}}
+
+<div class="edo-resource-bar {{classes}}">
+    {{log this}}
+    {{#if label}}
+        <label class="edo-resource-label">{{localize label}}</label>
+    {{/if}}
+    <div class="edo-wrapper">
+        <div class="fill" style="width: {{choose fill (percent value maxValue)}}%;"></div>
+        <div class="value flexrow">
+            <input class="align-center" type="number" {{#if valueName}} name="{{valueName}}" {{else}} disabled {{/if}} value="{{value}}" />
+            /
+            <input class="align-center" type="number" {{#if maxValueName}} name="{{maxValueName}}" {{else}} disabled {{/if}} value="{{maxValue}}" />
+        </div>
+    </div>
+</div>

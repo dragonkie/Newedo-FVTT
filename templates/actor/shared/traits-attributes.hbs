@@ -1,0 +1,18 @@
+{{!-- Additional modifiers --}}
+<div class="flexrow flex-gap-m">
+    <div class="trait-box align-center">
+        <label class="edo-resource-label flexlarge align-left">{{localize config.generic.rest}} {{localize "NEWEDO.Generic.Mod.abbr"}}</label>
+        <input value="{{system.rest.mod}}" type="number" disabled>
+        <a data-action="rest">Heal {{system.rest.total}}</a>
+    </div>
+    <div class="trait-box align-center">
+        <label class="edo-resource-label flexlarge align-left">{{localize config.generic.lift}} {{localize "NEWEDO.Generic.Mod.abbr"}}</label>
+        <input value="{{system.lift.mod}}" type="number" disabled>
+        <div>Carry {{multiply system.traits.core.pow.total system.lift.mod}}kg</div>
+    </div>
+    <div class="trait-box align-center">
+        <label class="edo-resource-label flexlarge align-left">{{localize "NEWEDO.Trait.Derived.Hp.long"}} {{localize "NEWEDO.Generic.Mod.abbr"}}</label>
+        <input value="{{system.hp.mod}}" type="number" disabled>
+        <div>+{{ceil (subtraction (multiply system.traits.core.hrt.total system.hp.mod) system.traits.core.hrt.total)}} Hp</div>
+    </div>
+</div>

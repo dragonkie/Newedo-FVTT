@@ -1,8 +1,7 @@
 @use '../helper' as *;
 
 //general classes
-.sheet.character .window-content,
-.sheet.npc .window-content {
+.sheet.actor .window-content {
     overflow: hidden;
     display: flex;
     flex-direction: row;
@@ -35,7 +34,7 @@
         }
     }
 
-    .panel {
+    .edo-panel {
         display: flex;
         flex: 0 0 200px;
         flex-direction: column;

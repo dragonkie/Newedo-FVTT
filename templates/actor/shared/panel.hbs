@@ -1,4 +1,4 @@
-<section class="panel">
+<section class="edo-panel">
     {{!-- Newedo banner rendered at the top of the screen--}}
     <img class="banner-newedo" src="systems/newedo/assets/images/banner-newedo.svg">
     <div class="portrait" style="border: 0;" data-action="editImage">
@@ -6,49 +6,28 @@
     </div>
 
     {{!-- Health container--}}
-    {{ localize 'NEWEDO.Trait.Derived.Hp.long' }}: {{ system.wound.label }}
-    <div class="bar">
-        <div class="fill" style="width: {{ percent system.hp.value system.hp.max }}%;"></div>
-        <div class="value flexrow">
-            <input class="align-center" type="number" name="system.hp.value" value="{{system.hp.value}}" />
-            /
-            <input class="align-center" type="number" value="{{system.hp.max}}" disabled />
-        </div>
-    </div>
+    {{> 'newedo.resource-bar-inline' newContext 
+        classes='edo-green'
+        label=system.wound.label 
+        value=system.hp.value 
+        valueName='system.hp.value' 
+        maxValue=system.hp.max
+    }}
 
     {{!-- Legend container --}}
     {{#if (eq document.type 'character')}}
-        <div>
-            <div>
-                {{{ledger 'system.legend.max' 'legend' 'NEWEDO.ledger.legend'}}}
-                {{ localize 'NEWEDO.Generic.Legend.long' }}
-            </div>
-            <div class="bar">
-                <div class="fill blue" style="width: {{ percent system.legend.value system.legend.max }}%;"></div>
-                <div class="value">
-                    <input class="align-center" type="number" name="system.legend.value" value="{{system.legend.value}}" />
-                    /
-                    <input class="align-center" type="number" name="system.legend.max" value="{{system.legend.max}}" disabled />
-                </div>
-            </div>
-        </div>
+        {{> 'newedo.resource-bar-inline' newContext 
+            classes='edo-blue'
+            label='NEWEDO.Generic.Legend.long' 
+            value=system.legend.value 
+            valueName='system.legend.value' 
+            maxValue=system.legend.max 
+            maxValueName='system.legend.max'
+        }}
     {{/if}}
 
     {{!-- Armour values --}}
-    <div class="edo-soak-container">
-        <b>
-            {{#if isEditMode}}<a class="fas fa-cog" data-action="configSoaks" title="NEWEDO.Button.ConfigSoaks"></a>{{/if}}
-            {{ localize 'NEWEDO.Generic.Soak.long' }}
-        </b>
-        <div class="flexrow" style="gap: 4px;">
-            {{#each system.armour as | soak key |}}
-                <div>
-                    <div class="name">{{ soak.abbr }}</div>
-                    <input type="number" class="score" value="{{soak.total}}" disabled>
-                </div>
-            {{/each}}
-        </div>
-    </div>
+    {{> 'newedo.armour-soaks'}}
 
     {{#if (eq document.type 'character')}}
         {{!-- Character XP tracker --}}

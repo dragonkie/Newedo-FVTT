@@ -1,0 +1,14 @@
+{{!-- Core Stats --}}
+<div class="flexrow flex-gap-m">
+    {{#each system.traits.core as | trait key |}}
+
+        <div class="trait-box align-center" data-roll-type="NEWEDO.Generic.Trait.long" data-roll-label="{{trait.label}}" data-roll="{{trait.rank}}d10">
+            <label class="edo-resource-label flexlarge align-left" data-action="roll">{{trait.label}}</label>
+            <input style="height: 3rem; font-size: 22px; font-weight: bold;" value="{{trait.total}}" disabled type="number" />
+            {{#if ../isEditMode}}
+                <input style="width: 75%; height: 1.5rem; border-radius: 0px 0px 5px 5px;" name="system.traits.core.{{key}}.value" value="{{trait.value}}" type="number" />
+            {{/if}}
+            <div class="edo-trait-rank" data-action="roll">Rank {{trait.rank}}</div>
+        </div>
+    {{/each}}
+</div>

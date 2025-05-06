@@ -25,9 +25,9 @@ export default class NewedoItemSheet extends NewedoSheetMixin(foundry.applicatio
     }
 
     static TABS = {
-        description: { id: "description", group: "primary", label: "NEWEDO.tab.description" },
-        settings: { id: "settings", group: "primary", label: "NEWEDO.tab.settings" },
-        rules: { id: "rules", group: "primary", label: "NEWEDO.tab.rules" }
+        description: { id: "description", group: "primary", label: "NEWEDO.Generic.Description" },
+        settings: { id: "settings", group: "primary", label: "NEWEDO.Generic.Setting" },
+        rules: { id: "rules", group: "primary", label: "NEWEDO.Generic.Rules" }
     }
 
     tabGroups = {

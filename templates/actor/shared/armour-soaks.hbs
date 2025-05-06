@@ -1,0 +1,15 @@
+{{!-- Armour values --}}
+<div class="edo-soak-container">
+    <b>
+        {{#if isEditMode}}<a class="fas fa-cog" data-action="configSoaks" title="NEWEDO.Button.ConfigSoaks"></a>{{/if}}
+        {{ localize 'NEWEDO.Generic.Soak.long' }}
+    </b>
+    <div class="flexrow" style="gap: 4px;">
+        {{#each system.armour as | soak key |}}
+            <div>
+                <div class="name">{{toTitleCase soak.abbr }}</div>
+                <input class="align-center" type="number" class="score" value="{{soak.total}}" disabled>
+            </div>
+        {{/each}}
+    </div>
+</div>

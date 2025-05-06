@@ -1,0 +1,27 @@
+<section class="body flexrow flex-start flex-align-start">
+
+    <div class="edo-panel flexshrink">
+        <img class="banner-newedo" src="systems/newedo/assets/images/banner-newedo.svg">
+        <div class="portrait" style="border: 0;" data-action="editImage">
+            <img class="profile-img" src="{{document.img}}" title="{{actor.name}}" height="175px" width="175px" style="object-fit: cover; border: 0; object-position: 50% 0%" />
+        </div>
+
+        {{!-- Health container--}}
+        {{> 'newedo.resource-bar-inline' label=(concat (localize 'NEWEDO.Trait.Derived.Hp.long') ':' system.wound.label) value=system.hp.value valueName='system.hp.value' max=system.hp.max}}
+
+        {{!-- Armour values --}}
+        {{> 'newedo.armour-soaks'}}
+    </div>
+
+
+    <div class="edo-pet-content">
+        <div data-application-part="header"></div>
+        {{!-- Navigation Tabs --}}
+        {{> "newedo.tabs-nav"}}
+        {{!-- Tab Bodies --}}
+        <section class="sheet-body scrollable">
+            {{!-- Creates a holder for all the different tabs contents --}}
+            {{> "newedo.tabs-content"}}
+        </section>
+    </div>
+</section>

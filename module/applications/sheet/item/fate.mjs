@@ -14,16 +14,6 @@ export default class FateSheet extends NewedoItemSheet {
         settings: { template: "systems/newedo/templates/item/settings/fate.hbs" }
     }
 
-    static TABS = {
-        description: { id: "description", group: "primary", label: "NEWEDO.tab.description" },
-        settings: { id: "settings", group: "primary", label: "NEWEDO.tab.settings" },
-        rules: { id: "rules", group: "primary", label: "NEWEDO.tab.rules" }
-    }
-
-    tabGroups = {
-        primary: "description"
-    }
-
     async _prepareContext() {
         const context = await super._prepareContext();
 

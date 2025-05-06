@@ -3,12 +3,16 @@
     "Generic": {
       "Armour": { "abbr": "armr", "long": "Armour", "plural": "Armours" },
       "Attack": { "abbr": "atk", "long": "Attack", "plural": "Attacks" },
+      "Augment": "Augment",
+      "Augments": "Augments",
       "Background": { "abbr": "bg", "long": "Background", "plural": "Backgrounds" },
       "Bonus": { "abbr": "bns", "long": "Bonus", "plural": "Bonuses" },
       "Core": { "abbr": "cr", "long": "Core", "plural": "Cores" },
       "Damage": { "abbr": "dmg", "long": "Damage", "plural": "Damages" },
       "Derived": { "abbr": "drvd", "long": "Derived", "plural": "DERIVED_PLURAL" },
+      "Description": "Description",
       "Equipped": { "abbr": "equip", "long": "Equipped", "plural": "Equipments" },
+      "Equipment": "Equipment",
       "Experience": { "abbr": "exp", "long": "Experience" },
       "Fate": { "abbr": "FATE_ABBR", "long": "Fate" },
       "Grit": { "abbr": "grit", "long": "Grit" },
@@ -17,12 +21,15 @@
       "Lift": { "long": "Lift" },
       "Lock": { "long": "Lock" },
       "LockToggle": { "long": "Toggle Lock" },
+      "Magic": "Magic",
       "Mod": { "abbr": "mod", "long": "Modifier", "plural": "Modifiers" },
       "Money": { "abbr": "", "long": "Money", "plural": "Monies", "symbol": "¥" },
       "Raise": { "abbr": "raise", "long": "Raise" },
+      "Rules": "Rules",
       "Rest": { "long": "Rest" },
       "Roll": { "abbr": "roll", "long": "Roll" },
       "Situational": { "abbr": "Situation", "long": "Situational", "plural": "Situations" },
+      "Setting": "Setting",
       "Size": { "abbr": "", "long": "Size", "plural": "Sizes" },
       "Skill": { "abbr": "skl", "long": "Skill", "plural": "Skills" },
       "Soak": { "long": "Soak", "plural": "Soaks" },
@@ -44,7 +51,7 @@
         "Def": { "abbr": "def", "long": "Defence" },
         "Init": { "abbr": "init", "long": "Initative" },
         "Move": { "abbr": "move", "long": "Move" },
-        "Res": { "abbr": "res", "long": "Resistance" },
+        "Res": { "abbr": "res", "long": "Resolve" },
         "Hp": { "abbr": "hp", "long": "Health" }
       }
     },
@@ -136,6 +143,18 @@
       "Prompt": {
 
       }
+    },
+    "Tab": {
+      "Augments": "Augments",
+      "Description": "Description",
+      "Features": "Features",
+      "Effects": "Effects",
+      "Equipment": "Equipment",
+      "Magic": "Magic",
+      "Rules": "Rules",
+      "Settings": "Settings",
+      "Skills": "Skills",
+      "Traits": "Traits"
     }
   },
   "TYPES": {
@@ -160,17 +179,6 @@
   "SHEET": {
 
   },
-
-  "NEWEDO.tab.augs": "Augments",
-  "NEWEDO.tab.bio": "Biography",
-  "NEWEDO.tab.description": "Description",
-  "NEWEDO.tab.effects": "Effects",
-  "NEWEDO.tab.equipment": "Equipment",
-  "NEWEDO.tab.magic": "Magic",
-  "NEWEDO.tab.rules": "Rules",
-  "NEWEDO.tab.settings": "Settings",
-  "NEWEDO.tab.skills": "Skills",
-  "NEWEDO.tab.traits": "Traits",
 
   "NEWEDO.feature.create": "Create new feature",
   "NEWEDO.feature.delete": "Are you sure you would like to delete this feature?",
