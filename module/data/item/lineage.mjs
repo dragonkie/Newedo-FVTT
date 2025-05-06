@@ -1,3 +1,5 @@
+import { NEWEDO } from "../../config.mjs";
+import utils from "../../helpers/sysUtil.mjs";
 import { ItemDataModel } from "../abstract.mjs";
 
 const {
@@ -8,43 +10,20 @@ export default class LineageData extends ItemDataModel {
     static defineSchema() {
         const schema = super.defineSchema();
 
+        const traits_core = {};
+        const traits_derived = {};
+        for (const trait of Object.keys(NEWEDO.traitsCore)) traits_core[trait] = new SchemaField({
+            value: new NumberField({ initial: 0, ...this.RequiredIntegerConfig, label: utils.localize(NEWEDO.traitsCore[trait]) })
+        })
+
+        for (const trait of Object.keys(NEWEDO.traitsDerived)) traits_derived[trait] = new SchemaField({
+            value: new NumberField({ initial: 0, ...this.RequiredIntegerConfig, label: utils.localize(NEWEDO.traitsDerived[trait]) }), // Added before multiplier
+            mod: new NumberField({ initial: 0, ...this.RequiredConfig, label: utils.localize(NEWEDO.traitsDerived[trait]) }), // the multiplier
+        })
+
         schema.traits = new SchemaField({
-            core: new SchemaField({
-                pow: new NumberField({ initial: 0 }),
-                per: new NumberField({ initial: 0 }),
-                pre: new NumberField({ initial: 0 }),
-                hrt: new NumberField({ initial: 0 }),
-                ref: new NumberField({ initial: 0 }),
-                sav: new NumberField({ initial: 0 }),
-                shi: new NumberField({ initial: 0 })
-            }),
-            derived: new SchemaField({
-                init: new SchemaField({
-                    value: new NumberField({ initial: 0 }),
-                    total: new NumberField({ initial: 0 }),
-                    mod: new NumberField({ initial: 0 })
-                }),
-                move: new SchemaField({
-                    value: new NumberField({ initial: 0 }),
-                    total: new NumberField({ initial: 0 }),
-                    mod: new NumberField({ initial: 0 })
-                }),
-                def: new SchemaField({
-                    value: new NumberField({ initial: 0 }),
-                    total: new NumberField({ initial: 0 }),
-                    mod: new NumberField({ initial: 0 })
-                }),
-                res: new SchemaField({
-                    value: new NumberField({ initial: 0 }),
-                    total: new NumberField({ initial: 0 }),
-                    mod: new NumberField({ initial: 0 })
-                }),
-                hp: new SchemaField({
-                    value: new NumberField({ initial: 0 }),
-                    total: new NumberField({ initial: 0 }),
-                    mod: new NumberField({ initial: 0 })
-                })
-            })
+            core: new SchemaField(traits_core),
+            derived: new SchemaField(traits_derived)
         });
 
         schema.lift = new SchemaField({
@@ -63,6 +42,28 @@ export default class LineageData extends ItemDataModel {
             bio: this.AddValueField('value', 0),
             arc: this.AddValueField('value', 0)
         });
+
+        schema.attributes = new SchemaField({
+            rest: new SchemaField({
+                base: new NumberField({ ...this.RequiredConfig, initial: 0 }),// added before
+                mod: new NumberField({ ...this.RequiredConfig, initial: 0 }),// multiplies the base
+                bonus: new NumberField({ ...this.RequiredConfig, initial: 0 }),// added after
+            }),
+            lift: new SchemaField({
+                base: new NumberField({ ...this.RequiredConfig, initial: 0 }),
+                mod: new NumberField({ ...this.RequiredConfig, initial: 0 })
+            }),
+
+        })
+
+        // List of linked items that are granted to an actor with this lineage
+        schema.items = new ArrayField(new SchemaField({
+            uuid: new StringField({ ...this.RequiredConfig, initial: '' })
+        }), { ...this.RequiredConfig, initial: [] })
+
+        schema.cultures = new ArrayField(new SchemaField({
+            uuid: new StringField({ ...this.RequiredConfig, initial: '' })
+        }), { ...this.RequiredConfig, initial: [] });
 
         return schema;
     }

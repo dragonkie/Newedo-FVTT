@@ -190,10 +190,12 @@ export default function NewedoSheetMixin(Base) {
         //=======================================================================================================================
         //> Drag and Drop
         //=======================================================================================================================
+        static drag_selectors = '[data-item-uuid]';
+        static drop_selectors = '.application';
         _setupDragAndDrop() {
             const dd = new foundry.applications.ux.DragDrop.implementation({
-                dragSelector: "[data-item-uuid]",
-                dropSelector: ".application",
+                dragSelector: NewedoDocumentSheet.drag_selectors,
+                dropSelector: NewedoDocumentSheet.drop_selectors,
                 permissions: {
                     dragstart: this._canDragStart.bind(this),
                     drop: this._canDragDrop.bind(this)
@@ -247,8 +249,7 @@ export default function NewedoSheetMixin(Base) {
         //>- Drop Handlers
         //=========================================================================================
         async _onDropItem(event, item) {
-            const { type, uuid } = foundry.applications.ux.TextEditor.getDragEventData(event);
-            if (!Object.keys(this.document.constructor.metadata.embedded).includes(type)) return;
+            if (!Object.keys(this.document.constructor.metadata.embedded).includes(item.documentName)) return;
             const itemData = item.toObject();
             const modification = {
                 "-=_id": null,
@@ -257,11 +258,13 @@ export default function NewedoSheetMixin(Base) {
                 "-=sort": null
             };
             foundry.utils.mergeObject(itemData, modification, { performDeletions: true });
-            getDocumentClass(type).create(itemData, { parent: this.document });
+            foundry.documents.Item.create(itemData, { parent: this.document });
         }
 
         async _onDropActor(event, actor) { }
+
         async _onDropActiveEffect(event, effect) {
+            if (!Object.keys(this.document.constructor.metadata.embedded).includes(effect.documentName)) return;
             // Clears meta data from owned items if neccesary
             const modification = {
                 "-=_id": null,

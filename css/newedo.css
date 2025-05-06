@@ -356,6 +356,9 @@
 .newedo .flex-gap-l {
   gap: 12px;
 }
+.newedo .nowrap {
+  flex-wrap: wrap;
+}
 
 .sheet.actor .tab[data-tab].active,
 .sheet.item .tab[data-tab].active {
@@ -396,6 +399,15 @@
 }
 .form-group .form-fields {
   flex: 2;
+}
+
+.edo-border-wrapper {
+  flex: 0;
+  border: 1px solid var(--edo-colour-border);
+  border-radius: 5px;
+  padding: 0.2em 1em;
+  flex-wrap: nowrap;
+  text-wrap: nowrap;
 }
 
 .edo-resource-label {

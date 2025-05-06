@@ -1,44 +1,68 @@
-<div class="edo-tab-content edo-item-settings edo-lineage-settings flex-gap-m">
-    <div style="margin: 10px 0;">
-        <label><b>Core Traits:</b></label>
-        <div class="traits-core flexrow" style="gap: 4px; flex: 1 0 auto; flex-wrap: nowrap; text-align: center;">
-            {{#each system.traits.core as | trait key | }}
-                <div class="flexcol" style="align-items: center; min-width: 70px;">
-                    <label class="edo-resource-label flexlarge align-left">{{key}}</label>
-                    <input name="system.traits.core.{{key}}" value="{{trait}}" type="number" style="padding: 0;" />
+<div class="edo-tab-content edo-item-settings edo-lineage-settings flex-gap-l">
+    <a data-action="configTraits">{{localize 'NEWEDO.Generic.Configure'}} {{localize 'NEWEDO.Generic.Trait'}}</a>
+
+    <div class="edo-wrapper">
+        <b>Core Traits:</b>
+        <div class="flexrow flex-gap-s">
+            {{#each system.traits.core as |trait key|}}
+                {{#if (gt trait.value 0)}}
+                    <div class="edo-border-wrapper">{{localize trait.label}} {{numberFormat trait.value sign=true}}</div>
+                {{/if}}
+            {{/each}}
+        </div>
+    </div>
+
+    <div class="edo-wrapper">
+        <b>Derived Traits:</b>
+        <div class="flexrow flex-gap-s">
+            {{#each system.traits.derived as |trait key|}}
+                {{#if (gt trait.value 0)}}
+                    <div class="edo-border-wrapper">{{localize trait.label}} {{numberFormat trait.value sign=true}}</div>
+                {{/if}}
+            {{/each}}
+        </div>
+    </div>
+
+    <div class="edo-wrapper">
+        <b>Derived Modifiers:</b>
+        <div class="flexrow flex-gap-s">
+            {{#each system.traits.derived as |trait key|}}
+                {{#if (gt trait.mod 0)}}
+                    <div class="edo-border-wrapper">{{localize trait.label}} {{numberFormat trait.mod sign=true decimals=2}}</div>
+                {{/if}}
+            {{/each}}
+        </div>
+    </div>
+
+    <div class="edo-wrapper" data-list="cultures">
+        <b>Cultures:</b>
+        <div class="flexrow flex-gap-s">
+            {{#each system.cultures as |item key|}}
+                <div class="edo-border-wrapper" data-index="{{key}}" data-uuid="{{item.uuid}}">
+                    {{#if ../isEditMode}}
+                        <a data-action="delete">
+                            <i class="fas fa-trash"></i>
+                        </a>
+                    {{/if}}
+
+                    <a data-action="edit">{{item.data.name}}</a>
                 </div>
             {{/each}}
         </div>
     </div>
 
-    <div style="margin: 10px 0;">
-        <label style="margin: 12px 0 8px 0;"><b>Derived Traits:</b></label>
-        <div class="traits-derived flexrow" style="gap: 4px; flex: 1 0 auto; flex-wrap: nowrap; text-align: center;">
-            {{#each system.traits.derived as | trait key | }}
-                <div class="flexcol" style="align-items: center; min-width: 70px; gap: 8px;">
-                    <label class="edo-resource-label flexlarge align-left">{{key}}</label>
-                    <input name="system.traits.core.{{key}}.value" value="{{trait.value}}" type="number" style="padding: 0;" />
-                </div>
-            {{/each}}
-        </div>
-    </div>
+    <div class="edo-wrapper" data-list="items">
+        <b>Items:</b>
+        <div class="flexrow flex-gap-s">
+            {{#each system.items as |item key|}}
+                <div class="edo-border-wrapper" data-index="{{key}}" data-uuid="{{item.uuid}}">
+                    {{#if ../isEditMode}}
+                        <a data-action="delete">
+                            <i class="fas fa-trash"></i>
+                        </a>
+                    {{/if}}
 
-    <div style="margin: 10px 0;">
-        <label style="margin: 12px 0 8px 0;"><b>Derived Modifiers:</b></label>
-        <div class="traits-derived flexrow" style="gap: 4px; flex: 1 0 auto; flex-wrap: nowrap; text-align: center;">
-            {{#each system.traits.derived as | trait key | }}
-                <input name="system.traits.core.{{key}}.mod" value="{{trait.mod}}" type="number" style="padding: 0;" />
-            {{/each}}
-        </div>
-    </div>
-
-    <div style="margin: 10px 0;">
-        <label style="margin: 12px 0 8px 0;"><b>Armour Soaks:</b></label>
-        <div class="armour-soaks flexrow" style="gap: 4px; flex: 1 0 auto; flex-wrap: nowrap; text-align: center;">
-            {{#each system.armour as | soak key | }}
-                <div class="flexcol" style="align-items: center; min-width: 70px;">
-                    <label class="edo-resource-label flexlarge align-left">{{key}}</label>
-                    <input name="system.armour.{{key}}.value" value="{{soak.value}}" type="number" style="padding: 0;" />
+                    <a data-action="edit">{{item.data.name}}</a>
                 </div>
             {{/each}}
         </div>

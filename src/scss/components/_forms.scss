@@ -24,3 +24,12 @@
     flex: 2;
   }
 }
+
+.edo-border-wrapper {
+  flex: 0;
+  border: 1px solid var(--edo-colour-border);
+  border-radius: 5px;
+  padding: 0.2em 1em;
+  flex-wrap: nowrap;
+  text-wrap: nowrap;
+}
