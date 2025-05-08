@@ -29,6 +29,8 @@ export default class NewedoLedger extends NewedoApplication {
             return {};
         }
 
+        console.log('ledger data', ledger)
+
         this.document = document;
         this.ledger = ledger;
     }

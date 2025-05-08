@@ -84,17 +84,10 @@ export class ActorDataModel extends SystemDataModel {
             mod: new NumberField({ initial: 3.0 }),
             flat: new NumberField({ initial: 0 }),
         });// mod * pow kg
-        schema.rest = new SchemaField({
-            mod: new NumberField({ initial: 2.0 }),
-            value: new NumberField({ initial: 5, ...this.RequiredIntegerConfig }),
-            flat: new NumberField({ initial: 0 }),
-        });// 5 * rest hp healed on nap
-
 
         const traits_core = {};
-        const traits_derived = {};
-        for (const trait of Object.keys(NEWEDO.traitsCore)) traits_core[trait] = new SchemaField({
-            value: new NumberField({ initial: 0, ...this.RequiredIntegerConfig })
+        for (const trait of Object.keys(NEWEDO.traitsCore).sort()) traits_core[trait] = new SchemaField({
+            value: new NumberField({ initial: 10, ...this.RequiredIntegerConfig })
         })
 
         schema.traits = new SchemaField({
@@ -109,11 +102,11 @@ export class ActorDataModel extends SystemDataModel {
                     flat: new NumberField({ initial: 0 }),
                 }),
                 def: new SchemaField({
-                    mod: new NumberField({ initial: 1.0 }),
+                    mod: new NumberField({ initial: 0.4 }),
                     flat: new NumberField({ initial: 0 }),
                 }),
                 res: new SchemaField({
-                    mod: new NumberField({ initial: 1.0 }),
+                    mod: new NumberField({ initial: 0.4 }),
                     flat: new NumberField({ initial: 0 }),
                 }),
             })
@@ -127,6 +120,15 @@ export class ActorDataModel extends SystemDataModel {
         });
 
         schema.bonus = new SchemaField({
+            TraitCore: new SchemaField({
+                pow: new NumberField({ initial: 0 }),
+                per: new NumberField({ initial: 0 }),
+                pre: new NumberField({ initial: 0 }),
+                hrt: new NumberField({ initial: 0 }),
+                ref: new NumberField({ initial: 0 }),
+                sav: new NumberField({ initial: 0 }),
+                shi: new NumberField({ initial: 0 }),
+            }),
             // Bonus to core trait totals, added after all other modifiers
             PowTotal: new NumberField({ initial: 0 }),
             PerTotal: new NumberField({ initial: 0 }),
@@ -205,25 +207,12 @@ export class ActorDataModel extends SystemDataModel {
         const { core, derived } = this.traits;
         const bonus = this.bonus;
 
-        core.hrt.total = 0;
-        core.pow.total = 0;
-        core.per.total = 0;
-        core.pre.total = 0;
-        core.ref.total = 0;
-        core.sav.total = 0;
-        core.shi.total = 0;
-        derived.init.total = 0;
-        derived.move.total = 0;
-        derived.def.total = 0;
-        derived.res.total = 0;
+        for (const trait of Object.keys(core)) {
+            core[trait].total = 0;
+            core[trait].rank = 0;
+        }
 
-        core.hrt.rank = 0;
-        core.pow.rank = 0;
-        core.per.rank = 0;
-        core.pre.rank = 0;
-        core.ref.rank = 0;
-        core.sav.rank = 0;
-        core.shi.rank = 0;
+        for (const trait of Object.keys(derived)) derived[trait].total = 0;
 
         this.armour.kin.total = 0;
         this.armour.ele.total = 0;
@@ -243,17 +232,9 @@ export class ActorDataModel extends SystemDataModel {
         for (const item of this.parent.items.contents) item.prepareOwnerData(this);
 
         // Totals up core stats
-        core.hrt.total += core.hrt.value + bonus.HrtTotal;
-        core.pow.total += core.pow.value + bonus.PowTotal;
-        core.per.total += core.per.value + bonus.PerTotal;
-        core.pre.total += core.pre.value + bonus.PreTotal;
-        core.ref.total += core.ref.value + bonus.RefTotal;
-        core.sav.total += core.sav.value + bonus.SavTotal;
-        core.shi.total += core.shi.value + bonus.ShiTotal;
-
-        // Loop through core traits and calculate their rank, traits are not included in the "Round everything up" rule
-        for (let [key, trait] of Object.entries(core)) {
-            trait.rank += Math.max(Math.floor(trait.total / 10), 0);
+        for (const trait of Object.keys(core)) {
+            core[trait].total += core[trait].value + bonus.TraitCore[trait];
+            core[trait].rank += Math.max(Math.floor(core[trait].total / 10), 0);
         }
 
         // Calculates derived traits for initative, move, defence, resolve, and max health
@@ -267,7 +248,7 @@ export class ActorDataModel extends SystemDataModel {
         this.hp.min = 0;
 
         // calculates the ammount of health healed by resting
-        this.rest.total = Math.ceil(this.rest.mod * this.rest.value) + this.rest.flat;
+        if (this.rest) this.rest.total = Math.ceil(this.rest.mod * this.rest.value) + this.rest.flat;
 
         // Gets the characters wound state
         this.wound = utils.woundState(this.hp.value / this.hp.max);
@@ -324,7 +305,7 @@ export class ItemDataModel extends SystemDataModel {
     getRollData() {
         const actorData = this.actor?.getRollData();
         if (!this.actor) return null;
-
+        console.log(actorData)
         const data = {
             ...actorData,
             ...utils.duplicate(this)

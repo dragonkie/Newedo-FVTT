@@ -1,5 +1,6 @@
 import NewedoItemSheet from "../item.mjs";
 import { elements } from "../../../elements/_module.mjs"
+import { NEWEDO } from "../../../config.mjs";
 
 export default class RoteSheet extends NewedoItemSheet {
     static DEFAULT_OPTIONS = {
@@ -30,29 +31,17 @@ export default class RoteSheet extends NewedoItemSheet {
 
         // Prepares the dropdown selector for skills
         if (actor) {
-            // if this item is owned, the skill list is generated from their available skills
-            // this allows custom skills to be added
-            // Only skills toggled as weapon skills will appear here to prevent bloat
-            let skills = [];
-            for (const skill of actor.itemTypes.skill) skills.push({ value: skill.id, label: skill.name });
+            const skills = {};
+            for (const skill of actor.itemTypes.skill) skills[skill.system.linkID] = skill.name;
 
-            skills.sort((a, b) => {
-                if (a.label > b.label) return 1;
-                if (b.label > a.label) return -1;
-                return 0;
-            })
-
-            context.selector.skill = foundry.applications.fields.createSelectInput({
-                options: skills,
-                value: this.document.system.skill.id,
-                valueAttr: "value",
-                labelAttr: "label",
-                localize: true,
-                sort: false,
-                name: 'system.skill.id'
-            }).outerHTML;
+            context.selector.skill = new foundry.data.fields.StringField({
+                initial: this.document.system.skill.linkID,
+                blank: false,
+                label: NEWEDO.generic.skill,
+                choices: skills
+            }).toFormGroup().outerHTML;
         } else {
-            context.selector.skill = elements.select.Skills(this.document.system.skill.slug, 'system.skill.slug');
+            context.selector.skill = await elements.select.Skills(this.document.system.skill.linkID);
         }
 
         return context;

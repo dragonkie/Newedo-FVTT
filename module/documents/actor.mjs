@@ -17,7 +17,10 @@ export default class NewedoActor extends foundry.documents.Actor {
         const createData = data;
         const newActor = typeof data.system === `undefined`;
 
-        if (newActor) {
+        console.log('data', data);
+        console.log('options', options);
+
+        if (newActor && (data.type == 'character' || data.type == 'npc')) {
             LOGGER.debug(`Creating new actor`)
             createData.items = [];
             const coreItems = await utils.getCoreCharDocs();
@@ -32,7 +35,7 @@ export default class NewedoActor extends foundry.documents.Actor {
                     createData.items.push(newItem);
                 });
             } else {
-                sysUtil
+                LOGGER.warn('Couldnt get core character docs')
             }
         }
 
@@ -93,12 +96,12 @@ export default class NewedoActor extends foundry.documents.Actor {
 
     /**
      * 
-     * @param {String} slug the identifying slug of the actor to retrieve 
+     * @param {String} linkID - the identifying id of the actor to retrieve 
      * @returns 
      */
-    getSkill(slug) {
-        for (let skill of this.itemTypes.skill) {
-            if (skill.system.slug == slug) return skill;
+    getSkill(linkID) {
+        for (const skill of this.itemTypes.skill) {
+            if (skill.system.linkID == linkID) return skill;
         }
         return undefined;
     }

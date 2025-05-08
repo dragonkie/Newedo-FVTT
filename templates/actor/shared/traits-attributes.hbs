@@ -1,5 +1,5 @@
 {{!-- Additional modifiers --}}
-<div class="flexrow flex-gap-m">
+<div class="edo-traits-list edo-attributes flexrow flex-gap-m">
     <div class="trait-box align-center">
         <label class="edo-resource-label flexlarge align-left">{{localize config.generic.rest}} {{localize "NEWEDO.Generic.Mod.abbr"}}</label>
         <input value="{{system.rest.mod}}" type="number" disabled>
@@ -12,7 +12,7 @@
     </div>
     <div class="trait-box align-center">
         <label class="edo-resource-label flexlarge align-left">{{localize "NEWEDO.Trait.Derived.Hp.long"}} {{localize "NEWEDO.Generic.Mod.abbr"}}</label>
-        <input value="{{system.hp.mod}}" type="number" disabled>
+        <input class="align-center" value="{{system.hp.mod}}" type="number" disabled>
         <div>+{{ceil (subtraction (multiply system.traits.core.hrt.total system.hp.mod) system.traits.core.hrt.total)}} Hp</div>
     </div>
 </div>

@@ -18,8 +18,7 @@ export default class WeaponData extends ItemDataModel {
         schema.price = new PriceField();
         schema.quality = new ResourceField(1, 1, 5, {});
         schema.skill = new SchemaField({
-            slug: new StringField({ initial: '', nullable: false, required: true }),
-            id: new StringField({ initial: '', nullable: false, required: true })
+            linkID: new StringField({ initial: '', nullable: false, required: true })
         });
         schema.equipped = new BooleanField({ initial: false, required: true });
 
@@ -63,6 +62,15 @@ export default class WeaponData extends ItemDataModel {
         return schema;
     }
 
+    async _preCreate(data, options, user) {
+        const allowed = super._preCreate(data, options, user) ?? true;
+        if (!allowed) return false;
+
+        this.updateSource({
+            
+        })
+    }
+
     _calledRaise = 0;
 
     prepareBaseData() {
@@ -88,8 +96,7 @@ export default class WeaponData extends ItemDataModel {
         }
 
         // Prep data relevant to skill
-        if (this.actor && this.skill.id != '') {
-            this.skill.slug = this.actor.items.get(this.skill.id)?.system.slug;
+        if (this.actor && this.skill.linkID != '') {
             this.skill.label = this.getSkill()?.name;
         }
     }
@@ -109,21 +116,53 @@ export default class WeaponData extends ItemDataModel {
 
     getSkill() {
         if (this.actor) {
-            if (this.skill.id != '') {
+            if (this.skill.linkID != '') {
                 // Gets the linked item
-                return this.actor.items.get(this.skill.id);
+                for (const skill of this.actor.items.contents) {
+                    if (skill.system.linkID == this.skill.linkID) return skill;
+                }
             } else {
                 // If there isn't a linked item, we grab the first weapon skill available and use it until otherwise assigned
-                for (const item of this.actor.itemTypes.skill) {
+                for (const item of this.actor.items.contents) {
                     if (item.system.isWeaponSkill) {
-                        this.skill.id = item.id;
+                        this.skill.linkID = item.id;
                         return item;
                     }
                 }
             }
-            return null;
         }
         return null;
+    }
+
+    // List of item controls to be added to their list on actor sheets
+    sheet_actions = () => {
+        console.log(this)
+        return [{
+            label: NEWEDO.generic.reload,
+            action: 'reload',
+            icon: 'fas fa-arrow-rotate-left',
+            condition: this.ammo.max > 0 && this.ranged
+        }, {
+            label: NEWEDO.generic.attack,
+            action: 'attack',
+            icon: 'fas fa-sword',
+            condition: true,
+        }, {
+            label: NEWEDO.generic.damage,
+            action: 'damage',
+            icon: 'fas fa-droplet',
+            condition: true,
+        }, {
+            label: NEWEDO.generic.equip,
+            action: 'equip',
+            icon: 'fas fa-briefcase-blank',
+            condition: !this.equipped,
+        }, {
+            label: 'Unequip',
+            action: 'equip',
+            icon: 'fas fa-briefcase-blank',
+            condition: this.equipped,
+        }]
     }
 
     async use(action) {
@@ -165,6 +204,8 @@ export default class WeaponData extends ItemDataModel {
         const rollData = this.getRollData();
         const skill = rollData.skill;
         LOGGER.debug('attack data', rollData)
+
+        console.log(rollData);
 
         const roll = new NewedoRoll({
             title: NEWEDO.generic.attack,

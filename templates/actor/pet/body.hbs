@@ -6,11 +6,16 @@
             <img class="profile-img" src="{{document.img}}" title="{{actor.name}}" height="175px" width="175px" style="object-fit: cover; border: 0; object-position: 50% 0%" />
         </div>
 
+        {{toFieldInput system.schema 'lineage' value=system.lineage}}
+
         {{!-- Health container--}}
-        {{> 'newedo.resource-bar-inline' label=(concat (localize 'NEWEDO.Trait.Derived.Hp.long') ':' system.wound.label) value=system.hp.value valueName='system.hp.value' max=system.hp.max}}
+        {{> 'newedo.resource-bar-inline' label=system.wound.label value=system.hp.value valueName='system.hp.value' maxValue=system.hp.max}}
 
         {{!-- Armour values --}}
         {{> 'newedo.armour-soaks'}}
+
+        
+
     </div>
 
 

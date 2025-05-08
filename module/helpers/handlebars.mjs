@@ -152,7 +152,7 @@ export function registerHelpers() {
                     label, hint, rootId, stacked, widget, localize: true, units,
                     classes: typeof classes === "string" ? classes.split(" ") : []
                 };
-                const group = field.toInput(groupConfig, inputConfig);
+                const group = field.toInput(inputConfig);
                 return new Handlebars.SafeString(group.outerHTML);
             }
         }
@@ -163,7 +163,6 @@ export function registerHelpers() {
     /* -------------------------------------------- */
     Handlebars.registerHelper('selectDamage', (v, n) => newedo.elements.select.DamageTypes(v, n));
     Handlebars.registerHelper('selectSkill', (v, n) => newedo.elements.select.Skills(v, n));
-    Handlebars.registerHelper('selectWeaponSkill', (v, n) => newedo.elements.select.WeaponSkills(v, n));
     Handlebars.registerHelper('selectTrait', (v, n) => newedo.elements.select.Traits(v, n));
 
     for (const helper of helpers) Handlebars.registerHelper(helper.name, helper.fn);

@@ -1,0 +1,17 @@
+<div class="edo-derived-traits">
+    {{#if isEditMode}}<a data-action="configDerived" class="fas fa-cog" title="NEWEDO.Button.ConfigDerivedTraits"></a>{{/if}}
+    {{#each system.traits.derived as |trait key| }}
+        <div>
+            &#x2022 {{trait.abbr}}:
+            <b>{{trait.total}}</b>
+        </div>
+    {{/each}}
+
+    <div>
+        &#x2022 {{ localize "NEWEDO.Generic.Size.long" }}:
+        {{#if isPlayMode}}<b>{{system.size.value}}</b>{{/if}}
+        {{#if isEditMode}}
+            <input name="system.size.value" type="number" value="{{system.size.value}}" title="{{localize 'NEWEDO.Generic.Size.long'}}">
+        {{/if}}
+    </div>
+</div>

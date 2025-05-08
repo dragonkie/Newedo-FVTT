@@ -3,7 +3,7 @@
     {{#each system.background as | background key |}}
         <div class="trait-box align-center" data-background="{{key}}">
             <label class="edo-resource-label flexlarge align-left" data-action="roll" data-roll="{{background.rank}}d10" data-label="{{background.label}}">{{background.label}}</label>
-            <input name="system.background.{{key}}.value" value="{{background.value}}" type="number" {{disabled ../isPlayMode}} />
+            <input class="align-center" name="system.background.{{key}}.value" value="{{background.value}}" type="number" {{disabled ../isPlayMode}} />
             <div class="edo-background-rank" data-action="roll" data-roll="{{background.rank}}d10" data-label="{{background.label}}">Rank {{ background.rank }}</div>
         </div>
     {{/each}}

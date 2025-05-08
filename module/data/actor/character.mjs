@@ -23,6 +23,12 @@ export default class CharacterDataModel extends ActorDataModel {
             value: new NumberField({ initial: 0 })
         });
 
+        schema.rest = new SchemaField({
+            mod: new NumberField({ initial: 2.0 }),
+            value: new NumberField({ initial: 5, ...this.RequiredIntegerConfig }),
+            flat: new NumberField({ initial: 0 }),
+        });// 5 * rest hp healed on nap
+
         schema.money = new SchemaField({
             value: new NumberField({ initial: 0 }),
         });

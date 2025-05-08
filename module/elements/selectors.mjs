@@ -1,4 +1,5 @@
-
+import { NEWEDO } from "../config.mjs";
+import utils from "../helpers/sysUtil.mjs";
 
 export function DamageTypes(value = '', name = '') {
     const opts = [];
@@ -19,7 +20,7 @@ export function DamageTypes(value = '', name = '') {
 export function Traits(value = '', name = '') {
     const opts = [];
     for (const [k, v] of Object.entries(NEWEDO.traitsCore)) opts.push({ value: k, label: v });
-    
+
     return foundry.applications.fields.createSelectInput({
         options: opts,
         value: value,
@@ -30,37 +31,34 @@ export function Traits(value = '', name = '') {
     }).outerHTML;
 }
 
-export function Skills(value, name) {
-    let opts = [];
-    for (const [key, skill] of Object.entries(NEWEDO.skills)) opts.push({ label: skill, value: key });
+export async function Skills(linkID) {
+    // grabs an array of all the items in the internal skills compendium
+    const skills = [];
 
-    opts.sort((a, b) => {
-        if (a.value > b.value) return 1;
-        if (a.value < b.value) return -1;
-        return 0;
-    });
+    // Add all items from compendium packs we can see
+    for (const pack of game.packs.contents) {
+        if (pack.documentName == 'Item') {
+            let documents = await pack.getDocuments();
+            for (const doc of documents) {
+                if (doc.type == 'skill') skills.push(doc);
+            }
+        }
+    }
 
-    return foundry.applications.fields.createSelectInput({
-        options: opts,
-        value: value,
-        valueAttr: "value",
-        labelAttr: "label",
-        localize: true,
-        sort: true,
-        name: name
-    }).outerHTML;
-}
+    for (const item of game.items.contents) if (item.type == 'skill') skills.push(item);
 
-export function WeaponSkills(value, name) {
-    const opts = [];
-    for (const [k, v] of Object.entries(NEWEDO.weaponSkills)) opts.push({ value: k, label: v });
-    return foundry.applications.fields.createSelectInput({
-        options: opts,
-        value: value,
-        valueAttr: "value",
-        labelAttr: "label",
-        localize: true,
-        sort: true,
-        name: name
-    }).outerHTML;
+    const options = {};
+    for (const skill of skills) options[skill.system.linkID] = skill.name;
+
+    console.log('options', options)
+
+    if (linkID == '' || !linkID) linkID = Object.keys(options)[0];
+    console.log('default skill linkID', linkID)
+
+    return new foundry.data.fields.StringField({
+        blank: false,
+        initial: linkID,
+        choices: options,
+        label: NEWEDO.generic.skill,
+    }).toFormGroup({ localize: true }, { blank: false }).outerHTML;
 }

@@ -21,6 +21,9 @@ export default class WeaponSheet extends NewedoItemSheet {
         settings: { template: "systems/newedo/templates/item/settings/weapon.hbs" }
     }
 
+    //==================================================================================================================
+    //> Prepare Context
+    //==================================================================================================================
     async _prepareContext(partId, content) {
         const context = await super._prepareContext(partId, content);
 
@@ -44,7 +47,7 @@ export default class WeaponSheet extends NewedoItemSheet {
                     path: `system.damageParts.${a}.type`
                 }
             })
-        } 
+        }
 
         // Selector lists to be rendered dynamically, others can use default handlebars templates
         const actor = this.document.actor;
@@ -53,27 +56,44 @@ export default class WeaponSheet extends NewedoItemSheet {
             damage: [],
         };
 
-        // Prepares the dropdown selector for skills
-        if (actor) {
-            context.selector.skill = new foundry.data.fields.StringField({
-                blank: false,
-                nullable: false,
-                required: true,
-                initial: this.document.system.skill.slug,
-                choices: () => {
-                    let options = {};
-                    for (const skill of actor.itemTypes.skill) {
-                        if (skill.system.isWeaponSkill) options[skill.id] = skill.name;
-                    }
-                    return options;
-                }
-            }).toFormGroup({ label: utils.localize(NEWEDO.generic.skill) }, {
-                value: this.document.system.skill.slug
-            }).outerHTML;
 
+        //========================================================================================
+        //>- Create skill list
+        //========================================================================================
+        // Creates the skill selector
+        // grabs an array of all the items in the internal skills compendium
+        const skills = [];
+
+        if (actor) {
+            //===================================================================================
+            //>-- Actor Skill List
+            //===================================================================================
+            for (const item of actor.items) if (item.type == 'skill' && item.system.isWeaponSkill) skills.push(item);
         } else {
-            context.selector.skill = elements.select.WeaponSkills(this.document.system.skill.slug, 'system.skill.slug');
+            //===================================================================================
+            //>-- World skill list
+            //===================================================================================
+            for (const pack of game.packs.contents) {
+                if (pack.documentName == 'Item') {
+                    let documents = await pack.getDocuments();
+                    for (const doc of documents) {
+                        if (doc.type == 'skill' && doc.system.isWeaponSkill) skills.push(doc);
+                    }
+                }
+            }
+
+            for (const item of game.items.contents) if (item.type == 'skill' && item.system.isWeaponSkill) skills.push(item);
         }
+
+        const options = {};
+        for (const skill of skills) options[skill.system.linkID] = skill.name;
+
+        context.selector.skill = new foundry.data.fields.StringField({
+            blank: false,
+            initial: this.document.system.skill.linkID,
+            choices: options,
+            label: NEWEDO.generic.skill,
+        }).toFormGroup({ localize: true }, { blank: false, name: 'system.skill.linkID' }).outerHTML;
 
         return context;
     }

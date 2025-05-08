@@ -21,8 +21,7 @@ export default class RoteData extends ItemDataModel {
             increments: new StringField({ initial: 'instant', required: true, nullable: false })
         });
         schema.skill = new SchemaField({
-            slug: new StringField({ initial: 'arcana' }),
-            id: new StringField({ initial: '' })
+            linkID: new StringField({ initial: '' })
         });
         schema.tn = new NumberField({ initial: 5, label: NEWEDO.generic.targetNumber });
         schema.action = new StringField({ initial: 'full' });
@@ -49,12 +48,6 @@ export default class RoteData extends ItemDataModel {
 
     prepareDerivedData() {
         super.prepareDerivedData();
-
-        if (this.actor) {
-            if (this.skill.id != '') {
-                this.skill.label = this.actor.items.get(this.skill.id).name;
-            }
-        }
     }
 
     getRollData() {
@@ -69,12 +62,12 @@ export default class RoteData extends ItemDataModel {
 
     getSkill() {
         if (this.actor) {
-            if (this.skill.id != '') {
+            if (this.skill.linkID != '') {
                 // Gets the linked item
-                return this.actor.items.get(this.skill.id);
+                for (const i of this.actor.items.contents) if (i.type == 'skill' && i.system.linkID == this.skill.linkID) return i;
             } else {
                 // If there isn't a linked item, we grab the first available skill and use it until otherwise assigned
-                this.skill.id = this.actor.itemTypes.skill[0].id;
+                this.skill.linkID = this.actor.itemTypes.skill[0].system.linkID;
                 return this.actor.itemTypes.skill[0];
             }
         }

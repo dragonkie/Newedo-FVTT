@@ -16,14 +16,16 @@
 
     {{!-- Legend container --}}
     {{#if (eq document.type 'character')}}
-        {{> 'newedo.resource-bar-inline' newContext 
-            classes='edo-blue'
-            label='NEWEDO.Generic.Legend.long' 
-            value=system.legend.value 
-            valueName='system.legend.value' 
-            maxValue=system.legend.max 
-            maxValueName='system.legend.max'
-        }}
+        <div class="edo-legend-bar-wrapper">
+            <div>{{{ledger 'system.legend.max' 'legend' 'NEWEDO.Generic.Legend.long'}}} {{localize 'NEWEDO.Generic.Legend.long'}}</div>
+            {{> 'newedo.resource-bar-inline' newContext
+                classes='edo-blue'
+                value=system.legend.value
+                valueName='system.legend.value'
+                maxValue=system.legend.max
+                maxValueName='system.legend.max'
+            }}
+        </div>
     {{/if}}
 
     {{!-- Armour values --}}

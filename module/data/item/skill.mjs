@@ -23,7 +23,11 @@ export default class SkillData extends ItemDataModel {
 
         schema.isWeaponSkill = new BooleanField({ initial: false, required: true, nullable: false });
         schema.useTraitRank = new BooleanField({ initial: true, required: true, nullable: false });
-        schema.slug = new StringField({ initial: '' });
+
+        // A special ID used for linking skills to other items
+        // default skills are populated with these
+        schema.linkID = new StringField({ initial: '', required: true, nullable: false, label: 'linkID' });
+
         schema.ranks = new ArrayField(
             new NumberField({
                 initial: 0,
@@ -40,10 +44,17 @@ export default class SkillData extends ItemDataModel {
         return schema;
     }
 
+    async _preCreate(data, options, user) {
+        const allowed = await super._preCreate(data, options, user) ?? true;
+        if (!allowed) return false;
+
+        await this.updateSource({
+            linkID: foundry.utils.randomID()
+        });
+    }
+
     prepareDerivedData() {
         super.prepareDerivedData();
-
-        if (this.slug === '') this.slug = this.parent.name.toLowerCase().replaceAll(' ', '');
     }
 
     prepareOwnerData(ActorData) {

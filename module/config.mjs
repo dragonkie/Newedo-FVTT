@@ -50,6 +50,7 @@ NEWEDO.generic = {
     core: "NEWEDO.Generic.Core.long",
     damage: "NEWEDO.Generic.Damage.long",
     derived: "NEWEDO.Generic.Derived.long",
+    equip: "NEWEDO.Generic.Equip",
     equipped: "NEWEDO.Generic.Equipped.long",
     experience: "NEWEDO.Generic.Experience.long",
     fate: "NEWEDO.Generic.Fate.long",
@@ -61,6 +62,7 @@ NEWEDO.generic = {
     mod: "NEWEDO.Generic.Mod.long",
     raise: "NEWEDO.Generic.Raise.long",
     rank: "NEWEDO.Generic.Rank.long",
+    reload: "NEWEDO.Generic.Reload",
     rest: "NEWEDO.Generic.Rest.long",
     roll: "NEWEDO.Generic.Roll.long",
     range: "NEWEDO.Generic.Range.long",
@@ -218,6 +220,12 @@ NEWEDO.actorTypes = {
     npc: "TYPES.Actor.npc",
     pet: "TYPES.Actor.pet",
     vehicle: "TYPES.Actor.vehicle",
+}
+
+NEWEDO.petTypes = {
+    animal: "NEWEDO.PetType.Animal",
+    kami: "NEWEDO.PetType.Kami",
+    robot: "NEWEDO.PetType.Robot",
 }
 
 NEWEDO.types = {

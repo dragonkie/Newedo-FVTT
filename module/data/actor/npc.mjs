@@ -7,6 +7,13 @@ const {
 export default class NpcDataModel extends ActorDataModel {
     static defineSchema() {
         const schema = super.defineSchema();
+
+        schema.rest = new SchemaField({
+            mod: new NumberField({ initial: 2.0 }),
+            value: new NumberField({ initial: 5, ...this.RequiredIntegerConfig }),
+            flat: new NumberField({ initial: 0 }),
+        });// 5 * rest hp healed on nap
+
         return schema;
     }
 

@@ -1,8 +1,5 @@
 <div class="edo-tab-content edo-item-settings edo-rote-settings flex-gap-m">
-    <div class="form-group">
-        <label>Skill:</label>
-        {{{ selector.skill }}}
-    </div>
+    {{{ selector.skill }}}
 
     {{toFieldGroup system.schema 'cost' value=system.cost label='cost'}}
 
@@ -18,19 +15,5 @@
             <option value="Full">Full</option>
             <option value="Quick">Quick</option>
         </select>
-    </div>
-
-    <div class="form-group">
-        <label>Duration:</label>
-        <div class="group-details">
-            <input type="checkbox" name="system.rules.rollRange" {{checked system.rules.rollDuration.active}}>
-            <input type="number" placeholder="Duration" name="system.duration" value="{{system.duration}}" />
-            <select>
-                <option>Round</option>
-                <option>Second</option>
-                <option>Minute</option>
-                <option>Hour</option>
-            </select>
-        </div>
     </div>
 </div>

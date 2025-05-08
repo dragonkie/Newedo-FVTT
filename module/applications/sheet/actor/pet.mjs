@@ -33,6 +33,15 @@ export default class PetSheet extends NewedoActorSheet {
     }
 
     tabGroups = {
-        primary: "traits"
+        primary: "features"
+    }
+
+    async _prepareContext() {
+        const context = await super._prepareContext();
+        context.skills = [];
+        for (const item of this.document.items.contents) {
+            if (item.type == 'skill') context.skills.push(item);
+        }
+        return context;
     }
 }

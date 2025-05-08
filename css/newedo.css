@@ -576,7 +576,7 @@ ol.items-list .item-delete {
   display: flex;
   flex: 0 0 200px;
   flex-direction: column;
-  padding: 10px 0 0 10px;
+  padding: 10px 10px 10px 10px;
   align-items: center;
   text-align: center;
   overflow: auto;
@@ -619,8 +619,18 @@ ol.items-list .item-delete {
 .sheet.actor .window-content .edo-panel .fate-card .fate-list :last-child {
   border: 0;
 }
-.sheet.actor .window-content .edo-tab-traits input {
+.sheet.actor .window-content .edo-traits-list input {
   text-align: center;
+}
+.sheet.actor .window-content .edo-traits-list .edo-trait-value {
+  height: 2em;
+  font-size: 2em;
+  font-weight: bold;
+}
+.sheet.actor .window-content .edo-traits-list .edo-trait-rank {
+  width: 75%;
+  height: 1.5em;
+  border-radius: 0 0 5px 5px;
 }
 .sheet.actor .window-content .body {
   padding: 10px;

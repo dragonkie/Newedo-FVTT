@@ -38,7 +38,7 @@
         display: flex;
         flex: 0 0 200px;
         flex-direction: column;
-        padding: 10px 0 0 10px;
+        padding: 10px 10px 10px 10px;
         align-items: center;
         text-align: center;
         overflow: auto;
@@ -95,9 +95,24 @@
     //===========================================================
     // Traits tab
     //===========================================================
-    .edo-tab-traits {
+
+    .edo-traits-list {
         input {
             text-align: center;
+        }
+
+        .edo-core-trait {}
+
+        .edo-trait-value {
+            height: 2em;
+            font-size: 2em;
+            font-weight: bold;
+        }
+
+        .edo-trait-rank {
+            width: 75%;
+            height: 1.5em;
+            border-radius: 0 0 5px 5px;
         }
     }
 

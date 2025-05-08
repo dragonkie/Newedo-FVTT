@@ -52,7 +52,7 @@ export default class ArmourData extends ItemDataModel {
         switch (action) {
             case 'equip': return this._onEquip();
             default:
-                LOGGER.error('Unknown weapon action: ', action);
+                LOGGER.error('Unknown Armour action: ', action);
                 return null;
         }
     }

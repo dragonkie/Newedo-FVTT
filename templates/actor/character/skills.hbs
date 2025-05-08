@@ -11,7 +11,7 @@
                     <ol class="items-list">
                         {{#each trait.list as | skill key |}}
                             <li class="item flexrow" data-item-uuid="{{skill.uuid}}">
-                                <a data-action="useItem">{{skill.name}}</a>
+                                <a class="align-start" data-action="useItem">{{skill.name}}</a>
                                 <div class="flexrow">
                                     {{#each skill.system.ranks as | value index |}}
                                         <input type="button" data-action="skillDice" data-index="{{index}}" value="{{value}}" />

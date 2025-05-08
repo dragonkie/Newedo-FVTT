@@ -195,6 +195,7 @@ export default class NewedoActorSheet extends NewedoSheetMixin(foundry.applicati
             ledgers = this.document.getFlag('newedo', 'ledger');
         }
 
+        ledgers[id].label = label;
         new NewedoLedger(this.document, ledgers[id]).render(true);
     }
 
