@@ -36,7 +36,7 @@ export default class RoteSheet extends NewedoItemSheet {
 
             context.selector.skill = new foundry.data.fields.StringField({
                 initial: this.document.system.skill.linkID,
-                blank: false,
+                blank: true,
                 label: NEWEDO.generic.skill,
                 choices: skills
             }).toFormGroup().outerHTML;

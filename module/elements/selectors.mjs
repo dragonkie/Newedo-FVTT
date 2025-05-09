@@ -47,8 +47,10 @@ export async function Skills(linkID) {
 
     for (const item of game.items.contents) if (item.type == 'skill') skills.push(item);
 
+    const sorted = skills.sort((a, b) => a.name.localeCompare(b.name));
+
     const options = {};
-    for (const skill of skills) options[skill.system.linkID] = skill.name;
+    for (const skill of sorted) options[skill.system.linkID] = skill.name;
 
     console.log('options', options)
 
@@ -56,9 +58,8 @@ export async function Skills(linkID) {
     console.log('default skill linkID', linkID)
 
     return new foundry.data.fields.StringField({
-        blank: false,
         initial: linkID,
         choices: options,
         label: NEWEDO.generic.skill,
-    }).toFormGroup({ localize: true }, { blank: false }).outerHTML;
+    }).toFormGroup({ localize: true }, { name: 'system.skill.linkID' }).outerHTML;
 }

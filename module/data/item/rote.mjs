@@ -53,9 +53,10 @@ export default class RoteData extends ItemDataModel {
     getRollData() {
         LOGGER.debug('RoteData | getRollData');
         const data = super.getRollData();
-        if (!data || !this.actor) return null;
+        if (!data || !this.actor) return data;
 
         data.trait = this.actor.system.traits.core.shi;
+        data.skill = this.getSkill();
 
         return data;
     }
@@ -85,27 +86,35 @@ export default class RoteData extends ItemDataModel {
         const rollData = this.getRollData();
         const skill = this.getSkill();
 
-        if (!skill) return;
-
         const roll = new NewedoRoll({
             title: this.parent.name,
             document: this.parent,
             rollData: rollData
         });
 
-        roll.AddPart([{
+        roll.AddPart({
             type: '',
             label: utils.localize(NEWEDO.generic.trait) + ":" + utils.localize(NEWEDO.traitsCore.shi),
             value: `${actor.system.traits.core.shi.rank}d10`
-        }, {
-            type: '',
-            label: skill.name,
-            value: skill.system.getRanks()
-        }]);
+        });
+
+        if (skill) {
+            roll.AddPart({
+                type: '',
+                label: skill.name,
+                value: skill.system.getRanks()
+            })
+        }
 
         roll.AddLegend(this.actor);
 
         await roll.evaluate();
+
+        // Pad rolldata out with new values from the roll
+        rollData.cs = Math.ceil(roll.total / this.tn);
+        rollData.roll = {
+            total: roll.total
+        }
 
         let messageData = { content: `` };
         messageData.content += `
@@ -123,6 +132,9 @@ export default class RoteData extends ItemDataModel {
                 TN: <b>${this.tn}</b>
             </div>
             <div class="flexrow">
+                CS: <b>${rollData.cs}</b>
+            </div>
+            <div class="flexrow">
                 Cost: <b>${this.cost}</b>
             </div>
             <div class="flexrow">
@@ -133,6 +145,8 @@ export default class RoteData extends ItemDataModel {
         <div>${this.description}</div>
         `;
         messageData.content += await roll.render();
+        messageData.content = await foundry.applications.ux.TextEditor.enrichHTML(messageData.content, { rollData: rollData });
+        console.log(rollData);
         return await roll.toMessage(messageData);
     }
 
