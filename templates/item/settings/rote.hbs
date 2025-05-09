@@ -1,19 +1,13 @@
 <div class="edo-tab-content edo-item-settings edo-rote-settings flex-gap-m">
-    {{{ selector.skill }}}
-
-    {{toFieldGroup system.schema 'cost' value=system.cost label='cost'}}
-
     <div class="form-group">
         <label>Kami:</label>
     </div>
-
-    {{toFieldGroup system.schema 'tn' value=system.tn label='TN'}}
-
-    <div class="form-group">
-        <label>Action cost:</label>
-        <select name="system.action">
-            <option value="Full">Full</option>
-            <option value="Quick">Quick</option>
-        </select>
+    <div class="flexrow flex-gap-m">
+        {{{ selector.skill }}}
+        {{log system}}
+        {{toFieldGroup system.schema 'action' value=system.action label='Action'}}
     </div>
+
+    {{toFieldGroup system.schema 'casting.cost' value=system.casting.cost label='Legend Cost'}}
+    {{toFieldGroup system.schema 'tn' value=system.tn label='TN'}}
 </div>

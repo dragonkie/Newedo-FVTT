@@ -80,6 +80,30 @@ for (const [key, value] of Object.entries(NEWEDO.generic)) {
     NEWEDO.genericPlural[key] = value.replace('long', 'plural');
 }
 
+NEWEDO.time = {
+    instant: 'NEWEDO.Time.Instant',
+    turns: 'NEWEDO.Time.Turns',
+    rounds: 'NEWEDO.Time.Rounds',
+    seconds: 'NEWEDO.Time.Seconds',
+    minutes: 'NEWEDO.Time.Minutes',
+    hours: 'NEWEDO.Time.Hours',
+    days: 'NEWEDO.Time.Days',
+}
+
+NEWEDO.targets = {
+    self: '',
+    ally: '',
+    enemy: '',
+    any: '',
+
+}
+
+NEWEDO.actions = {
+    full: 'NEWEDO.Action.Full',
+    quick: 'NEWEDO.Action.Quick',
+    interupt: 'NEWEDO.Action.Interupt',
+}
+
 NEWEDO.effect = {
     create: "NEWEDO.EffectCreate",
     delete: "NEWEDO.EffectDelete",

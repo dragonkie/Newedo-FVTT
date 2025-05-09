@@ -13,35 +13,56 @@ export default class RoteData extends ItemDataModel {
     static defineSchema() {
         const schema = super.defineSchema();
 
-        schema.rank = new NumberField({ initial: 1, label: NEWEDO.generic.rank });
         schema.range = new NumberField({ initial: 1, label: NEWEDO.generic.range });
-        schema.cost = new NumberField({ initial: 1, label: NEWEDO.generic.cost });
+
+        // time the spell lasts for
         schema.duration = new SchemaField({
             value: new NumberField({ initial: 1, required: true, nullable: false }),
-            increments: new StringField({ initial: 'instant', required: true, nullable: false })
+            increment: new StringField({
+                initial: 'instant',
+                blank: false,
+                choices: () => {
+                    const options = { ...NEWEDO.time };
+                    for (const key of Object.keys(options)) options[key] = utils.localize(options[key]);
+                    return options;
+                }
+            })
         });
+
+        // Details about how the spell is cast
+        schema.casting = new SchemaField({
+            time: new SchemaField({ // time it takes to actually cast the spell
+                value: new NumberField({ initial: 1, required: true, nullable: false }),
+                increment: new StringField({
+                    initial: 'instant',
+                    blank: false,
+                    choices: () => {
+                        const options = { ...NEWEDO.time };
+                        for (const key of Object.keys(options)) options[key] = utils.localize(options[key]);
+                        return options;
+                    }
+                })
+            }),
+            cost: new NumberField({ initial: 8, label: NEWEDO.generic.cost })
+        })
+
         schema.skill = new SchemaField({
             linkID: new StringField({ initial: '' })
         });
         schema.tn = new NumberField({ initial: 5, label: NEWEDO.generic.targetNumber });
-        schema.action = new StringField({ initial: 'full' });
+        schema.action = new StringField({
+            initial: 'full',
+            blank: true,
+            choices: () => {
+                const options = { ...NEWEDO.actions };
+                for (const key of Object.keys(options)) options[key] = utils.localize(options[key]);
+                console.log('Action options', options);
+                return options;
+            }
+        });
 
         // Optional toggles for the different ways a spell can roll its values
         // in this scenario, value is an additional modifier added to the divider of spells
-        schema.rules = new SchemaField({
-            rollRange: new SchemaField({
-                active: new BooleanField({ initial: false }),
-                value: new NumberField({ initial: 0 })
-            }),
-            rollDuration: new SchemaField({
-                active: new BooleanField({ initial: false }),
-                value: new NumberField({ initial: 0 })
-            }),
-            rollPotency: new SchemaField({
-                active: new BooleanField({ initial: false }),
-                value: new NumberField({ initial: 0 })
-            })
-        })
 
         return schema;
     }
@@ -108,6 +129,9 @@ export default class RoteData extends ItemDataModel {
 
         roll.AddLegend(this.actor);
 
+        // Before evaluating the roll, we check if the user can spend legend to cast the spell
+        let payed = await utils.spendLegend(this.actor, this.casting.cost);
+
         await roll.evaluate();
 
         // Pad rolldata out with new values from the roll
@@ -135,7 +159,7 @@ export default class RoteData extends ItemDataModel {
                 CS: <b>${rollData.cs}</b>
             </div>
             <div class="flexrow">
-                Cost: <b>${this.cost}</b>
+                Cost: <b>${this.casting.cost}</b>
             </div>
             <div class="flexrow">
                 Range: <b>${this.range}</b>

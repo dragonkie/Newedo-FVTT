@@ -1,5 +1,5 @@
 <div class="edo-tab-content edo-item-settings edo-weapon-settings flex-gap-s">
-    
+
     {{{ selector.skill }}}
 
     <div class="flexcol flex-gap-s">
@@ -21,60 +21,51 @@
         {{/each}}
         <div>
             <a data-action="createDamagePart" style="float: right;">
-                Add new damage part <i class="fa-solid fa-plus fa-l"></i>
+                <i class="fa-solid fa-plus fa-l"></i> Add new damage part
             </a>
         </div>
     </div>
 
-    {{toFieldGroup system.schema 'quality.value' value=system.quality.value label='Quality'}}
-    {{toFieldGroup system.schema 'grit.value' value=system.grit.value label='Grit'}}
-
-    <div class="form-group">
-        <label>Grit attack / damage bonus:</label>
-        <div class="form-fields flexrow">
-            <input type="number" name="system.grit.atk" value="{{system.grit.atk}}">
-            /
-            <input type="number" name="system.grit.dmg" value="{{system.grit.dmg}}">
+    <div class="flexrow flex-gap-m">
+        <div class="flexcol flex-gap-m">
+            {{toFieldGroup system.schema 'quality.value' value=system.quality.value label='Quality' class='align-center'}}
+            {{toFieldGroup system.schema 'grit.atk' value=system.grit.atk label='Grit Attack' class='align-center'}}
+        </div>
+        <div class="flexcol flex-gap-m">
+            {{toFieldGroup system.schema 'grit.value' value=system.grit.value label='Grit'}}
+            {{toFieldGroup system.schema 'grit.dmg' value=system.grit.dmg label='Grit Damage'}}
         </div>
     </div>
 
-
     {{toFieldGroup system.schema 'ranged' value=system.ranged label='Ranged'}}
-
-    <div class="form-group">
-        {{#if system.ranged}}<label>Close / Long range:</label>{{/if}}
-        {{#if (not system.ranged)}}<label>Reach / thrown range:</label>{{/if}}
-        <div class="form-fields flexrow">
-            <input type="number" name="system.range.short" value="{{system.range.short}}">
-            /
-            <input type="number" name="system.range.long" value="{{system.range.long}}">
-        </div>
+    <div class="flexrow flex-gap-m">
+        {{#if system.ranged}}
+            {{toFieldGroup system.schema 'range.short' value=system.range.short label='Short Range'}}
+            {{toFieldGroup system.schema 'range.long' value=system.range.long label='Long Range'}}
+        {{else}}
+            {{toFieldGroup system.schema 'range.short' value=system.range.short label='Melee'}}
+            {{toFieldGroup system.schema 'range.long' value=system.range.long label='Thrown'}}
+        {{/if}}
     </div>
 
     {{#if system.ranged}}
-        <div class="form-group">
-            <label>Range hit mods:</label>
-            <div class="flexrow">
-                <input type="number" name="system.range.modShort" value="{{system.range.modShort}}">
-                /
-                <input type="number" name="system.range.modLong" value="{{system.range.modLong}}">
-            </div>
+        <div class="flexrow flex-gap-m">
+            {{toFieldGroup system.schema 'range.modShort' value=system.range.modShort label='Short Mod'}}
+            {{toFieldGroup system.schema 'range.modLong' value=system.range.modLong label='Long Mod'}}
         </div>
 
-        <div class="form-group">
-            <label>Magazine</label>
-            <span class="flexrow">
-                <input type="number" name="system.ammo.value" value="{{system.ammo.value}}" />
-                /
-                <input type="number" {{disabled isPlayMode}} name="system.ammo.max" value="{{system.ammo.max}}" />
-            </span>
+        <div class="flexrow flex-gap-m">
+            {{toFieldGroup system.schema 'ammo.value' value=system.ammo.value label='Magazine'}}
+            {{toFieldGroup system.schema 'ammo.max' value=system.ammo.max label='Max'}}
         </div>
 
         {{toFieldGroup system.schema 'burst.active' value=system.burst.active label='Enable Burst'}}
 
         {{#if system.burst.active}}
-            {{toFieldGroup system.schema 'burst.ammo' value=system.burst.ammo label='Burst Ammo'}}
-            {{toFieldGroup system.schema 'burst.roll' value=system.burst.roll label='Burst Roll'}}
+            <div class="flexrow flex-gap-m">
+                {{toFieldGroup system.schema 'burst.ammo' value=system.burst.ammo label='Burst Ammo'}}
+                {{toFieldGroup system.schema 'burst.roll' value=system.burst.roll label='Burst Roll'}}
+            </div>
         {{/if}}
     {{/if}}
 

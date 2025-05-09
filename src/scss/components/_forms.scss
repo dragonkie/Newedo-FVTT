@@ -15,8 +15,11 @@
 .form-group {
   display: flex;
   flex-direction: row;
+  justify-content: center;
 
   label {
+    display: flex;
+    align-items: center;
     flex: 1;
   }
 

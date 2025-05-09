@@ -67,7 +67,7 @@ export default class WeaponData extends ItemDataModel {
         if (!allowed) return false;
 
         this.updateSource({
-            
+
         })
     }
 

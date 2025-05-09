@@ -393,8 +393,11 @@
 .form-group {
   display: flex;
   flex-direction: row;
+  justify-content: center;
 }
 .form-group label {
+  display: flex;
+  align-items: center;
   flex: 1;
 }
 .form-group .form-fields {

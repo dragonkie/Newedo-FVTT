@@ -1,5 +1,10 @@
 {
   "NEWEDO": {
+    "Action": {
+      "Quick": "Quick",
+      "Full": "Full",
+      "Interupt": "Interupt"
+    },
     "Generic": {
       "Armour": { "abbr": "armr", "long": "Armour", "plural": "Armours" },
       "Attack": { "abbr": "atk", "long": "Attack", "plural": "Attacks" },
@@ -54,6 +59,15 @@
         "Res": { "abbr": "res", "long": "Resolve" },
         "Hp": { "abbr": "hp", "long": "Health" }
       }
+    },
+    "Time": {
+      "Instant": "Instant",
+      "Turns": "Turns",
+      "Rounds": "Rounds",
+      "Seconds": "Seconds",
+      "Minutes": "Minutes",
+      "Hours": "Hours",
+      "Days": "Days"
     },
     "Effect": {
       "Create": "Create Effect",
@@ -157,9 +171,9 @@
       "Traits": "Traits"
     },
     "PetType": {
-      "Animal":"Animal",
-      "Kami":"Kami",
-      "Robot":"Robot"
+      "Animal": "Animal",
+      "Kami": "Kami",
+      "Robot": "Robot"
     }
   },
   "TYPES": {
