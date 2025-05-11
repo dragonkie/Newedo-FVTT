@@ -154,13 +154,14 @@ export default class SkillData extends ItemDataModel {
         let rollData = this.getRollData();
         if (!rollData) return;
 
+        const useLegend = Object.hasOwn(this.actor.system, 'legend');
+
         const roll = new NewedoRoll({
+            legend: useLegend,
             document: this.parent,
             title: this.parent.name,
             rollData: rollData
         });
-
-        roll.AddLegend(this.actor);
 
         roll.AddPart([{
             type: '',

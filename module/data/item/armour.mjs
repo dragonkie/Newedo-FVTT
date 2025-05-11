@@ -48,6 +48,20 @@ export default class ArmourData extends ItemDataModel {
         return this.equipped == true;
     }
 
+    sheet_actions = () => {
+        return [{
+            label: NEWEDO.generic.equip,
+            action: 'equip',
+            icon: 'fas fa-briefcase-blank',
+            condition: !this.equipped,
+        }, {
+            label: 'Unequip',
+            action: 'equip',
+            icon: 'fas fa-briefcase-blank',
+            condition: this.equipped,
+        }]
+    }
+
     async use(action) {
         switch (action) {
             case 'equip': return this._onEquip();

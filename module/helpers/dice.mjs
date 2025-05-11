@@ -114,10 +114,12 @@ export default class NewedoRoll {
     }
 
     AddLegend(actor) {
-        console.log('Adding legend', this)
-        console.log(!actor && !this.actor)
+        // ensure we have the actor tied in
         if ((!actor || actor?.documentName !== 'Actor') && !this.actor) throw new Error('Cant add legend to roll without an actor');
         if (actor) this.actor = actor;
+        // Verify the actor has legend to use
+        if (!Object.hasOwn(this.actor.system, 'legend')) throw new Error("Actor doesn't have legend to use");
+
         this.AddPart({
             label: NEWEDO.generic.legend,
             value: '0',

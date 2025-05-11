@@ -14,6 +14,9 @@ export default class NpcDataModel extends ActorDataModel {
             flat: new NumberField({ initial: 0 }),
         });// 5 * rest hp healed on nap
 
+        // Npc's need a rank for some abilities and spells, this gives us a place to store rank
+        schema.rank = new NumberField({ initial: 1 });
+
         return schema;
     }
 

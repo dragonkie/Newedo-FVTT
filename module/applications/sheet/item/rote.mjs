@@ -28,21 +28,42 @@ export default class RoteSheet extends NewedoItemSheet {
         context.selector = {
             skill: {}
         }
+        const skill_options = {};
 
         // Prepares the dropdown selector for skills
         if (actor) {
-            const skills = {};
-            for (const skill of actor.itemTypes.skill) skills[skill.system.linkID] = skill.name;
-
-            context.selector.skill = new foundry.data.fields.StringField({
-                initial: this.document.system.skill.linkID,
-                blank: true,
-                label: NEWEDO.generic.skill,
-                choices: skills
-            }).toFormGroup().outerHTML;
+            for (const skill of actor.itemTypes.skill) skill_options[skill.system.linkID] = skill.name;
         } else {
-            context.selector.skill = await elements.select.Skills(this.document.system.skill.linkID);
+            // grabs an array of all the items in the internal skills compendium
+            const skills = [];
+
+            // Add all items from compendium packs we can see
+            for (const pack of game.packs.contents) {
+                if (pack.documentName == 'Item') {
+                    let documents = await pack.getDocuments();
+                    for (const doc of documents) {
+                        if (doc.type == 'skill') skills.push(doc);
+                    }
+                }
+            }
+
+            // Add all items available from the global game context
+            for (const item of game.items.contents) if (item.type == 'skill') skills.push(item);
+
+            // sort the list of skills
+            const sorted = skills.sort((a, b) => a.name.localeCompare(b.name));
+            for (const skill of sorted) skill_options[skill.system.linkID] = skill.name;
+
+            if (this.document.linkID == '' || !this.document.linkID) this.document.linkID = Object.keys(skill_options)[0];
         }
+
+        // Generate the final selector
+        context.selector.skill = new foundry.data.fields.StringField({
+            initial: this.document.system.skill.linkID,
+            blank: true,
+            label: NEWEDO.generic.skill,
+            choices: skill_options
+        }).toFormGroup({ localize: true }, { name: 'system.skill.linkID' }).outerHTML;
 
         return context;
     }

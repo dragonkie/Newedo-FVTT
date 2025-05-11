@@ -41,13 +41,13 @@ NEWEDO.traitsAbbr = {
 }
 
 NEWEDO.generic = {
-    cost: "NEWEDO.Generic.Cost",
-    targetNumber: 'NEWEDO.Generic.TargetNumber',
     armour: "NEWEDO.Generic.Armour.long",
     attack: "NEWEDO.Generic.Attack.long",
     background: "NEWEDO.Generic.Background.long",
     bonus: "NEWEDO.Generic.Bonus.long",
+    cast: "NEWEDO.Generic.Cast",
     core: "NEWEDO.Generic.Core.long",
+    cost: "NEWEDO.Generic.Cost",
     damage: "NEWEDO.Generic.Damage.long",
     derived: "NEWEDO.Generic.Derived.long",
     equip: "NEWEDO.Generic.Equip",
@@ -61,18 +61,20 @@ NEWEDO.generic = {
     lift: "NEWEDO.Generic.Lift.long",
     mod: "NEWEDO.Generic.Mod.long",
     raise: "NEWEDO.Generic.Raise.long",
+    range: "NEWEDO.Generic.Range.long",
     rank: "NEWEDO.Generic.Rank.long",
     reload: "NEWEDO.Generic.Reload",
     rest: "NEWEDO.Generic.Rest.long",
     roll: "NEWEDO.Generic.Roll.long",
-    range: "NEWEDO.Generic.Range.long",
     situational: 'NEWEDO.Generic.Situational.long',
     size: "NEWEDO.Generic.Size.long",
     skill: "NEWEDO.Generic.Skill.long",
     soak: "NEWEDO.Generic.Soak.long",
+    targetNumber: 'NEWEDO.Generic.TargetNumber',
     trait: "NEWEDO.Generic.Trait.long",
-    wound: "NEWEDO.Generic.Wound.long"
+    wound: "NEWEDO.Generic.Wound.long",
 };
+
 NEWEDO.genericAbbr = {};
 NEWEDO.genericPlural = {};
 for (const [key, value] of Object.entries(NEWEDO.generic)) {

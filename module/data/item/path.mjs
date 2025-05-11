@@ -14,7 +14,7 @@ export default class PathData extends ItemDataModel {
     prepareOwnerData(ActorData) {
 
         for (const feature of this.features) {
-            if (ActorData.legend.rank >= feature.unlock) {
+            if (ActorData.rank >= feature.unlock) {
                 if (feature.type == 'trait') {
                     for (const [g, e] of Object.entries(feature.data)) {
                         for (const [k, v] of Object.entries(e)) {

@@ -61,9 +61,6 @@ export default class RoteData extends ItemDataModel {
             }
         });
 
-        // Optional toggles for the different ways a spell can roll its values
-        // in this scenario, value is an additional modifier added to the divider of spells
-
         return schema;
     }
 
@@ -96,6 +93,16 @@ export default class RoteData extends ItemDataModel {
         return null;
     }
 
+    // List of item controls to be added to their list on actor sheets
+    sheet_actions = () => {
+        return [{
+            label: NEWEDO.generic.cast,
+            action: 'cast',
+            icon: 'fas fa-book',
+            condition: this.ammo.max > 0 && this.ranged
+        }]
+    }
+
     async use(action) {
         return this._onCast();
     }
@@ -104,10 +111,19 @@ export default class RoteData extends ItemDataModel {
         const actor = this.actor;
         if (!actor) return;
 
+        // Before evaluating the roll, we check if the user can spend legend to cast the spell
+        const useLegend = Object.hasOwn(this.actor.system, 'legend');
+
+        if (useLegend) {
+            let payed = await utils.spendLegend(this.actor, this.casting.cost);
+            if (!payed) return;
+        }
+
         const rollData = this.getRollData();
         const skill = this.getSkill();
 
         const roll = new NewedoRoll({
+            legend: useLegend,
             title: this.parent.name,
             document: this.parent,
             rollData: rollData
@@ -126,11 +142,6 @@ export default class RoteData extends ItemDataModel {
                 value: skill.system.getRanks()
             })
         }
-
-        roll.AddLegend(this.actor);
-
-        // Before evaluating the roll, we check if the user can spend legend to cast the spell
-        let payed = await utils.spendLegend(this.actor, this.casting.cost);
 
         await roll.evaluate();
 

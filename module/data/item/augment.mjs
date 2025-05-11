@@ -12,7 +12,7 @@ export default class AugmentData extends ItemDataModel {
         schema.installed = new BooleanField({ initial: false });
         schema.biofeedback = new NumberField({ initial: 0 });
         schema.rank = new ResourceField(1, 1, 5);
-        
+
         schema.noise = new SchemaField({
             hrt: new NumberField({ initial: 0, nullable: false, required: true }),
             ref: new NumberField({ initial: 0, nullable: false, required: true }),
@@ -27,5 +27,19 @@ export default class AugmentData extends ItemDataModel {
 
     prepareDerivedData() {
         super.prepareDerivedData();
+    }
+
+    sheet_actions = () => {
+        return [{
+            label: NEWEDO.generic.equip,
+            action: 'install',
+            icon: 'fas microchip',
+            condition: !this.installed,
+        }, {
+            label: 'Unequip',
+            action: 'uninstall',
+            icon: 'fas fa-circle-minus',
+            condition: this.installed,
+        }]
     }
 }

@@ -81,7 +81,7 @@ export default class CharacterDataModel extends ActorDataModel {
         }
 
         //calculates characters legend rank
-        this.legend.rank = utils.legendRank(this.legend.max);
+        this.rank = utils.legendRank(this.legend.max);
 
         super.prepareDerivedData();
     }
