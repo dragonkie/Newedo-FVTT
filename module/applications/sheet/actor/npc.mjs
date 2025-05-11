@@ -11,7 +11,7 @@ export default class NpcSheet extends NewedoActorSheet {
     static PARTS = {
         panel: { template: "systems/newedo/templates/actor/shared/panel.hbs" },
         body: { template: "systems/newedo/templates/actor/npc/body.hbs" },
-        header: { template: "systems/newedo/templates/actor/character/header.hbs" },
+        header: { template: "systems/newedo/templates/actor/npc/header.hbs" },
         traits: { template: "systems/newedo/templates/actor/npc/traits.hbs" },
         equipment: { template: "systems/newedo/templates/actor/npc/equipment.hbs" },
         magic: { template: "systems/newedo/templates/actor/npc/magic.hbs" },

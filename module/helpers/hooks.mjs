@@ -54,7 +54,6 @@ export default function registerHooks() {
     //> Hook 'renderActorDirectory'
     //==========================================================================================
     Hooks.on('renderActorDirectory', async (directory, element, data) => {
-        console.log('actorDirectory', element)
         let ele = element.querySelector('.directory-footer.action-buttons');
         let btn = document.createElement('BUTTON');
         btn.innerHTML = utils.localize('NEWEDO.Button.CharacterCreator');

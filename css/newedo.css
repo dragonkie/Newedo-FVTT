@@ -63,6 +63,7 @@
   --edo-background-1: var(--edo-colour-light-2);
   --edo-background-2: var(--edo-colour-light-4);
   --edo-background-3: var(--edo-colour-light-6);
+  --edo-button-background: var(--edo-colour-3);
 }
 .newedo input {
   --edo-input-background-colour: var(--edo-colour-light-3);
@@ -89,6 +90,7 @@
   --edo-background-1: var(--edo-colour-cool-1-90);
   --edo-background-2: var(--edo-colour-cool-2);
   --edo-background-3: var(--edo-colour-cool-1);
+  --edo-button-background: var(--edo-colour-3);
 }
 .theme-dark .newedo input {
   --edo-input-background-colour: var(--edo-colour-cool-3);
@@ -356,8 +358,11 @@
 .newedo .flex-gap-l {
   gap: 12px;
 }
+.newedo .flex-reverse {
+  flex-wrap: wrap-reverse;
+}
 .newedo .nowrap {
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
 }
 
 .sheet.actor .tab[data-tab].active,
@@ -643,8 +648,12 @@ ol.items-list .item-delete {
   align-items: start;
   gap: 8px;
 }
-.sheet.actor .window-content .skill-lists li.item {
-  padding: 1px 0 0 0;
+.sheet.actor .window-content .edo-skill-dice-button {
+  background-color: var(--edo-button-background, white);
+  padding: 0;
+  margin-right: 0.25em;
+  height: 1.75em;
+  min-height: 1.75em;
 }
 
 .sheet.item .tab {

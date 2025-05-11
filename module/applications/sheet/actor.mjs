@@ -236,10 +236,8 @@ export default class NewedoActorSheet extends NewedoSheetMixin(foundry.applicati
             wounds: false
         });
 
-        roll.AddLegend(this.document);
-
         roll.AddPart({
-            type: '',
+            type: ele.dataset?.rollLabel,
             label: ele.dataset?.rollLabel,
             value: ele.dataset.roll
         });
@@ -249,7 +247,7 @@ export default class NewedoActorSheet extends NewedoSheetMixin(foundry.applicati
         let r = await roll.evaluate();
         if (!r) return;
 
-        let msg = r.toMessage();
+        let msg = r.toMessage({ flavor: ele.dataset?.rollLabel || '' });
     }
 
     /**Handle fate roll table calls

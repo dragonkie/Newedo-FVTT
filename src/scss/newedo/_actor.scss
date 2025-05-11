@@ -93,7 +93,7 @@
     }
 
     //===========================================================
-    // Traits tab
+    //> Traits tab
     //===========================================================
 
     .edo-traits-list {
@@ -121,12 +121,25 @@
         flex: 1;
     }
 
+    //===========================================================
+    //> Traits tab
+    //===========================================================
     .skill-lists {
         align-items: start;
         gap: 8px;
 
-        li.item {
-            padding: 1px 0 0 0;
-        }
+        li.item {}
+    }
+
+    .edo-skill-group {
+        li.edo-skill-item {}
+    }
+
+    .edo-skill-dice-button {
+        background-color: var(--edo-button-background, white);
+        padding: 0;
+        margin-right: 0.25em;
+        height: 1.75em;
+        min-height: 1.75em;
     }
 }

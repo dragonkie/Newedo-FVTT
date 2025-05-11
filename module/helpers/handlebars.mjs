@@ -155,6 +155,18 @@ export function registerHelpers() {
                 const group = field.toInput(inputConfig);
                 return new Handlebars.SafeString(group.outerHTML);
             }
+        },
+        //======================================================================================
+        //>- Data Field Helpers
+        //======================================================================================
+        {
+            name: 'arrayIndex',
+            fn: (array, index, options) => {
+                if (!Array.isArray(array)) throw new Error('Cannot parse non array as array');
+                console.log(`Array accesed, index=${index} value of `, array[index])
+                if (index < 0) index = 0;
+                return array[index];
+            }
         }
     ]
 

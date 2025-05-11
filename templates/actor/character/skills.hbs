@@ -8,13 +8,19 @@
                         <span>{{trait.label}}</span>
                         <span>Dice</span>
                     </li>
-                    <ol class="items-list">
+                    <ol class="items-list edo-skill-group">
                         {{#each trait.list as | skill key |}}
-                            <li class="item flexrow" data-item-uuid="{{skill.uuid}}">
-                                <a class="align-start" data-action="useItem">{{skill.name}}</a>
-                                <div class="flexrow">
+                            <li class="item flexrow edo-skill-item" data-item-uuid="{{skill.uuid}}">
+                                <a class="align-start" data-action="useItem">
+                                    {{skill.name}}
+                                </a>
+                                <div class="flexrow nowrap">
                                     {{#each skill.system.ranks as | value index |}}
-                                        <input type="button" data-action="skillDice" data-index="{{index}}" value="{{value}}" />
+                                        <button class="edo-skill-dice-button" data-action="skillDice" data-index="{{index}}" value="{{value}}">
+                                            {{#if (not (eq value 0))}}
+                                                {{value}}
+                                            {{/if}}
+                                        </button>
                                     {{/each}}
                                 </div>
                             </li>

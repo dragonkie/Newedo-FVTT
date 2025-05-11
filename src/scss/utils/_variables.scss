@@ -97,6 +97,8 @@ $bg-image: url(/ui/parchment.jpg);
     --edo-background-2: var(--edo-colour-light-4);
     --edo-background-3: var(--edo-colour-light-6);
 
+    --edo-button-background: var(--edo-colour-3);
+
     input {
         --edo-input-background-colour: var(--edo-colour-light-3);
 
@@ -132,6 +134,8 @@ $bg-image: url(/ui/parchment.jpg);
     --edo-background-1: var(--edo-colour-cool-1-90);
     --edo-background-2: var(--edo-colour-cool-2);
     --edo-background-3: var(--edo-colour-cool-1);
+
+    --edo-button-background: var(--edo-colour-3);
 
     input {
         --edo-input-background-colour: var(--edo-colour-cool-3);
