@@ -175,7 +175,14 @@ export default class SkillData extends ItemDataModel {
         }]);
 
         await roll.evaluate();
-        await roll.toMessage();
+        await roll.toMessage({
+            flavor: this.parent.name,
+            speaker: foundry.documents.ChatMessage.getSpeaker({
+                scene: undefined,
+                token: this.actor.token,
+                actor: this.actor,
+            })
+        });
 
         return roll;
     }

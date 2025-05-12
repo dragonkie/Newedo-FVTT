@@ -210,6 +210,7 @@ export class ActorDataModel extends SystemDataModel {
         for (const trait of Object.keys(core)) {
             core[trait].total = 0;
             core[trait].rank = 0;
+            core[trait].noise = 0;
         }
 
         for (const trait of Object.keys(derived)) derived[trait].total = 0;

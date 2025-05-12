@@ -20,9 +20,11 @@
                     {{#if (eq item.type 'skill')}}
                         <li class="item flexrow" data-item-uuid="{{item.uuid}}">
                             <a data-action="useItem">{{item.name}}</a>
-                            <div class="flexrow">
+                            <div class="flexrow nowrap">
                                 {{#each item.system.ranks as | value index |}}
-                                    <input type="button" data-action="skillDice" data-index="{{index}}" value="{{value}}" />
+                                    <button type="button" data-action="skillDice" data-index="{{index}}" value="{{value}}">
+                                        {{#if (ne value 0)}}{{value}}{{/if}}
+                                    </button>
                                 {{/each}}
                             </div>
                         </li>
@@ -32,11 +34,14 @@
         </div>
         <div class="edo-pet-items">
             {{!-- Pet Items --}}
-            <ol class="edo-skills-list items-list">
+            <ol class="items-list">
                 {{#each items.contents as |item|}}
                     {{#if (not (eq item.type 'skill'))}}
                         <li class="item flexrow" data-item-uuid="{{item.uuid}}">
-                            <a data-action="useItem">{{item.name}}</a>
+                            <span style="display: flex; flex-direction: row; align-items: center; justify-content: flex-start;">
+                                <img src="{{item.img}}" width="30" height="30">
+                                <a style="margin-left: 4px;" data-action="editItem">{{item.name}}</a>
+                            </span>
                             <div class="item-controls">
                                 {{#each item.system.sheet_actions as | button |}}
                                     {{#if button.condition}}

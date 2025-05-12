@@ -370,6 +370,7 @@
   display: flex;
   flex-direction: column;
   flex: 1;
+  height: 100%;
 }
 .sheet.actor .window-content,
 .sheet.item .window-content {
@@ -580,7 +581,7 @@ ol.items-list .item-delete {
   text-align: center;
   padding: 0;
 }
-.sheet.actor .window-content .edo-panel {
+.sheet.actor .window-content .edo-sheet-panel {
   display: flex;
   flex: 0 0 200px;
   flex-direction: column;
@@ -589,42 +590,42 @@ ol.items-list .item-delete {
   text-align: center;
   overflow: auto;
 }
-.sheet.actor .window-content .edo-panel > * {
+.sheet.actor .window-content .edo-sheet-panel > * {
   margin-bottom: 5px;
 }
-.sheet.actor .window-content .edo-panel .fate-card {
+.sheet.actor .window-content .edo-sheet-panel .fate-card {
   flex: 0;
   width: 100%;
   font-size: 14px;
 }
-.sheet.actor .window-content .edo-panel .fate-card .fate-switch {
+.sheet.actor .window-content .edo-sheet-panel .fate-card .fate-switch {
   flex: 1 1;
   align-items: right;
   text-align: right;
   padding-right: 12px;
 }
-.sheet.actor .window-content .edo-panel .fate-card .fate-title {
+.sheet.actor .window-content .edo-sheet-panel .fate-card .fate-title {
   text-align: left;
   flex: 2;
 }
-.sheet.actor .window-content .edo-panel .fate-card .fate-list {
+.sheet.actor .window-content .edo-sheet-panel .fate-card .fate-list {
   width: 100%;
   padding: 0;
   margin: 0;
 }
-.sheet.actor .window-content .edo-panel .fate-card .fate-list > * {
+.sheet.actor .window-content .edo-sheet-panel .fate-card .fate-list > * {
   border-bottom: 1px solid gray;
   gap: 5px;
 }
-.sheet.actor .window-content .edo-panel .fate-card .fate-list > * :first-child {
+.sheet.actor .window-content .edo-sheet-panel .fate-card .fate-list > * :first-child {
   text-align: right;
   flex: 1;
 }
-.sheet.actor .window-content .edo-panel .fate-card .fate-list > * :last-child {
+.sheet.actor .window-content .edo-sheet-panel .fate-card .fate-list > * :last-child {
   text-align: left;
   flex: 2;
 }
-.sheet.actor .window-content .edo-panel .fate-card .fate-list :last-child {
+.sheet.actor .window-content .edo-sheet-panel .fate-card .fate-list :last-child {
   border: 0;
 }
 .sheet.actor .window-content .edo-traits-list input {
@@ -691,6 +692,8 @@ ol.items-list .item-delete {
   display: flex;
   flex-direction: column;
   gap: 0.5em;
+  flex: 1;
+  overflow: auto;
 }
 
 .edo-resource-bar {
@@ -905,6 +908,12 @@ ol.items-list .item-delete {
 
 .edo-input-bar {
   padding: 5px;
+}
+
+.edo-sheet-body {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
 }
 
 /*# sourceMappingURL=newedo.css.map */

@@ -2,4 +2,49 @@
 
     {{!-- Core Stats --}}
     {{> 'newedo.traits-core'}}
+    <div class="flexrow flex-gap-m flex-group-start flex-align-start scrollable">
+        <div>
+            <ol class="edo-skills-list items-list">
+                {{#each items.contents as |item|}}
+                    {{#if (eq item.type 'skill')}}
+                        <li class="item flexrow" data-item-uuid="{{item.uuid}}">
+                            <a data-action="useItem">{{item.name}}</a>
+                            <div class="flexrow">
+                                {{#each item.system.ranks as | value index |}}
+                                    <button class="edo-skill-dice-button" data-action="skillDice" data-index="{{index}}" value="{{value}}">
+                                        {{#if (not (eq value 0))}}
+                                            {{value}}
+                                        {{/if}}
+                                    </button>
+                                {{/each}}
+                            </div>
+                        </li>
+                    {{/if}}
+                {{/each}}
+            </ol>
+        </div>
+        <div>
+            <ol class="items-list">
+                {{#each items.contents as |item|}}
+                    {{#if (not (eq item.type 'skill'))}}
+                        <li class="item flexrow" data-item-uuid="{{item.uuid}}">
+                            <span style="display: flex; flex-direction: row; align-items: center; justify-content: flex-start;">
+                                <img src="{{item.img}}" width="30" height="30">
+                                <a style="margin-left: 4px;" data-action="editItem">{{item.name}}</a>
+                            </span>
+                            <div class="item-controls">
+                                {{#each item.system.sheet_actions as | button |}}
+                                    {{#if button.condition}}
+                                        <a data-action="useItem" data-use="{{button.action}}" class="flexrow"><i class="{{button.icon}}"></i></a>
+                                    {{/if}}
+                                {{/each}}
+                                <a data-action="editItem"><i class="fas fa-edit"></i></a>
+                                {{#if ../isEditMode}}<a data-action="deleteItem" title="Delete"><i class="fa-solid fa-trash"></i></a>{{/if}}
+                            </div>
+                        </li>
+                    {{/if}}
+                {{/each}}
+            </ol>
+        </div>
+    </div>
 </div>

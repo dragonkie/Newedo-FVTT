@@ -56,7 +56,6 @@ export default class RoteData extends ItemDataModel {
             choices: () => {
                 const options = { ...NEWEDO.actions };
                 for (const key of Object.keys(options)) options[key] = utils.localize(options[key]);
-                console.log('Action options', options);
                 return options;
             }
         });
@@ -99,7 +98,7 @@ export default class RoteData extends ItemDataModel {
             label: NEWEDO.generic.cast,
             action: 'cast',
             icon: 'fas fa-book',
-            condition: this.ammo.max > 0 && this.ranged
+            condition: true,
         }]
     }
 
@@ -151,7 +150,15 @@ export default class RoteData extends ItemDataModel {
             total: roll.total
         }
 
-        let messageData = { content: `` };
+        let messageData = { 
+            content: ``,
+            speaker: foundry.documents.ChatMessage.getSpeaker({
+                scene: undefined,
+                token: this.actor.token,
+                actor: this.actor,
+            })
+        };
+        
         messageData.content += `
         <b>${this.parent.name}</b>
         <div class="flexrow" style="background: rgba(0, 0, 0, 0.1); border-radius: 3px; border: 1px solid var(--color-border-light-2); margin-bottom: 5px; text-align: center; padding: 3px;">

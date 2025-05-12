@@ -84,9 +84,6 @@ export default class CharacterSheet extends NewedoActorSheet {
             case 'lineage':
                 this._onDropLineage(event, item)
                 break;
-            case 'culture':
-                this._onDropCulture(event, item)
-                break;
             case 'path':
                 this._onDropPath(event, item)
                 break;

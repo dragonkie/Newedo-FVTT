@@ -29,6 +29,10 @@ export default class AugmentData extends ItemDataModel {
         super.prepareDerivedData();
     }
 
+    prepareOwnerData(ActorData) {
+        for (const trait of Object.keys(this.noise)) ActorData.traits.core[trait].noise += this.noise[trait];
+    }
+
     sheet_actions = () => {
         return [{
             label: NEWEDO.generic.equip,

@@ -228,8 +228,10 @@ export default class NewedoActorSheet extends NewedoSheetMixin(foundry.applicati
         let ele = target.closest('[data-roll]');
         if (!ele) return;
 
+        const useLegend = Object.hasOwn(this.document.system, 'legend');
+
         const roll = new NewedoRoll({
-            legend: true,
+            legend: useLegend,
             title: 'NEWEDO.Generic.Trait.long',
             document: this.document,
             data: this.document.getRollData(),
@@ -247,7 +249,14 @@ export default class NewedoActorSheet extends NewedoSheetMixin(foundry.applicati
         let r = await roll.evaluate();
         if (!r) return;
 
-        let msg = r.toMessage({ flavor: ele.dataset?.rollLabel || '' });
+        let msg = r.toMessage({
+            flavor: ele.dataset?.rollLabel || '',
+            speaker: foundry.documents.ChatMessage.getSpeaker({
+                scene: undefined,
+                token: this.document.token,
+                actor: this.document,
+            })
+        });
     }
 
     /**Handle fate roll table calls

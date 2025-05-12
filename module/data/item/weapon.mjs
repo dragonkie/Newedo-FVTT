@@ -206,12 +206,14 @@ export default class WeaponData extends ItemDataModel {
 
         console.log(rollData);
 
+        const useLegend = Object.hasOwn(this.actor.system, 'legend');
+
         const roll = new NewedoRoll({
             title: NEWEDO.generic.attack,
             document: this.parent,
             rollData: rollData,
             wound: true,
-            legend: true,
+            legend: useLegend,
             raise: true,
         });
 
@@ -279,7 +281,12 @@ export default class WeaponData extends ItemDataModel {
         }
 
         const messageData = {
-            content: `<div>@UUID[${this.actor.uuid}] attacks with @UUID[${this.parent.uuid}]</div><br>`
+            content: `<div>@UUID[${this.actor.uuid}] attacks with @UUID[${this.parent.uuid}]</div><br>`,
+            speaker: foundry.documents.ChatMessage.getSpeaker({
+                scene: undefined,
+                token: this.actor.token,
+                actor: this.actor,
+            })
         };
 
         if (roll.options.raise > 0) {
@@ -412,7 +419,12 @@ export default class WeaponData extends ItemDataModel {
 
         // COVNERT ROLL INTO CHAT CARD
         const messageData = {
-            content: `<div>${this.actor.name} attacks with their ${this.parent.name}!</div>`
+            content: `<div>Damage dealt by ${this.parent.name}!</div>`,
+            speaker: foundry.documents.ChatMessage.getSpeaker({
+                scene: undefined,
+                token: this.actor.token,
+                actor: this.actor,
+            })
         };
 
         // If we have data passed into the argument, that means this was called with targeting data
