@@ -32,25 +32,31 @@ export default class NewedoRoll {
         raise: 0,
     };
 
+    useTrait = false;
     useWounds = false;
     useLegend = false;
     useRaises = false; // Not directly used, raises are parsed externally on a seperate basis later on
+    useTraits = false;
 
-    /**Accepts an optional list of dice objects to pre populate the tray */
-    constructor(data) {
-        console.log(data)
+    /**
+     * 
+     * @param {*} param0 
+     */
+    constructor({ document, actor, rollData = {}, prompt = true, legend = false, wounds = false, raise = false, title = 'NEWEDO.Generic.Roll' } = {},) {
+        console.log(arguments[0])
 
-        for (const [k, v] of Object.entries(data)) if (Object.hasOwn(this, k)) this[k] = v;
+        for (const key of Object.keys(arguments[0])) if (Object.hasOwn(this, key)) this[key] = arguments[0][key];
 
         // prepare implied data
-        if (!this.actor && data.document?.documentName == `Item`) this.actor = data.document.actor;
-        if (!this.actor && data.document?.documentName == `Actor`) this.actor = data.document;
+        if (!this.actor && this.document?.documentName == `Item`) this.actor = this.document.actor;
+        if (!this.actor && this.document?.documentName == `Actor`) this.actor = this.document;
 
+        this.rollData = rollData;
         if (!this.rollData) this.rollData = this.document.getRollData() || this.actor.getRollData();
 
-        this.useWounds = data.wound;
-        this.useLegend = data.legend;
-        this.useRaises = data.raise;
+        this.useWounds = wounds;
+        this.useLegend = legend;
+        this.useRaises = raise;
     }
 
     /**
@@ -58,23 +64,22 @@ export default class NewedoRoll {
      * @prop {String|Array<String>} label - localizeable string or array of them to appear on the roll popup
      * @prop {String} group - The roll grouping to place this part in
      * @prop {String|Number} value - Inputs value field and must be valid roll format
-     * @prop {String|Array<String>} type - Additional tags to identify what this roll does for effects
+     * @prop {String|Array<String>} tags - Additional tags to identify what this roll does for effects
+     * @prop {String|Array<String>} type - The type of part this is <'formula', 'selector', 'stepper'>
      * @prop {Boolean} active - Whether this will actually be used in the roll
-     * @prop {Boolean} stepper - Is this a stepper value?
      */
 
     /**
-     * 
      * @returns {RollPart}
      */
     static getPartSchema() {
         return {
             group: '',
             type: 'formula',
+            tags: '',// special roll tags to specify
             label: 'MISSING_LABEL',
             value: 0,
             active: true,
-            stepper: false
         }
     }
 
@@ -90,20 +95,19 @@ export default class NewedoRoll {
      * })
      */
     AddPart(parts) { // Function for assigning data parts, means I dont have to worry about fucking up templates again
-        console.log('adding parts', parts)
         if (!Array.isArray(parts)) parts = [parts];
         for (const i of parts) {
             if (!i.value) continue;
             if (typeof i.value !== 'string') i.value = `${i.value}`;
             i.value = i.value.replaceAll(/\s/gm, '');
-            i.value = i.value.replaceAll(/[\+\-\*\/]?0+d[\d]+/gm, '');
-            if (i.value == '' || (i.value == '0' && !i.stepper)) continue;
+            i.value = i.value.replaceAll(/[\+\-\*\/]?0+d[\d]+/gm, ''); // Removes empty dice values such as 0d10 and any leading operators
+            i.value = i.value.replaceAll(/[\+\-\*\/]?[\d]+d[0]+/gm, ''); // Removes empty dice values such as 10d0 and any leading operators
+            if ((i.value == '' || i.value == '0') && (!i.stepper)) continue;// if the value is empty and this part isnt a special one
             this.parts.push(Object.assign(this.constructor.getPartSchema(), i))
         }
     }
 
     AddWounds(actor) {
-        console.log('Adding wounds')
         if ((!actor || actor?.documentName !== 'Actor') && !this.actor) throw new Error('Cant add wounds to roll without an actor');
         if (actor) this.actor = actor;
         this.AddPart({
@@ -128,14 +132,52 @@ export default class NewedoRoll {
         })
     }
 
-    AddRaise() {
+    AddRaise(value = 0) {
         console.log('Adding raises')
         this.AddPart({
             label: NEWEDO.generic.raise,
-            value: '0',
+            value: value,
             type: 'raise',
             stepper: true,
         })
+    }
+
+    /**
+     * Adds a special field for controlling trait dice, requires the traits be provided in object format
+     * @argument {Object} traits - provided trait data
+     * @argument {String} key - the default trait to use
+     * traits = {
+     *  pre: {
+     *      value: 12,
+     *      total: 15,
+     *      rank: 1,
+     *  }
+     * }
+     */
+    AddTrait(key = '', traits) {
+        console.log('Adding traits');
+
+        // Ensures that we have the needed trait data
+        if (!traits) {
+            // default values into empty
+            traits = {};
+
+            // Try and get values from the roll data 
+            if (Object.hasOwn(this.rollData, 'traits') && Object.hasOwn(this.rollData.traits, 'core')) {
+                traits = { ...this.rollData.traits.core }
+            } else {
+                for (const k of Object.keys(NEWEDO.traitsCore)) {
+                    traits[k] = { rank: 0 };
+                    if (Object.hasOwn(this.rollData, k)) traits[k] = this.rollData[k];
+                }
+            }
+
+            console.log('roll traits', traits);
+        }
+
+        if (Object.keys(traits).length <= 0) throw new Error('Failed to add traits to roll');
+
+        console.log(traits[key]);
     }
 
     //=================================================================================================================

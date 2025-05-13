@@ -125,8 +125,11 @@ export default class RoteData extends ItemDataModel {
             legend: useLegend,
             title: this.parent.name,
             document: this.parent,
-            rollData: rollData
+            rollData: rollData,
+            wounds: true,
         });
+
+        roll.AddTrait('shi');
 
         roll.AddPart({
             type: '',
@@ -150,7 +153,7 @@ export default class RoteData extends ItemDataModel {
             total: roll.total
         }
 
-        let messageData = { 
+        let messageData = {
             content: ``,
             speaker: foundry.documents.ChatMessage.getSpeaker({
                 scene: undefined,
@@ -158,7 +161,7 @@ export default class RoteData extends ItemDataModel {
                 actor: this.actor,
             })
         };
-        
+
         messageData.content += `
         <b>${this.parent.name}</b>
         <div class="flexrow" style="background: rgba(0, 0, 0, 0.1); border-radius: 3px; border: 1px solid var(--color-border-light-2); margin-bottom: 5px; text-align: center; padding: 3px;">

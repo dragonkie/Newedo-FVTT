@@ -26,6 +26,10 @@
   .form-fields {
     flex: 2;
   }
+
+  &.stacked {
+    flex-direction: column;
+  }
 }
 
 .edo-border-wrapper {

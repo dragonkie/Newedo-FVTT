@@ -212,7 +212,7 @@ export default class WeaponData extends ItemDataModel {
             title: NEWEDO.generic.attack,
             document: this.parent,
             rollData: rollData,
-            wound: true,
+            wounds: true,
             legend: useLegend,
             raise: true,
         });
@@ -395,7 +395,6 @@ export default class WeaponData extends ItemDataModel {
         const rollData = this.getRollData();
 
         const roll = new NewedoRoll({
-            legend: false,
             title: NEWEDO.generic.damage,
             document: this.parent,
             rollData: rollData,

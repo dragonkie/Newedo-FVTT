@@ -234,8 +234,8 @@ export default class NewedoActorSheet extends NewedoSheetMixin(foundry.applicati
             legend: useLegend,
             title: 'NEWEDO.Generic.Trait.long',
             document: this.document,
-            data: this.document.getRollData(),
-            wounds: false
+            rollData: this.document.getRollData(),
+            wounds: false,
         });
 
         roll.AddPart({

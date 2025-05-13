@@ -158,10 +158,13 @@ export default class SkillData extends ItemDataModel {
 
         const roll = new NewedoRoll({
             legend: useLegend,
+            wounds: true,
             document: this.parent,
             title: this.parent.name,
             rollData: rollData
         });
+
+        roll.AddTrait(this.trait);
 
         roll.AddPart([{
             type: '',

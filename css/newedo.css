@@ -409,6 +409,9 @@
 .form-group .form-fields {
   flex: 2;
 }
+.form-group.stacked {
+  flex-direction: column;
+}
 
 .edo-border-wrapper {
   flex: 0;
