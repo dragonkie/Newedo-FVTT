@@ -151,7 +151,7 @@ export default class SkillData extends ItemDataModel {
 
     // Creates and rolls a NewedoRoll using this item, giving it the context that this is a skill roll
     async roll() {
-        let rollData = this.getRollData();
+        const rollData = this.getRollData();
         if (!rollData) return;
 
         const useLegend = Object.hasOwn(this.actor.system, 'legend');

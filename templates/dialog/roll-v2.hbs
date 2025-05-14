@@ -6,8 +6,10 @@ TODO:
 
 <div class="flexcol flex-gap-m">
     {{#each parts as | part key |}}
-        {{#if (not part.stepper)}}
-            <div class="edo-formula-group form-group" data-formula-type="{{part.type}}">
+
+        {{!-- Default input types --}}
+        {{#if (eq part.element 'input')}}
+            <div class="edo-formula-group form-group" data-part="{{part.element}}" data-tags="{{#each part.tags as |tag|}}{{tag}}|{{/each}}">
                 {{!-- Get the parts type and label --}}
                 <label><b>{{localize part.label}}</b></label>
                 <div class="flexrow flex-gap-s">
@@ -16,11 +18,10 @@ TODO:
                 </div>
             </div>
         {{/if}}
-    {{/each}}
 
-    {{#each parts as | part key |}}
-        {{#if part.stepper}}
-            <div class="edo-formula-group form-group" data-formula-type="{{part.type}}">
+        {{!-- Stepped inputs --}}
+        {{#if (eq part.element 'stepper')}}
+            <div class="edo-formula-group form-group" data-part="{{part.element}}" data-tags="{{#each part.tags as |tag|}}{{tag}}|{{/each}}">
                 <label>{{localize part.label}}</label>
                 <div class="flexrow clicker flex-group-center flex-gap-s" name="clicker">
                     <button type="button" name="decrease" class="flexshrink"><i class="fa-solid fa-minus"></i></button>
@@ -29,10 +30,26 @@ TODO:
                 </div>
             </div>
         {{/if}}
+
+        {{!-- Select inputs --}}
+        {{#if (eq part.element 'selector')}}
+            <div class="edo-formula-group form-group" data-part="{{part.element}}" data-tags="{{#each part.tags as |tag|}}{{tag}}|{{/each}}">
+                <select style="flex: 1">
+                    {{#each part.select_options as | option |}}
+                        <option value="{{option.value}}" {{selected option.default}}>{{localize option.label}}</option>
+                    {{/each}}
+                </select>
+                <div class="flexrow flex-gap-s">
+                    <input type="checkbox" name="active" class="flexshrink" {{checked part.active}}>
+                    <input type="text" name="value" value="{{part.value}}" disabled>
+                </div>
+            </div>
+        {{/if}}
+
     {{/each}}
 
     {{!-- Optional roll modifiers, anything that isnt accounted for can be manually done here --}}
-    <div class="form-group" data-formula="extra">
+    <div class="form-group edo-formula-group" data-part="custom" data-tags="">
         <label>{{localize 'NEWEDO.Generic.Situational.long'}}</label>
         <input type="text" name="value" />
     </div>

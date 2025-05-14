@@ -131,15 +131,8 @@ export default class RoteData extends ItemDataModel {
 
         roll.AddTrait('shi');
 
-        roll.AddPart({
-            type: '',
-            label: utils.localize(NEWEDO.generic.trait) + ":" + utils.localize(NEWEDO.traitsCore.shi),
-            value: `${actor.system.traits.core.shi.rank}d10`
-        });
-
         if (skill) {
             roll.AddPart({
-                type: '',
                 label: skill.name,
                 value: skill.system.getRanks()
             })

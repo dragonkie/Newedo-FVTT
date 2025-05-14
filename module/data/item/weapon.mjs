@@ -202,9 +202,6 @@ export default class WeaponData extends ItemDataModel {
         // Gather relevant data
         const rollData = this.getRollData();
         const skill = rollData.skill;
-        LOGGER.debug('attack data', rollData)
-
-        console.log(rollData);
 
         const useLegend = Object.hasOwn(this.actor.system, 'legend');
 
@@ -217,10 +214,9 @@ export default class WeaponData extends ItemDataModel {
             raise: true,
         });
 
+        roll.AddTrait(rollData.skill.system.trait);
+
         roll.AddPart([{
-            label: `${rollData.trait.label}`,
-            value: `${rollData.trait.rank}d10`
-        }, {
             label: skill.name,
             value: skill.system.getRanks()
         }, {
@@ -336,36 +332,6 @@ export default class WeaponData extends ItemDataModel {
     }
 
     getDamageParts() {
-        const rollData = this.getRollData();
-        if (!rollData) return null;
-
-        const parts = [];
-
-        // Add trait dice for non ranged attacks 
-        if (!this.isRanged) parts.push({
-            group: '',
-            type: this.damageParts[0].type,
-            label: rollData.trait.label,
-            value: `${rollData.trait.rank}d10`
-        })
-
-        // add weapon damage parts
-        for (const p of this.damageParts) {
-            parts.push({
-                group: 'NEWEDO.Generic.WeaponDamage',
-                type: p.type,
-                label: 'Weapon',
-                value: p.value
-            })
-        }
-
-        // add grit damage
-        parts.push({
-            type: this.damageParts[0].type,
-            label: NEWEDO.generic.grit,
-            value: this.grit.dmg
-        })
-
         return parts;
     }
 
@@ -393,15 +359,35 @@ export default class WeaponData extends ItemDataModel {
 
         // Gather relevant data
         const rollData = this.getRollData();
+        if (!rollData) return null;
 
         const roll = new NewedoRoll({
             title: NEWEDO.generic.damage,
             document: this.parent,
             rollData: rollData,
         });
+        
+        // Add trait dice for non ranged attacks 
+        if (!this.isRanged) roll.AddTrait('pow');
 
-        // add standard damage dice
-        roll.AddPart(this.getDamageParts());
+        // add weapon damage parts
+        const options = [];
+        for (const p of this.damageParts) {
+            options.push({
+                group: 'NEWEDO.Generic.WeaponDamage',
+                type: p.type,
+                label: 'Weapon',
+                value: p.value
+            })
+        }
+
+        options.push({
+            type: this.damageParts[0].type,
+            label: NEWEDO.generic.grit,
+            value: this.grit.dmg
+        });
+
+        roll.AddPart(options);
 
         // adds raise dice if a raise was called
         if (attack?.raises > 0) {

@@ -3,6 +3,9 @@ import { NEWEDO } from "../config.mjs";
 import LOGGER from "./logger.mjs";
 import utils from "./sysUtil.mjs";
 
+// Declare valid entries for different data types
+const PART_TYPES = ['input', 'selector', 'stepper'];
+const PART_ELEMENTS = ['input', 'selector', 'stepper'];
 
 /**
  * Expanded roll option for use with the vast number of dice used in newedo
@@ -43,8 +46,6 @@ export default class NewedoRoll {
      * @param {*} param0 
      */
     constructor({ document, actor, rollData = {}, prompt = true, legend = false, wounds = false, raise = false, title = 'NEWEDO.Generic.Roll' } = {},) {
-        console.log(arguments[0])
-
         for (const key of Object.keys(arguments[0])) if (Object.hasOwn(this, key)) this[key] = arguments[0][key];
 
         // prepare implied data
@@ -60,13 +61,25 @@ export default class NewedoRoll {
     }
 
     /**
+     * @typedef {Object} SelectData
+     * @prop {String} label - label on the selector
+     * @prop {?Number|String} value - input fill value
+     * @prop {Boolean} default - FALSE, if this is the value to start with, when not set uses firs entry, if multiple set, uses first in array
+     */
+
+    /**
      * @typedef {Object} RollPart
      * @prop {String|Array<String>} label - localizeable string or array of them to appear on the roll popup
      * @prop {String} group - The roll grouping to place this part in
-     * @prop {String|Number} value - Inputs value field and must be valid roll format
      * @prop {String|Array<String>} tags - Additional tags to identify what this roll does for effects
-     * @prop {String|Array<String>} type - The type of part this is <'formula', 'selector', 'stepper'>
+     * @prop {String|Number} value - Inputs value field and must be valid roll format
+     * @prop {String} element - Type of element to create on the roll popup [input, selector, stepper]
+     * @prop {Number} sort - Value used to sort the list of parts on display, happens inside groups BIGGER = LOWER
      * @prop {Boolean} active - Whether this will actually be used in the roll
+     * @prop {Array<SelectData>} select_options - Whether this will actually be used in the roll
+     * @prop {Object} step_options - Whether this will actually be used in the roll
+     * @prop {Number} step_options.size - Whether this will actually be used in the roll
+     * @prop {String} id - random id value which can be used to identify specific parts, mostly here for debugging 
      */
 
     /**
@@ -74,12 +87,18 @@ export default class NewedoRoll {
      */
     static getPartSchema() {
         return {
-            group: '',
-            type: 'formula',
-            tags: '',// special roll tags to specify
             label: 'MISSING_LABEL',
-            value: 0,
-            active: true,
+            group: '',// groupings for the roll to make things cleaner
+            tags: [],// special roll tags to specify
+            value: 0,// default value of the given input
+            element: 'input',
+            sort: 0,//
+            active: true,// is this value turned on by default
+            select_options: [], // list of available options for the selector
+            step_options: {
+                size: 1
+            },
+            id: foundry.utils.randomID()
         }
     }
 
@@ -96,14 +115,20 @@ export default class NewedoRoll {
      */
     AddPart(parts) { // Function for assigning data parts, means I dont have to worry about fucking up templates again
         if (!Array.isArray(parts)) parts = [parts];
-        for (const i of parts) {
-            if (!i.value) continue;
-            if (typeof i.value !== 'string') i.value = `${i.value}`;
-            i.value = i.value.replaceAll(/\s/gm, '');
-            i.value = i.value.replaceAll(/[\+\-\*\/]?0+d[\d]+/gm, ''); // Removes empty dice values such as 0d10 and any leading operators
-            i.value = i.value.replaceAll(/[\+\-\*\/]?[\d]+d[0]+/gm, ''); // Removes empty dice values such as 10d0 and any leading operators
-            if ((i.value == '' || i.value == '0') && (!i.stepper)) continue;// if the value is empty and this part isnt a special one
-            this.parts.push(Object.assign(this.constructor.getPartSchema(), i))
+        for (const p of parts) {
+            const part = Object.assign(this.constructor.getPartSchema(), p);
+            console.log('adding part', part);
+
+            if (part.element && !PART_ELEMENTS.includes(part.element)) throw new Error(`Recieved invalid part element: ${part.element}`);
+            if (part.element == 'input') {
+                if (part.value === undefined) throw new Error('Input parts need a value ' + part.value);
+                if (typeof part.value !== 'string') part.value = `${part.value}`;
+                part.value = part.value.replaceAll(/\s+/gm, '');// cleans up spaces in the formula, removing gaps between values
+                part.value = part.value.replaceAll(/[\+\-\*\/]?(0+d[\d]+|[\d]+d[0]+)/gm, ''); // Removes useless values, 0d10, 10d0
+                if (part.value == '' || part.value == '0') continue; // part ended up empty and will be skipped
+            }
+
+            this.parts.push(part);
         }
     }
 
@@ -112,8 +137,8 @@ export default class NewedoRoll {
         if (actor) this.actor = actor;
         this.AddPart({
             label: this.actor.system.wound.label,
-            value: this.actor.system.wound.value,
-            type: 'wound'
+            value: this.actor.system.wound.value | 0,
+            tags: ['wound']
         })
     }
 
@@ -127,8 +152,8 @@ export default class NewedoRoll {
         this.AddPart({
             label: NEWEDO.generic.legend,
             value: '0',
-            type: 'legend',
-            stepper: true,
+            tags: ['legend'],
+            element: 'stepper',
         })
     }
 
@@ -137,26 +162,17 @@ export default class NewedoRoll {
         this.AddPart({
             label: NEWEDO.generic.raise,
             value: value,
-            type: 'raise',
-            stepper: true,
+            tags: ['raise'],
+            element: 'stepper',
         })
     }
 
     /**
      * Adds a special field for controlling trait dice, requires the traits be provided in object format
-     * @argument {Object} traits - provided trait data
      * @argument {String} key - the default trait to use
-     * traits = {
-     *  pre: {
-     *      value: 12,
-     *      total: 15,
-     *      rank: 1,
-     *  }
-     * }
+     * @argument {Object} traits - provided trait data
      */
-    AddTrait(key = '', traits) {
-        console.log('Adding traits');
-
+    AddTrait(key = 'hrt', traits) {
         // Ensures that we have the needed trait data
         if (!traits) {
             // default values into empty
@@ -171,13 +187,28 @@ export default class NewedoRoll {
                     if (Object.hasOwn(this.rollData, k)) traits[k] = this.rollData[k];
                 }
             }
-
-            console.log('roll traits', traits);
         }
 
         if (Object.keys(traits).length <= 0) throw new Error('Failed to add traits to roll');
 
-        console.log(traits[key]);
+        // if we succesfulyl found and made our trait data, we can now convert it to the options list and add the part
+        const options = [];
+        let value = `${traits[key].rank}d10`;
+        for (const trait of Object.keys(traits)) {
+            options.push({
+                label: NEWEDO.traits[trait],
+                value: `${traits[trait].rank}d10`,
+                default: key == trait,
+            })
+        }
+
+        this.AddPart({
+            label: NEWEDO.generic.trait,
+            element: 'selector',
+            value: value,
+            select_options: options,
+            tags: ['trait']
+        })
     }
 
     //=================================================================================================================
@@ -188,7 +219,6 @@ export default class NewedoRoll {
     static template = 'systems/newedo/templates/dialog/roll-v2.hbs';
 
     async getRollOptions() {
-        console.log(this.parts)
         // prepare contexual parts
         if (this.parts.length == 0) {
             utils.warn("NEWEDO.warn.NoDiceToRoll");
@@ -200,17 +230,20 @@ export default class NewedoRoll {
         if (this.useLegend) this.AddLegend();
         if (this.useRaises) this.AddRaise();
 
+        console.log('Final Roll parts', this.parts)
+
         // if there is no roll data attached, but we have an option to get it
         if (this.document != null && !this.rollData) this.rollData = this.document?.getRollData() || {};
 
         const groups = [];
-        for (const part of this.parts) if (!groups.includes(part.group) && part.group != '' && part.group) groups.push(part.group);
+        for (const part of this.parts) if (!groups.includes(part.group) && part.group) groups.push(part.group);
 
         const title = utils.localize(NEWEDO.generic.roll) + ": " + utils.localize(this.title);
+        const sorted_parts = this.parts.sort((a, b) => { return a.sort - b.sort })
         const render = await foundry.applications.handlebars.renderTemplate(this.constructor.template, {
             ...this.rollData,
             groups: groups,
-            parts: utils.duplicate(this.parts)
+            parts: sorted_parts
         });
 
         //==========================================================================================
@@ -250,6 +283,7 @@ export default class NewedoRoll {
                         const input = element.querySelector('[name=value]');
                         const formula = input.value;
                         const active = element.querySelector('[name=active]');
+                        const tags = element.dataset.tags?.split('|');
 
                         // Raises are special depending on how their used
                         // Usually they repersent either additional difficulty to a roll
@@ -265,7 +299,7 @@ export default class NewedoRoll {
                         }
 
                         // Handles the spending of legend
-                        if (element.dataset.formulaType == 'legend' && this.actor && +input.value > 0) {
+                        if (tags.includes('legend') && this.actor && +input.value > 0) {
                             console.log('spending legend');
                             // special handling for the legend option since it spends a resource
                             if (utils.spendLegend(this.actor, utils.parseElementValue(input))) {
@@ -274,14 +308,14 @@ export default class NewedoRoll {
                                     value: input.value,
                                     active: true,
                                 })
-                            } else reject('Actor doesnt have enough legend for this roll');
+                            } else throw new Error('Actor doesnt have enough legend for this roll');
                         }
 
                         // Catch any other roll parts to be added
-                        if (Roll.validate(formula) && active && +input.value != 0) {
+                        if (Roll.validate(formula) && +input.value != 0) {
                             this.options.pieces.push({
                                 value: input.value,
-                                active: active.checked || true
+                                active: active?.checked || true
                             })
                         } else if (!Roll.validate(formula) && active) reject(`Invalid formula piece: ${formula}`);
 
@@ -297,13 +331,21 @@ export default class NewedoRoll {
             // Hook up stepper elements in the roll dialog
             let clickers = app.element.querySelectorAll('.clicker');
             for (const c of clickers) {
-                let btn_i = c.querySelector('button[name=increase]');
-                let btn_d = c.querySelector('button[name=decrease]');
-                let val = c.querySelector('input[name=value]');
+                const btn_i = c.querySelector('button[name=increase]');
+                const btn_d = c.querySelector('button[name=decrease]');
+                const val = c.querySelector('input[name=value]');
 
                 btn_i.addEventListener('click', () => val.value = +val.value + 1);
                 btn_d.addEventListener('click', () => val.value = +val.value - 1);
             };
+
+            // Set up selector elements
+            const selectors = app.element.querySelectorAll('[data-part=selector]');
+            for (const selector of selectors) {
+                const option = selector.querySelector('select');
+                const input = selector.querySelector('input[name=value]');
+                option.addEventListener('change', () => { input.value = option.value });
+            }
         });
     }
 
@@ -316,6 +358,7 @@ export default class NewedoRoll {
      * Creates and rolls the values gotten here
      */
     async evaluate() {
+        if (this.options.cancelled) return null;
         if (!this._ready && this.prompt) await this.getRollOptions();
         else if (!this._ready) {
             // assemble the roll without prompting the user
@@ -328,16 +371,15 @@ export default class NewedoRoll {
             }
         }
 
-        if (this.options.cancelled) return null;
 
         // Handle the advantage / disadvantage roll first and foremost
-        let adv = this.options.advantage;
-        let dis = this.options.disadvantage;
+        const adv = this.options.advantage;
+        const dis = this.options.disadvantage;
         let formula = '';
 
         // Adds all the formula parts
-        for (let part of this.options.pieces) {
-            // if the formula has a piece in it already, add osmething to join them
+        for (const part of this.options.pieces) {
+            // if the formula has a piece in it already, add an operator to join them
             if (!part.active || part.value == 0 || part.value == '') continue; // Skips parts that were marked as inactive, or that are empty
             switch (Array.from(part)[0]) {
                 case "/":

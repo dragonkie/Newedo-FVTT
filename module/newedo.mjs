@@ -42,6 +42,7 @@ Hooks.once('init', async function () {
     newedo.document = documents;
     newedo.elements = elements;
     newedo.helper = helpers;
+    newedo.roll = helpers.NewedoRoll;
 
     // Add combat documents
     CONFIG.Combat.documentClass = documents.NewedoCombat;
