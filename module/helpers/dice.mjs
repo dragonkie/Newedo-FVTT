@@ -315,9 +315,9 @@ export default class NewedoRoll {
                         if (Roll.validate(formula) && +input.value != 0) {
                             this.options.pieces.push({
                                 value: input.value,
-                                active: active?.checked || true
+                                active: active?.checked ?? true
                             })
-                        } else if (!Roll.validate(formula) && active) reject(`Invalid formula piece: ${formula}`);
+                        } else if (!Roll.validate(formula) && active) throw new Error(`Invalid formula piece: ${formula}`);
 
                     }
 

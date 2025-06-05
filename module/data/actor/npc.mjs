@@ -1,3 +1,4 @@
+import { NEWEDO } from "../../config.mjs";
 import { ActorDataModel } from "../abstract.mjs";
 
 const {
@@ -17,6 +18,8 @@ export default class NpcDataModel extends ActorDataModel {
         // Npc's need a rank for some abilities and spells, this gives us a place to store rank
         schema.rank = new NumberField({ initial: 1 });
 
+        schema.skills = new ArrayField(this.SkillField(), { initial: [], ...this.RequiredConfig });
+
         return schema;
     }
 
@@ -30,5 +33,61 @@ export default class NpcDataModel extends ActorDataModel {
 
     prepareDerivedData() {
         super.prepareDerivedData();
+    }
+
+    async _preCreate(data, options, user) {
+        const allowed = await super._preCreate(data, options, user) ?? true;
+        if (!allowed) return false;
+
+        //==========================================================================================
+        //> Populate default skills
+        //==========================================================================================
+        const skill_documents = [{
+            linkID: 'NEWEDOATTACK',
+            label: NEWEDO.generic.attack,
+            trait: 'pow',
+            ranks: [0, 0, 0, 0, 0]
+        }];
+
+        const SkillData = () => {
+            return {
+                linkID: '',
+                label: '',
+                trait: Object.keys(NEWEDO.traitsCore)[0],
+                ranks: [0, 0, 0, 0, 0]
+            }
+        }
+
+        //=======================================================================
+        //>- Compendium skills
+        //=======================================================================
+        for (const pack of game.packs.contents) {
+            if (pack.documentName != 'Item') continue;
+
+            const documents = await pack.getDocuments();
+            for (const doc of documents) {
+                if (doc.type == 'skill') {
+                    skill_documents.push(Object.assign(SkillData(), { linkID: doc.system.linkID, label: doc.name, trait: doc.system.trait }));
+                }
+            }
+        }
+
+        //=======================================================================
+        //>- World skills
+        //=======================================================================
+        for (const item of game.items.contents) {
+            if (item.type == 'skill') {
+                skill_documents.push(Object.assign(SkillData(), { linkID: item.system.linkID, label: item.name, trait: item.system.trait }));
+            }
+        }
+
+        //=======================================================================
+        //>- Finalize skills
+        //=======================================================================
+        await this.updateSource({
+            skills: skill_documents
+        })
+
+        return true;
     }
 }

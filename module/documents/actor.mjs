@@ -20,7 +20,10 @@ export default class NewedoActor extends foundry.documents.Actor {
         console.log('data', data);
         console.log('options', options);
 
-        if (newActor && (data.type == 'character' || data.type == 'npc')) {
+        if (newActor && data.type == 'character') {
+            //==================================================================================
+            //>- Give characters found items
+            //==================================================================================
             LOGGER.debug(`Creating new actor`)
             createData.items = [];
             const coreItems = await utils.getCoreCharDocs();

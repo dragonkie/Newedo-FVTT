@@ -50,15 +50,16 @@ export default class PetDataModel extends ActorDataModel {
             })
         });
 
+        schema.skills = new ArrayField(this.SkillField(), { ...this.RequiredConfig, initial: [] });
+
         return schema;
     }
 
-    get isAlive() {
-        return this.hp.value >= 0
-    }
+    async _preCreate(data, options, user) {
+        const allowed = await super._preCreate(data, options, user) ?? true;
+        if (!allowed) return false;
 
-    get isDead() {
-        return this.hp.value <= 0;
+        return true;
     }
 
     prepareDerivedData() {

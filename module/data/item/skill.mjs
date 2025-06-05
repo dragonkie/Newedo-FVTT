@@ -13,13 +13,7 @@ export default class SkillData extends ItemDataModel {
     static defineSchema() {
         const schema = super.defineSchema();
 
-        schema.trait = new StringField({
-            initial: 'hrt', required: true, nullable: false, label: NEWEDO.generic.trait, choices: () => {
-                let options = utils.duplicate(NEWEDO.traitsCore);
-                for (const key of Object.keys(options)) options[key] = utils.localize(options[key]);
-                return options;
-            }
-        });
+        schema.trait = this.TraitField();
 
         schema.isWeaponSkill = new BooleanField({ initial: false, required: true, nullable: false });
         schema.useTraitRank = new BooleanField({ initial: true, required: true, nullable: false });
@@ -167,11 +161,6 @@ export default class SkillData extends ItemDataModel {
         roll.AddTrait(this.trait);
 
         roll.AddPart([{
-            type: '',
-            label: NEWEDO.traitsCore[this.trait],
-            value: `${rollData.trait.rank}d10`,
-            active: this.useTraitRank
-        }, {
             type: '',
             label: this.parent.name,
             value: this.getRanks()

@@ -44,6 +44,31 @@ export class SystemDataModel extends foundry.abstract.TypeDataModel {
         })
     }
 
+    static TraitField(init = 'hrt') {
+        if (init !== '' && !Object.keys(NEWEDO.traitsCore).includes(init)) init = Object.keys(NEWEDO.traitsCore)[0];
+        return new StringField({
+            initial: init,
+            required: true,
+            nullable: false,
+            blank: true,
+            label: NEWEDO.generic.trait,
+            choices: () => {
+                let options = utils.duplicate(NEWEDO.traitsCore);
+                for (const key of Object.keys(options)) options[key] = utils.localize(options[key]);
+                return options;
+            }
+        });
+    }
+
+    static SkillField() {
+        return new SchemaField({
+            linkID: new StringField({ initial: '', required: false, nullable: true }), // Used by skills to auto link the skill to items that need it
+            label: new StringField({ initial: 'NEWEDO.Generic.NewSkill', required: false, nullable: true }), // Localizeable field for the name of this skill
+            trait: this.TraitField(),// the core trait associated with this skill
+            ranks: new ArrayField(new NumberField(), { initial: [0, 0, 0, 0, 0], nullable: false, required: true, min: 5, max: 5 }) //NPC's can only have d8's by default, this is here so that rule can be homebrewed by DMs
+        })
+    }
+
     getRollData() {
         // Get owning documents rolldata
         let data = { ...this };
@@ -87,7 +112,7 @@ export class ActorDataModel extends SystemDataModel {
 
         const traits_core = {};
         for (const trait of Object.keys(NEWEDO.traitsCore).sort()) traits_core[trait] = new SchemaField({
-            value: new NumberField({ initial: 10, ...this.RequiredIntegerConfig })
+            value: new NumberField({ initial: trait != 'shi' ? 10 : 0, ...this.RequiredIntegerConfig })
         })
 
         schema.traits = new SchemaField({
@@ -272,6 +297,14 @@ export class ActorDataModel extends SystemDataModel {
         }
 
         return data;
+    }
+
+    get isAlive() {
+        return this.hp.value >= 0
+    }
+
+    get isDead() {
+        return this.hp.value <= 0;
     }
 }
 

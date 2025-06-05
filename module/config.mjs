@@ -97,7 +97,6 @@ NEWEDO.targets = {
     ally: '',
     enemy: '',
     any: '',
-
 }
 
 NEWEDO.actions = {
