@@ -64,6 +64,19 @@
   ],
   "packs": [
     {
+      "label": "System Macros",
+      "name": "system-macro",
+      "ownership": {
+        "ASSISTANT": "OBSERVER",
+        "GAMEMASTER": "OWNER",
+        "PLAYER": "OBSERVER",
+        "TRUSTED": "OBSERVER"
+      },
+      "path": "packs/core/macro",
+      "system": "newedo",
+      "type": "Macro"
+    },
+    {
       "label": "Core: Rotes",
       "name": "core-rote",
       "ownership": {

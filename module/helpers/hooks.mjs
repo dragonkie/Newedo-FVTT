@@ -7,8 +7,50 @@ export default function registerHooks() {
     //> Hook once 'ready'
     //==========================================================================================
     Hooks.once("ready", async () => {
-        // Wait to register hotbar drop hook on ready so that modules could register earlier if they want to
 
+
+        // Fix world skill linking if things are messed up
+        if (!game.settings.get(game.system.id, 'migrateLinkID')) {
+            console.log('Updating skill linkID\'s')
+            const WorldSkills = [];
+
+            // Get custom world level skills
+            for (const item of game.items) {
+                if (item.type == 'skill' && item.system.linkID == "") WorldSkills.push(item)
+            }
+
+            // Get default skills from compendium packs
+            for (const pack of game.packs.contents) {
+                if (pack.documentName != 'Item') continue;
+                for (const index of pack.index.contents) {
+                    if (index.type != 'skill') continue;
+                    const item = await (fromUuid(index.uuid));
+                    WorldSkills.push(item);
+                }
+            }
+
+            // Assign linkID to any skills that are missing them
+            await WorldSkills.forEach(async (skill) => {
+                if (skill.system.linkID == "") skill.update({ 'system.linkID': foundry.utils.randomID() })
+            })
+
+            // Update all skills on actors to match the new linking IDs
+            for (const actor of game.actors.contents) {
+                foundry.ui.notifications.notify('Updating skills for: ' + actor.name);
+                actor.items.contents.forEach((item) => {
+                    if (item.type == 'skill' && item.system.linkID == "") {
+                        WorldSkills.forEach((skill) => {
+                            if (skill.name == item.name) {
+                                console.log('Linked: ' + item.name);
+                                item.update({ 'system.linkID': skill.system.linkID });
+                            }
+                        })
+                    }
+                })
+            }
+
+            game.settings.set(game.system.id, 'migrateLinkID', true);
+        }
     });
 
     //==========================================================================================
