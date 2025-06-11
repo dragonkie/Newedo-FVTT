@@ -113,7 +113,7 @@ export default class NewedoRoll {
      *  value:"1d20+5"
      * })
      */
-    AddPart(parts) { // Function for assigning data parts, means I dont have to worry about fucking up templates again
+    AddPart(parts) { // Function for assigning data parts, means I dont have to worry about breaking templates again
         if (!Array.isArray(parts)) parts = [parts];
         for (const p of parts) {
             const part = Object.assign(this.constructor.getPartSchema(), p);
@@ -430,7 +430,7 @@ export default class NewedoRoll {
                     formula = formula.replace(term, newTerm);
                 }
             } else {
-                // if there were no d10's to drop, fucking oops we gotta drop the next highest dice and that sucks
+                // if there were no d10's to drop, oops we gotta drop the next highest dice and that sucks, and probably wont ever happen so we leave it blank until its a problem t('l't )
             }
         }
 
