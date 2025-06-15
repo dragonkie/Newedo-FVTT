@@ -88,6 +88,28 @@ export class SystemDataModel extends foundry.abstract.TypeDataModel {
         nullable: false,
         integer: true
     }
+
+    //==================================================================================
+    //>- Create Functions
+    //==================================================================================
+    async _preCreate(data, options, user) {
+        return super._preCreate(data, options, user);
+    }
+
+    _onCreate(data, options, userId) {
+        return super._onCreate(data, options, userId);
+    }
+
+    //==================================================================================
+    //>- Delete functions
+    //==================================================================================
+    async _preDelete(options, user) {
+        return super._preDelete(options, user);
+    }
+
+    _onDelete(options, userId) {
+        return super._onDelete(options, userId);
+    }
 }
 
 //======================================================================================

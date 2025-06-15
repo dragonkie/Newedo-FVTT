@@ -28,43 +28,43 @@
 
     <div class="flexrow flex-gap-m">
         <div class="flexcol flex-gap-m">
-            {{toFieldGroup system.schema 'quality.value' value=system.quality.value label='Quality' class='align-center'}}
-            {{toFieldGroup system.schema 'grit.atk' value=system.grit.atk label='Grit Attack' class='align-center'}}
+            {{toFieldGroup schema 'quality.value' value=system.quality.value label='Quality' class='align-center'}}
+            {{toFieldGroup schema 'grit.atk' value=system.grit.atk label='Grit Attack' class='align-center'}}
         </div>
         <div class="flexcol flex-gap-m">
-            {{toFieldGroup system.schema 'grit.value' value=system.grit.value label='Grit'}}
-            {{toFieldGroup system.schema 'grit.dmg' value=system.grit.dmg label='Grit Damage'}}
+            {{toFieldGroup schema 'grit.value' value=system.grit.value label='Grit'}}
+            {{toFieldGroup schema 'grit.dmg' value=system.grit.dmg label='Grit Damage'}}
         </div>
     </div>
 
-    {{toFieldGroup system.schema 'ranged' value=system.ranged label='Ranged'}}
+    {{toFieldGroup schema 'ranged' value=system.ranged label='Ranged'}}
     <div class="flexrow flex-gap-m">
         {{#if system.ranged}}
-            {{toFieldGroup system.schema 'range.short' value=system.range.short label='Short Range'}}
-            {{toFieldGroup system.schema 'range.long' value=system.range.long label='Long Range'}}
+            {{toFieldGroup schema 'range.short' value=system.range.short label='Short Range'}}
+            {{toFieldGroup schema 'range.long' value=system.range.long label='Long Range'}}
         {{else}}
-            {{toFieldGroup system.schema 'range.short' value=system.range.short label='Melee'}}
-            {{toFieldGroup system.schema 'range.long' value=system.range.long label='Thrown'}}
+            {{toFieldGroup schema 'range.short' value=system.range.short label='Melee'}}
+            {{toFieldGroup schema 'range.long' value=system.range.long label='Thrown'}}
         {{/if}}
     </div>
 
     {{#if system.ranged}}
         <div class="flexrow flex-gap-m">
-            {{toFieldGroup system.schema 'range.modShort' value=system.range.modShort label='Short Mod'}}
-            {{toFieldGroup system.schema 'range.modLong' value=system.range.modLong label='Long Mod'}}
+            {{toFieldGroup schema 'range.modShort' value=system.range.modShort label='Short Mod'}}
+            {{toFieldGroup schema 'range.modLong' value=system.range.modLong label='Long Mod'}}
         </div>
 
         <div class="flexrow flex-gap-m">
-            {{toFieldGroup system.schema 'ammo.value' value=system.ammo.value label='Magazine'}}
-            {{toFieldGroup system.schema 'ammo.max' value=system.ammo.max label='Max'}}
+            {{toFieldGroup schema 'ammo.value' value=system.ammo.value label='Magazine'}}
+            {{toFieldGroup schema 'ammo.max' value=system.ammo.max label='Max'}}
         </div>
 
-        {{toFieldGroup system.schema 'burst.active' value=system.burst.active label='Enable Burst'}}
+        {{toFieldGroup schema 'burst.active' value=system.burst.active label='Enable Burst'}}
 
         {{#if system.burst.active}}
             <div class="flexrow flex-gap-m">
-                {{toFieldGroup system.schema 'burst.ammo' value=system.burst.ammo label='Burst Ammo'}}
-                {{toFieldGroup system.schema 'burst.roll' value=system.burst.roll label='Burst Roll'}}
+                {{toFieldGroup schema 'burst.ammo' value=system.burst.ammo label='Burst Ammo'}}
+                {{toFieldGroup schema 'burst.roll' value=system.burst.roll label='Burst Roll'}}
             </div>
         {{/if}}
     {{/if}}

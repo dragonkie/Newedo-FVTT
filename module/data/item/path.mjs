@@ -30,4 +30,8 @@ export default class PathData extends ItemDataModel {
         }
 
     }
+
+    async _preCreate() {
+        await super._preCreate();
+    }
 }

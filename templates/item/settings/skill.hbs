@@ -1,5 +1,5 @@
 <div class="edo-tab-contet edo-item-settings edo-skill-settings flex-gap-m">
-    {{toFieldGroup system.schema 'trait' value=system.trait}}
+    {{toFieldGroup schema 'trait' value=system.trait}}
     <div class="form-group">
         <div>Ranks:</div>
         <div class="flexrow" style="gap: 4px; align-items:flex-start;">
@@ -10,6 +10,6 @@
             {{/each}}
         </div>
     </div>
-    {{toFieldGroup system.schema 'useTraitRank' value=system.useTraitRank label='Use Trait Dice'}}
-    {{toFieldGroup system.schema 'isWeaponSkill' value=system.isWeaponSkill label='Is a weapon skill'}}
+    {{toFieldGroup schema 'useTraitRank' value=system.useTraitRank label='Use Trait Dice'}}
+    {{toFieldGroup schema 'isWeaponSkill' value=system.isWeaponSkill label='Is a weapon skill'}}
 </div>

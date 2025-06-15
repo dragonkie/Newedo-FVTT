@@ -61,6 +61,7 @@ export default function NewedoSheetMixin(Base) {
                 actor: doc.actor,
                 config: NEWEDO,
                 system: doc.system,
+                schema: doc.system.schema,
                 flags: doc.flags,
                 userFlags: game.user.flags,
                 user: game.user,
