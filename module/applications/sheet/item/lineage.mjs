@@ -6,8 +6,9 @@ import NewedoDialog from "../../dialog.mjs";
 export default class LineageSheet extends NewedoItemSheet {
     static DEFAULT_OPTIONS = {
         actions: {
-            configSoaks: this._onConfigureSoaks,
-            configTraits: this._onConfigureTraits,
+            configSoak: this._onConfigureSoaks,
+            configCore: this._onConfigureCore,
+            configDerived: this._onConfigureDerived,
             delete: this._onDelete,
             edit: this._onEdit
         }
@@ -33,6 +34,10 @@ export default class LineageSheet extends NewedoItemSheet {
             trait.label = utils.localize(NEWEDO.traits[key]);
         }
 
+        for (const [key, soak] of Object.entries(context.system.armour)) {
+            soak.label = utils.localize(NEWEDO.damageTypes[key]);
+        }
+
         for (const item of context.system.items) {
             item.data = await fromUuid(item.uuid);
         }
@@ -45,18 +50,20 @@ export default class LineageSheet extends NewedoItemSheet {
     }
 
     static async _onConfigureSoaks(event, target) {
-
-    }
-
-    static async _onConfigureTraits(event, target) {
         const system = this.document.system;
         // Add in the derived traits
         let content = '';
-        for (const [key, trait] of Object.entries(system.traits.core)) {
-            content += system.schema.getField(`traits.core.${key}.value`).toFormGroup({}, { value: trait.value }).outerHTML;
+        for (const [key, soak] of Object.entries(system.armour)) {
+            content += system.schema.getField(`armour.${key}.value`).toFormGroup({ label: key }, { value: soak.value }).outerHTML;
         }
 
-        content += `<div class="items-header flexrow"><div>Trait</div><div>Flat</div><div>Modifier</div></div>`;
+        return this._configDialog(content, 'NEWEDO.Dialog.Soak', 'soak');
+    }
+
+    static async _onConfigureDerived(event, target) {
+        const system = this.document.system;
+        // Add in the derived traits
+        let content = `<div class="items-header flexrow"><div>Trait</div><div>Flat</div><div>Modifier</div></div>`;
         for (const [key, trait] of Object.entries(system.traits.derived)) {
             content += `<div class="form-group"><label>${utils.localize(NEWEDO.traitsDerived[key])}</label><div class="form-fields">`;
             content += system.schema.getField(`traits.derived.${key}.value`).toInput({ value: trait.value }).outerHTML;
@@ -64,16 +71,28 @@ export default class LineageSheet extends NewedoItemSheet {
             content += `</div></div>`;
         }
 
+        return this._configDialog(content, 'NEWEDO.Dialog.TraitsDerived', 'derived');
+    }
+
+    static async _onConfigureCore(event, target) {
+        const system = this.document.system;
+        // Add in the derived traits
+        let content = '';
+        for (const [key, trait] of Object.entries(system.traits.core)) {
+            content += system.schema.getField(`traits.core.${key}.value`).toFormGroup({}, { value: trait.value }).outerHTML;
+        }
+
+        return this._configDialog(content, 'NEWEDO.Dialog.TraitsCore', 'core');
+    }
+
+    async _configDialog(content, title, id) {
         const app = await new NewedoDialog({
-            id: `${this.id}-dialog-config-traits`,
+            id: `${this.id}-dialog-config-${id}`,
             content: content,
             window: {
                 resizeable: false,
                 minimizable: false,
-                title: 'NEWEDO.Dialog.Traits'
-            },
-            position: {
-                width: 500,
+                title: title
             },
             buttons: [{
                 action: 'confirm',

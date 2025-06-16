@@ -78,45 +78,4 @@ export default class CharacterSheet extends NewedoActorSheet {
             }
         });
     }
-
-    async _onDropItem(event, item) {
-        switch (item.type) {
-            case 'lineage':
-                this._onDropLineage(event, item)
-                break;
-            default:
-                super._onDropItem(event, item);
-                break;
-        }
-    }
-
-    async _onDropLineage(event, item) {
-        // Check if the actor needs a culture, and offer them one
-
-
-        // Validate what needs to be done for this drop
-
-        // Apply other items to be made, and the trait modifiers to be added
-        console.log(item.system)
-        const update_data = this.document.system.toObject();
-        const system = this.document.system;
-
-        // Update core traits
-        
-
-        
-        await this.document.update({ system: update_data });
-
-        // Calls back to the super to create the actual lineage item
-        super._onDropItem(event, item);
-    }
-
-    async _onDropCulture(event, item) {
-
-    }
-
-
-    async _onDropPath(event, item) {
-
-    }
 }

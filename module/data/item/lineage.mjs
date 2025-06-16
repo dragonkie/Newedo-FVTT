@@ -1,6 +1,6 @@
 import { NEWEDO } from "../../config.mjs";
 import utils from "../../helpers/sysUtil.mjs";
-import { ItemDataModel } from "../abstract.mjs";
+import { ActorDataModel, ItemDataModel } from "../abstract.mjs";
 import NewedoDialog from "../../applications/dialog.mjs";
 
 const {
@@ -37,12 +37,12 @@ export default class LineageData extends ItemDataModel {
             mod: new NumberField({ initial: 0 })
         });
 
-        schema.armour = new SchemaField({
-            kin: this.AddValueField('value', 0),
-            ele: this.AddValueField('value', 0),
-            bio: this.AddValueField('value', 0),
-            arc: this.AddValueField('value', 0)
-        });
+        const ArmourData = {};
+        for (const k of Object.keys(NEWEDO.damageTypes)) {
+            const settings = { initial: 0 };
+            ArmourData[k] = new NumberField({ ...settings, label: NEWEDO.damageTypes[k] });
+        }
+        schema.armour = new SchemaField(ArmourData);
 
         schema.attributes = new SchemaField({
             rest: new SchemaField({
@@ -67,6 +67,22 @@ export default class LineageData extends ItemDataModel {
         }), { ...this.RequiredConfig, initial: [] });
 
         return schema;
+    }
+
+    /** @override */
+    prepareActorData(ActorData) {
+        const allowed = super.prepareActorData(ActorData) || true;
+        if (!allowed || !ActorData) return false;
+
+        for (const [key, trait] of Object.entries(this.traits.derived)) {
+
+        }
+
+        for (const k of Object.keys(NEWEDO.damageTypes)) ActorData.armour[k].total += this.armour[k];
+
+        // Attributes
+        ActorData.bonus.RestMod += this.attributes.rest.mod;
+        ActorData.bonus.LiftMod += this.attributes.lift.mod;
     }
 
     //==========================================================================================================
@@ -104,55 +120,59 @@ export default class LineageData extends ItemDataModel {
                     const choices = {};
                     for (const option of this.cultures) {
                         const item_data = await fromUuid(option.uuid);
+                        if (!item_data) continue;
                         choices[option.uuid] = item_data.name;
                     }
 
-                    // prepares the dialog contents
-                    let content = '<div class="newedo">';
-                    content += `<div>Please select your culture.</div>`
-                    content += new foundry.data.fields.StringField({
-                        blank: true, initial: '', choices: choices
-                    }).toFormGroup({}, { classes: ['edo-culture-select'] }).outerHTML;
+                    await new Promise(async (resolve, reject) => {
+                        // prepares the dialog contents
+                        let content = '<div class="newedo">';
+                        content += `<div>Please select your culture.</div>`
+                        content += new foundry.data.fields.StringField({
+                            blank: true, initial: '', choices: choices
+                        }).toFormGroup({}, { classes: ['edo-culture-select'] }).outerHTML;
 
-                    content += `</div>`
-                    let app_culture = await new NewedoDialog({
-                        content: content,
-                        buttons: [{
-                            label: 'Confirm',
-                            action: 'confirm',
-                            icon: 'fas fa-check'
-                        }, {
-                            label: 'Cancel',
-                            action: 'cancel',
-                            icon: 'fas fa-xmark'
-                        }],
-                        submit: async (result) => {
-                            console.log(app_culture);
-                            if (result != 'confirm') return;
-                            const ele = app_culture.element;
-                            const uuid = ele.querySelector('.edo-culture-select').value
-                            const culture = await fromUuid(uuid);
-                            if (!culture) return;
+                        content += `</div>`
+                        let app_culture = await new NewedoDialog({
+                            content: content,
+                            buttons: [{
+                                label: 'Confirm',
+                                action: 'confirm',
+                                icon: 'fas fa-check'
+                            }, {
+                                label: 'Cancel',
+                                action: 'cancel',
+                                icon: 'fas fa-xmark'
+                            }],
+                            submit: async (result) => {
+                                console.log(app_culture);
+                                if (result != 'confirm') return reject();
+                                const ele = app_culture.element;
+                                const uuid = ele.querySelector('.edo-culture-select').value
+                                const culture = await fromUuid(uuid);
+                                if (!culture) return;
 
-                            const itemData = culture.toObject();
-                            const modification = {
-                                "-=_id": null,
-                                "-=ownership": null,
-                                "-=folder": null,
-                                "-=sort": null
-                            };
-                            foundry.utils.mergeObject(itemData, modification, { performDeletions: true });
-                            await actor.createEmbeddedDocuments(culture.documentName, [itemData], {});
-                        }
-                    }).render(true);
+                                const itemData = culture.toObject();
+                                const modification = {
+                                    "-=_id": null,
+                                    "-=ownership": null,
+                                    "-=folder": null,
+                                    "-=sort": null
+                                };
+                                foundry.utils.mergeObject(itemData, modification, { performDeletions: true });
+                                await actor.createEmbeddedDocuments(culture.documentName, [itemData], {});
+                                resolve();
+                            }
+                        }).render(true);
+                    })
                 }
             }
 
             //==================================================================================================
             //>- Add Items
             //==================================================================================================
-            const itemList = [];
             if (this.items.length > 0) {
+                const itemList = [];
                 for (const i of this.items) {
                     const item = await fromUuid(i.uuid);
                     const data = item.toObject();

@@ -31,8 +31,8 @@ export default class NewedoItem extends Item {
         super.prepareDerivedData();
     }
 
-    prepareOwnerData(data) {
-        this.system.prepareOwnerData(data);
+    prepareActorData(data) {
+        this.system.prepareActorData(data);
     }
 
     async deleteDialog(options = {}) {

@@ -47,12 +47,13 @@ export default class SkillData extends ItemDataModel {
         });
     }
 
-    prepareDerivedData() {
-        super.prepareDerivedData();
+    prepareActorData(ActorData) {
+        const allowed = super.prepareActorData(ActorData) || true;
+        if (!allowed) return false;
     }
 
-    prepareOwnerData(ActorData) {
-
+    prepareDerivedData() {
+        super.prepareDerivedData();
     }
 
     async use() {

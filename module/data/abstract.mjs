@@ -75,6 +75,8 @@ export class SystemDataModel extends foundry.abstract.TypeDataModel {
         return data;
     }
 
+    get document() { return this.parent };
+
     //==================================================================================
     //>- Field config presets
     //==================================================================================
@@ -98,6 +100,17 @@ export class SystemDataModel extends foundry.abstract.TypeDataModel {
 
     _onCreate(data, options, userId) {
         return super._onCreate(data, options, userId);
+    }
+
+    //==================================================================================
+    //>- Update functions
+    //==================================================================================
+    async _preUpdate(changes, options, user) {
+        return super._preUpdate(changes, options, user);
+    }
+
+    _onUpdate(changed, options, userId) {
+        return super._onUpdate(changed, options, userId);
     }
 
     //==================================================================================
@@ -166,72 +179,6 @@ export class ActorDataModel extends SystemDataModel {
             arc: this.AddValueField('value', 0)
         });
 
-        schema.bonus = new SchemaField({
-            TraitCore: new SchemaField({
-                pow: new NumberField({ initial: 0 }),
-                per: new NumberField({ initial: 0 }),
-                pre: new NumberField({ initial: 0 }),
-                hrt: new NumberField({ initial: 0 }),
-                ref: new NumberField({ initial: 0 }),
-                sav: new NumberField({ initial: 0 }),
-                shi: new NumberField({ initial: 0 }),
-            }),
-            // Bonus to core trait totals, added after all other modifiers
-            PowTotal: new NumberField({ initial: 0 }),
-            PerTotal: new NumberField({ initial: 0 }),
-            PreTotal: new NumberField({ initial: 0 }),
-            HrtTotal: new NumberField({ initial: 0 }),
-            RefTotal: new NumberField({ initial: 0 }),
-            SavTotal: new NumberField({ initial: 0 }),
-            ShiTotal: new NumberField({ initial: 0 }),
-            DefTotal: new NumberField({ initial: 0 }),
-            InitTotal: new NumberField({ initial: 0 }),
-            MoveTotal: new NumberField({ initial: 0 }),
-            ResTotal: new NumberField({ initial: 0 }),
-
-            // Bonus to core trait ranks, very op
-            PowRank: new NumberField({ initial: 0 }),
-            PerRank: new NumberField({ initial: 0 }),
-            PreRank: new NumberField({ initial: 0 }),
-            HrtRank: new NumberField({ initial: 0 }),
-            RefRank: new NumberField({ initial: 0 }),
-            SavRank: new NumberField({ initial: 0 }),
-            ShiRank: new NumberField({ initial: 0 }),
-
-            // Bonus to derived trait base values (these bonuses are applied before the modifier is calculated)
-            DefBase: new NumberField({ initial: 0 }),
-            ResBase: new NumberField({ initial: 0 }),
-            InitBase: new NumberField({ initial: 0 }),
-            MoveBase: new NumberField({ initial: 0 }),
-
-            // Bonus to derived trait mods
-            DefMod: new NumberField({ initial: 0 }),
-            ResMod: new NumberField({ initial: 0 }),
-            InitMod: new NumberField({ initial: 0 }),
-            MoveMod: new NumberField({ initial: 0 }),
-
-            // Health modifiers
-            HpBase: new NumberField({ initial: 0 }),
-            HpTotal: new NumberField({ initial: 0 }),
-            HpMod: new NumberField({ initial: 0 }),
-            RestMod: new NumberField({ initial: 0 }),
-            LiftMod: new NumberField({ initial: 0 }),
-
-            // Bonus to attacks
-            attackMelee: new NumberField({ initial: 0 }),
-            attackRanged: new NumberField({ initial: 0 }),
-
-            // Bonus to damage
-            damageMelee: new NumberField({ initial: 0 }),
-            damageRanged: new NumberField({ initial: 0 }),
-
-            // Bonus to soaks
-            SoakKin: new NumberField({ initial: 0 }),
-            SoakEle: new NumberField({ initial: 0 }),
-            SoakBio: new NumberField({ initial: 0 }),
-            SoakArc: new NumberField({ initial: 0 }),
-        })
-
         return schema;
     }
 
@@ -252,7 +199,6 @@ export class ActorDataModel extends SystemDataModel {
 
     prepareBaseData() {
         const { core, derived } = this.traits;
-        const bonus = this.bonus;
 
         for (const trait of Object.keys(core)) {
             core[trait].total = 0;
@@ -262,6 +208,79 @@ export class ActorDataModel extends SystemDataModel {
 
         for (const trait of Object.keys(derived)) derived[trait].total = 0;
 
+        //===================================================================================
+        //> Bonus Fields
+        //===================================================================================
+        this.bonus = {
+            TraitCore: {
+                pow: 0,
+                per: 0,
+                pre: 0,
+                hrt: 0,
+                ref: 0,
+                sav: 0,
+                shi: 0,
+            },
+            TraitDerived: {
+                init: {
+                    mod: 0,
+                    value: 0,
+                    total: 0,
+                },
+                move: {
+                    mod: 0,
+                    value: 0,
+                    total: 0,
+                },
+                def: {
+                    mod: 0,
+                    value: 0,
+                    total: 0,
+                },
+                res: {
+                    mod: 0,
+                    value: 0,
+                    total: 0,
+                },
+            },
+
+            // Health modifiers
+            hp: {
+                value: 0,
+                total: 0,
+                mod: 0,
+            },
+            rest: {
+                value: 0,
+                total: 0,
+                mod: 0,
+            },
+            lift: {
+                value: 0,
+                total: 0,
+                mod: 0
+            },
+
+            // Bonus to attacks
+            attackMelee: 0,
+            attackRanged: 0,
+
+            // Bonus to damage
+            damageMelee: 0,
+            damageRanged: 0,
+
+            // Bonus to soaks
+            armour: {
+                kin: 0,
+                ele: 0,
+                bio: 0,
+                arc: 0,
+            }
+        }
+
+        //===================================================================================
+        //> Calculation totals
+        //===================================================================================
         this.armour.kin.total = 0;
         this.armour.ele.total = 0;
         this.armour.bio.total = 0;
@@ -269,27 +288,37 @@ export class ActorDataModel extends SystemDataModel {
         super.prepareBaseData();
     }
 
-    //============================================================
+    //===================================================================================================
     //>- Prepare Derived Data
-    //============================================================
+    //===================================================================================================
     prepareDerivedData() {
         super.prepareDerivedData();
         const { core, derived } = this.traits;
         const bonus = this.bonus;
+        const bc = bonus.TraitCore;
+        const bd = bonus.TraitDerived;
 
-        for (const item of this.parent.items.contents) item.prepareOwnerData(this);
+        //===============================================================================================
+        //>-- Get item related modifiers
+        //===============================================================================================
+        for (const item of this.parent.items.contents) item.prepareActorData(this);
 
-        // Totals up core stats
+        //===============================================================================================
+        //>-- Core trait totals
+        //===============================================================================================
         for (const trait of Object.keys(core)) {
-            core[trait].total += core[trait].value + bonus.TraitCore[trait];
+            core[trait].total += core[trait].value + bc[trait];
             core[trait].rank += Math.max(Math.floor(core[trait].total / 10), 0);
         }
 
+        //===============================================================================================
+        //>-- Derived trait totals
+        //===============================================================================================
         // Calculates derived traits for initative, move, defence, resolve, and max health
-        derived.init.total += derived.init.flat + Math.ceil((core.sav.total + core.ref.total + bonus.InitBase) * (derived.init.mod + bonus.InitMod)) + bonus.InitTotal;
-        derived.move.total += derived.move.flat + Math.ceil((((core.hrt.total + core.ref.total) / this.size.value) + bonus.MoveBase) * (derived.move.mod + bonus.MoveMod)) + bonus.MoveTotal;
-        derived.def.total += derived.def.flat + Math.ceil((core.pow.total + core.ref.total + bonus.DefBase) * (derived.def.mod + bonus.DefMod)) + bonus.DefTotal;
-        derived.res.total += derived.res.flat + Math.ceil((core.hrt.total + core.pre.total + bonus.ResBase) * (derived.res.mod + bonus.ResMod)) + bonus.ResTotal;
+        derived.init.total += derived.init.flat + Math.ceil((core.sav.total + core.ref.total + bd.init.value) * (derived.init.mod + bd.init.mod)) + bd.init.total;
+        derived.move.total += derived.move.flat + Math.ceil((((core.hrt.total + core.ref.total) / this.size.value) + bd.move.value) * (derived.move.mod + bd.move.mod)) + bd.move.total;
+        derived.def.total += derived.def.flat + Math.ceil((core.pow.total + core.ref.total + bd.def.value) * (derived.def.mod + bd.def.mod)) + bd.def.total;
+        derived.res.total += derived.res.flat + Math.ceil((core.hrt.total + core.pre.total + bd.res.value) * (derived.res.mod + bd.res.mod)) + bd.res.total;
 
         // Sets health range, MIN is included for use with the token resource bars and is always 0
         this.hp.max = Math.ceil(core.hrt.total * (this.hp.mod + bonus.HpMod)) + bonus.HpTotal + this.hp.flat;
@@ -301,11 +330,8 @@ export class ActorDataModel extends SystemDataModel {
         // Gets the characters wound state
         this.wound = utils.woundState(this.hp.value / this.hp.max);
 
-        // Totals up the armour soak values
-        this.armour.kin.total += this.armour.kin.value + bonus.SoakKin;
-        this.armour.ele.total += this.armour.ele.value + bonus.SoakEle;
-        this.armour.bio.total += this.armour.bio.value + bonus.SoakBio;
-        this.armour.arc.total += this.armour.arc.value + bonus.SoakArc;
+        // Totals up the armour soaks
+        for (const [key, soak] of Object.entries(this.armour)) soak.total += soak.value + bonus.armour[key];
     }
 
     getRollData() {
@@ -351,11 +377,13 @@ export class ItemDataModel extends SystemDataModel {
     }
 
     /**
-     * Called by an owning actor to augment itself with data provided by this item
-     * @param {ActorDataModel} ActorData The owning NewedoActorDocument
+     * Called as part of prepareDer
+     * @param {ActorDataModel} ActorData 
+     * @returns 
      */
-    prepareOwnerData(ActorData) {
-
+    prepareActorData(ActorData) {
+        if (!this.actor) console.error('No actor on this item?', this.actor);
+        if (!this.actor) return false;
     }
 
     getRollData() {

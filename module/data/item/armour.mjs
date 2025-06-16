@@ -21,7 +21,7 @@ export default class ArmourData extends ItemDataModel {
             ele: new NumberField({ initial: 0, required: true, nullable: false, label: NEWEDO.damageTypes.ele }),
             bio: new NumberField({ initial: 0, required: true, nullable: false, label: NEWEDO.damageTypes.bio }),
             arc: new NumberField({ initial: 0, required: true, nullable: false, label: NEWEDO.damageTypes.arc })
-        }, {}, { name: 'TestArmour' });
+        });
 
         schema.conceal = new BooleanField({ initial: false });
         schema.fragile = new BooleanField({ initial: false });
@@ -35,13 +35,12 @@ export default class ArmourData extends ItemDataModel {
         super.prepareDerivedData();
     }
 
-    prepareOwnerData(ActorData) {
+    prepareActorData(ActorData) {
+        const allowed = super.prepareActorData(ActorData) || true;
+        if (!allowed) return false;
         if (!this.isEquipped) return;
 
-        ActorData.bonus.SoakKin += this.soak.kin;
-        ActorData.bonus.SoakEle += this.soak.ele;
-        ActorData.bonus.SoakBio += this.soak.bio;
-        ActorData.bonus.SoakArc += this.soak.arc;
+        for (const soak of Object.keys(this.soak)) ActorData.bonus.armour[soak] += this.soak[soak];
     }
 
     get isEquipped() {

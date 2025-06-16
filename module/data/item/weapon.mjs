@@ -77,6 +77,11 @@ export default class WeaponData extends ItemDataModel {
         super.prepareBaseData();
     }
 
+    prepareActorData(ActorData) {
+        const allowed = super.prepareActorData(ActorData) || true;
+        if (!allowed) return false;
+    }
+
     prepareDerivedData() {
         super.prepareDerivedData();
 
@@ -366,7 +371,7 @@ export default class WeaponData extends ItemDataModel {
             document: this.parent,
             rollData: rollData,
         });
-        
+
         // Add trait dice for non ranged attacks 
         if (!this.isRanged) roll.AddTrait('pow');
 

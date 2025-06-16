@@ -1,5 +1,6 @@
 import { ResourceField } from "../fields.mjs";
 import { ItemDataModel } from "../abstract.mjs";
+import { NEWEDO } from "../../config.mjs";
 
 const {
     ArrayField, BooleanField, IntegerSortField, NumberField, SchemaField, SetField, StringField
@@ -13,14 +14,12 @@ export default class AugmentData extends ItemDataModel {
         schema.biofeedback = new NumberField({ initial: 0 });
         schema.rank = new ResourceField(1, 1, 5);
 
-        schema.noise = new SchemaField({
-            hrt: new NumberField({ initial: 0, nullable: false, required: true }),
-            ref: new NumberField({ initial: 0, nullable: false, required: true }),
-            sav: new NumberField({ initial: 0, nullable: false, required: true }),
-            pow: new NumberField({ initial: 0, nullable: false, required: true }),
-            pre: new NumberField({ initial: 0, nullable: false, required: true }),
-            per: new NumberField({ initial: 0, nullable: false, required: true })
-        })
+        const TraitData = {};
+        for (const key of Object.keys(NEWEDO.traitsCore)) {
+            const settings = { initial: 0, nullable: false, required: true }
+            TraitData[key] = new NumberField({ ...settings, label: NEWEDO.traitsCore[key] });
+        }
+        schema.noise = new SchemaField(TraitData);
 
         return schema;
     }
@@ -29,7 +28,11 @@ export default class AugmentData extends ItemDataModel {
         super.prepareDerivedData();
     }
 
-    prepareOwnerData(ActorData) {
+    prepareActorData(ActorData) {
+        const allowed = super.prepareActorData(ActorData) || true;
+        if (!allowed) return false;
+        if (!this.installed) return;
+
         for (const trait of Object.keys(this.noise)) ActorData.traits.core[trait].noise += this.noise[trait];
     }
 

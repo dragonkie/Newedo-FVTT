@@ -1,8 +1,6 @@
-<div class="edo-tab-content edo-item-settings edo-lineage-settings flex-gap-l">
-    <a data-action="configTraits">{{localize 'NEWEDO.Generic.Configure'}} {{localize 'NEWEDO.Generic.Trait'}}</a>
-
+<div class="edo-tab-content edo-item-settings edo-lineage-settings flexcol flex-gap-xl">
     <div class="edo-wrapper">
-        <b>Core Traits:</b>
+        <b>{{#if isEditMode}}<a data-action="configCore"><i class="fas fa-cog"></i></a>{{/if}} Core Traits:</b>
         <div class="flexrow flex-gap-s">
             {{#each system.traits.core as |trait key|}}
                 {{#if (gt trait.value 0)}}
@@ -13,22 +11,25 @@
     </div>
 
     <div class="edo-wrapper">
-        <b>Derived Traits:</b>
+        <b>{{#if isEditMode}}<a data-action="configDerived"><i class="fas fa-cog"></i></a>{{/if}} Derived Traits:</b>
         <div class="flexrow flex-gap-s">
             {{#each system.traits.derived as |trait key|}}
                 {{#if (gt trait.value 0)}}
                     <div class="edo-border-wrapper">{{localize trait.label}} {{numberFormat trait.value sign=true}}</div>
+                {{/if}}
+                {{#if (gt trait.mod 0)}}
+                    <div class="edo-border-wrapper">{{localize trait.label}} {{numberFormat trait.mod sign=true decimals=2}}</div>
                 {{/if}}
             {{/each}}
         </div>
     </div>
 
     <div class="edo-wrapper">
-        <b>Derived Modifiers:</b>
+        <b>{{#if isEditMode}}<a data-action="configSoak"><i class="fas fa-cog"></i></a>{{/if}}Armour Soaks:</b>
         <div class="flexrow flex-gap-s">
-            {{#each system.traits.derived as |trait key|}}
-                {{#if (gt trait.mod 0)}}
-                    <div class="edo-border-wrapper">{{localize trait.label}} {{numberFormat trait.mod sign=true decimals=2}}</div>
+            {{#each system.armour as |soak key|}}
+                {{#if (gt soak.value 0)}}
+                    <div class="edo-border-wrapper">{{localize soak.label}} {{numberFormat soak.value sign=true}}</div>
                 {{/if}}
             {{/each}}
         </div>

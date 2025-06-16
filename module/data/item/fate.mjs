@@ -28,13 +28,14 @@ export default class FateData extends ItemDataModel {
         return schema;
     }
 
+    prepareActorData(ActorData) {
+        const allowed = super.prepareActorData(ActorData) || true;
+        if (!allowed) return false;
+    }
+
     prepareDerivedData() {
         super.prepareDerivedData();
 
         this.end = Math.max(this.start + this.chance - 1, 0);
-    }
-
-    prepareOwnerData(ActorData) {
-        
     }
 }

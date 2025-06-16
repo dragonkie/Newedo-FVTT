@@ -1,3 +1,4 @@
+import { NEWEDO } from "../../config.mjs";
 import { ItemDataModel } from "../abstract.mjs";
 
 const {
@@ -43,23 +44,30 @@ export default class CultureData extends ItemDataModel {
         });
 
         schema.lift = new SchemaField({
-            value: new NumberField({ initial: 0}),
-            mod: new NumberField({ initial: 0})
+            value: new NumberField({ initial: 0 }),
+            mod: new NumberField({ initial: 0 })
         });
 
         schema.rest = new SchemaField({
-            value: new NumberField({ initial: 0}),
-            mod: new NumberField({ initial: 0})
+            value: new NumberField({ initial: 0 }),
+            mod: new NumberField({ initial: 0 })
         });
 
-        schema.armour = new SchemaField({
-            kin: this.AddValueField('value', 0),
-            ele: this.AddValueField('value', 0),
-            bio: this.AddValueField('value', 0),
-            arc: this.AddValueField('value', 0)
-        });
+        const ArmourData = {};
+        for (const key of Object.keys(NEWEDO.damageTypes)) {
+            ArmourData[key] = new NumberField({ initial: 0, label: NEWEDO.damageTypes[key] });
+        }
+        console.log(ArmourData);
+        schema.armour = new SchemaField(ArmourData);
 
         return schema;
+    }
+
+    prepareActorData(ActorData) {
+        const allowed = super.prepareActorData(ActorData) || true;
+        if (!allowed) return false;
+
+        for (const key of Object.keys(NEWEDO.damageTypes)) ActorData.bonus[key] += this.armour[key];
     }
 
     prepareDerivedData() {

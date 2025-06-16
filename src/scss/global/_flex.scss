@@ -77,8 +77,12 @@
     text-align: center;
   }
 
-  .flex-gap-s {
+  .flex-gap-xs {
     gap: 4px;
+  }
+
+  .flex-gap-s {
+    gap: 6px;
   }
 
   .flex-gap-m {
@@ -87,6 +91,10 @@
 
   .flex-gap-l {
     gap: 12px;
+  }
+
+  .flex-gap-xl {
+    gap: 16px;
   }
 
   .flex-reverse {

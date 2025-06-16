@@ -11,7 +11,9 @@ export default class PathData extends ItemDataModel {
         return schema;
     }
 
-    prepareOwnerData(ActorData) {
+    prepareActorData(ActorData) {
+        const allowed = super.prepareActorData(ActorData) || true;
+        if (!allowed) return false;
 
         for (const feature of this.features) {
             if (ActorData.rank >= feature.unlock) {

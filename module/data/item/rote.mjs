@@ -63,6 +63,11 @@ export default class RoteData extends ItemDataModel {
         return schema;
     }
 
+    prepareActorData(ActorData) {
+        const allowed = super.prepareActorData(ActorData) || true;
+        if (!allowed) return false;
+    }
+
     prepareDerivedData() {
         super.prepareDerivedData();
     }
