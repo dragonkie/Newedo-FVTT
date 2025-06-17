@@ -12,7 +12,9 @@ export default class FateData extends ItemDataModel {
         schema.start = new NumberField({ initial: 0 });
         schema.chance = new NumberField({ initial: 0 });
 
-        // Boolean flags to trigger / enable reaction rolling of this fate, potentially automatically
+        schema.linkID = new StringField({ initial: '', ...this.RequiredConfig })
+
+        // Triggers to roll for this fate to be hooked onto
         schema.triggers = new SchemaField({
             attackMelee: new BooleanField({ initial: false }),
             attackRange: new BooleanField({ initial: false }),
@@ -26,6 +28,29 @@ export default class FateData extends ItemDataModel {
         });
 
         return schema;
+    }
+
+    async _preCreate(data, options, user) {
+        const allowed = await super._preCreate() || true;
+        if (!allowed) return false;
+
+        console.log('_preCreate Fate', { data: data, options: options, user: user });
+
+        // Check if this object already existed by looking for document stats
+        if (!Object.hasOwn(data, '_stats')) {
+            await this.updateSource({ linkID: foundry.utils.randomID() });
+        }
+
+        const actor = this.actor;
+        if (actor && Object.hasOwn(data, 'system')) {
+            for (const fate of actor.itemTypes.fate) {
+                if ((fate.system.linkID != '' && fate.system.linkID == data.system.linkID) || data.name == fate.name) {
+                    console.log(fate);
+                    await fate.update({ system: { chance: fate.system.chance + data.system.chance } });
+                    return false;
+                }
+            }
+        }
     }
 
     prepareActorData(ActorData) {

@@ -3,13 +3,13 @@ export const NEWEDO = {};
 
 // Base data
 NEWEDO.traitsCore = {
-    pow: "NEWEDO.Trait.Core.Pow.long",
-    ref: "NEWEDO.Trait.Core.Ref.long",
     hrt: "NEWEDO.Trait.Core.Hrt.long",
+    per: "NEWEDO.Trait.Core.Per.long",
+    pow: "NEWEDO.Trait.Core.Pow.long",
+    pre: "NEWEDO.Trait.Core.Pre.long",
+    ref: "NEWEDO.Trait.Core.Ref.long",
     sav: "NEWEDO.Trait.Core.Sav.long",
     shi: "NEWEDO.Trait.Core.Shi.long",
-    per: "NEWEDO.Trait.Core.Per.long",
-    pre: "NEWEDO.Trait.Core.Pre.long",
 }
 
 NEWEDO.traitsCoreAbbr = {};

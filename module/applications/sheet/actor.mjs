@@ -101,6 +101,33 @@ export default class NewedoActorSheet extends NewedoSheetMixin(foundry.applicati
             }
         }
 
+        // Setup active effect groups
+        context.effects = {
+            active: {
+                label: 'Active',
+                effects: []
+            },
+            passive: {
+                label: 'Passive',
+                effects: []
+            },
+            disabled: {
+                label: 'Disabled',
+                effects: []
+            },
+            suppressed: {
+                label: 'Suppressed',
+                effects: []
+            }
+        }
+
+        for (const effect of this.document.effects) {
+            if (effect.isSuppressed) context.effects.suppressed.effects.push(effect);
+            else if (effect.isTemporary) context.effects.active.effects.push(effect);
+            else if (effect.active) context.effects.passive.effects.push(effect);
+            else context.effects.disabled.effects.push(effect);
+        }
+
         // Sort the mega list so the displayed lists are alphabetical
         context.itemTypes.skill.sort((a, b) => ('' + a.name).localeCompare(b.name))
         // Iterate through items, allocating to containers
@@ -136,6 +163,7 @@ export default class NewedoActorSheet extends NewedoSheetMixin(foundry.applicati
                 });
             }
         }
+
         return context;
     }
 

@@ -138,6 +138,12 @@ export class SystemDataModel extends foundry.abstract.TypeDataModel {
         nullable: false
     }
 
+    static RequiredStringConfig = {
+        required: true,
+        nullable: false,
+        blank: true
+    }
+
     static RequiredIntegerConfig = {
         required: true,
         nullable: false,
@@ -297,6 +303,26 @@ export class ActorDataModel extends SystemDataModel {
         }
 
         //===================================================================================
+        //> Skill bonuses
+        //===================================================================================
+        this.bonus.skills = new Map();
+        const SkillBonusConfig = (item) => {
+            return {
+                name: item.name,
+                linkID: item.system.linkID,
+                uuid: item.uuid,
+                value: 0,
+                parts: []
+            }
+        }
+
+        for (const skill of this.document.itemTypes.skill) {
+            this.bonus.skills.set(skill.system.linkID, SkillBonusConfig(skill));
+        }
+
+        console.log(this.bonus.skills);
+
+        //===================================================================================
         //> Calculation totals
         //===================================================================================
         this.armour.kin.total = 0;
@@ -409,7 +435,6 @@ export class ItemDataModel extends SystemDataModel {
     getRollData() {
         const actorData = this.actor?.getRollData();
         if (!this.actor) return null;
-        console.log(actorData)
         const data = {
             ...actorData,
             ...utils.duplicate(this)

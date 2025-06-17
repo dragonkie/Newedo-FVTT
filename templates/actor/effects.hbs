@@ -4,15 +4,18 @@
             <li class="items-header flexrow collapsible">
                 <span>{{list.label}}</span>
                 <span>Controls</span>
-                <a class="controls" type="button" data-action="createEffect" style="flex:0; margin-right: 5px;">
-                    <i class="fa-solid fa-plus"></i>
-                </a>
+                <span>
+                    <a class="controls" type="button" data-action="createEffect" style="flex:0; margin-right: 5px;">
+                        <i class="fa-solid fa-plus"></i>
+                        New Effect
+                    </a>
+                </span>
             </li>
             {{#each list.effects as | effect |}}
                 <li class="item flexrow" data-item-uuid="{{effect.uuid}}">
-                    <span data-action="editItem">
+                    <span data-action="editItem" class="flexrow flexshrink nowrap">
                         <img src="{{effect.img}}" width="30" height="30">
-                        <a style="margin-left: 4px;">{{effect.name}}</a>
+                        <a class="flexshrink" style="margin-left: 4px;">{{effect.name}}</a>
                     </span>
                     <span class="item-controls">
                         {{#if effect.disabled}}<a data-action="disableEffect"><i class="fa-solid fa-bolt-slash"></i></a>{{/if}}

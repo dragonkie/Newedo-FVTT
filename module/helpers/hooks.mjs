@@ -8,10 +8,12 @@ export default function registerHooks() {
     //==========================================================================================
     Hooks.once("ready", async () => {
 
-
+        //======================================================================================
+        //>- repair broken skill links
+        //======================================================================================
         // Fix world skill linking if things are messed up
-        if (!game.settings.get(game.system.id, 'migrateLinkID')) {
-            console.log('Updating skill linkID\'s')
+        if (!game.settings.get(game.system.id, 'migrateSkillLinks')) {
+            console.log(`Updating skill linkID's`)
             const WorldSkills = [];
 
             // Get custom world level skills
@@ -49,7 +51,51 @@ export default function registerHooks() {
                 })
             }
 
-            game.settings.set(game.system.id, 'migrateLinkID', true);
+            game.settings.set(game.system.id, 'migrateSkillLinks', true);
+        }
+        //======================================================================================
+        //>- repair broken fate links
+        //======================================================================================
+        if (!game.settings.get(game.system.id, 'migrateFateLinks')) {
+            console.log(`Updating Fate linkID's`)
+            const WorldFates = [];
+
+            // Get custom world level skills
+            for (const item of game.items) {
+                if (item.type == 'fate' && item.system.linkID == "") WorldFates.push(item)
+            }
+
+            // Get default skills from compendium packs
+            for (const pack of game.packs.contents) {
+                if (pack.documentName != 'Item') continue;
+                for (const index of pack.index.contents) {
+                    if (index.type != 'fate') continue;
+                    const item = await (fromUuid(index.uuid));
+                    WorldFates.push(item);
+                }
+            }
+
+            // Assign linkID to any skills that are missing them
+            await WorldFates.forEach(async (fate) => {
+                if (fate.system.linkID == "") fate.update({ 'system.linkID': foundry.utils.randomID() })
+            })
+
+            // Update all skills on actors to match the new linking IDs
+            for (const actor of game.actors.contents) {
+                foundry.ui.notifications.notify('Updating fates for: ' + actor.name);
+                actor.items.contents.forEach((item) => {
+                    if (item.type == 'fate' && item.system.linkID == "") {
+                        WorldFates.forEach((fate) => {
+                            if (fate.name == item.name) {
+                                console.log('Linked: ' + item.name);
+                                item.update({ 'system.linkID': fate.system.linkID });
+                            }
+                        })
+                    }
+                })
+            }
+
+            game.settings.set(game.system.id, 'migrateFateLinks', true);
         }
     });
 

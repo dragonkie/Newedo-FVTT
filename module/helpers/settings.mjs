@@ -34,7 +34,18 @@ export default function registerSystemSettings() {
             default: true
         }
     }, {
-        id: 'migrateLinkID',
+        id: 'migrateSkillLinks',
+        config: {
+            name: "",
+            hint: "",
+            scope: "world",
+            config: false,
+            type: Boolean,
+            default: false,
+            onChange: () => { foundry.ui.notifications.notify('Finished migrating skill data') }
+        }
+    }, {
+        id: 'migrateFateLinks',
         config: {
             name: "",
             hint: "",

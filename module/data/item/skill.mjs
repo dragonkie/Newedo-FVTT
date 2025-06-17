@@ -38,13 +38,22 @@ export default class SkillData extends ItemDataModel {
         return schema;
     }
 
+    get rank() {
+        let r = 0;
+        this.ranks.forEach(element => {
+            if (element > 0) r += 1;
+        });
+        return r;
+    }
+
     async _preCreate(data, options, user) {
         const allowed = await super._preCreate(data, options, user) ?? true;
         if (!allowed) return false;
 
-        await this.updateSource({
-            linkID: foundry.utils.randomID()
-        });
+        // Check if this object already existed by looking for document stats
+        if (!Object.hasOwn(data, '_stats')) {
+            await this.updateSource({ linkID: foundry.utils.randomID() });
+        }
     }
 
     prepareActorData(ActorData) {
@@ -166,6 +175,25 @@ export default class SkillData extends ItemDataModel {
             label: this.parent.name,
             value: this.getRanks()
         }]);
+
+        if (this.actor) {
+            console.log('Actor ksill bonuses', this.actor.system.bonus.skills)
+            const bonus = this.actor.system.bonus.skills.get(this.linkID);
+            console.log('Skill bonus');
+            let value = `${bonus.value != 0 ? bonus.value : ''}`;
+
+            bonus.parts.forEach(element => {
+                if (value != '') value += '+';
+                value += element;
+            })
+
+            if (value != '') {
+                roll.AddPart({
+                    label: 'Bonuses',
+                    value: value
+                })
+            }
+        }
 
         await roll.evaluate();
         await roll.toMessage({

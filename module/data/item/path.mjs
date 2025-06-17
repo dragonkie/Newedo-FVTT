@@ -8,6 +8,9 @@ export default class PathData extends ItemDataModel {
     static defineSchema() {
         const schema = super.defineSchema();
         schema.features = new ArrayField(this.FeatureField(), { initial: [] });
+
+        // the active rank of this path, triggers level up prompts
+        schema.rank = new NumberField({initial: 1, min: 1, max: 5, required: true, nullable: false});
         return schema;
     }
 
@@ -33,7 +36,13 @@ export default class PathData extends ItemDataModel {
 
     }
 
+    // Add rank 1 features as defaut when the path is added to a character
     async _preCreate() {
         await super._preCreate();
+    }
+
+    // When this item is updated, check the actors level against this one
+    _onUpdate() {
+
     }
 }
