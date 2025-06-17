@@ -1,13 +1,54 @@
 <div class="edo-tab-content edo-item-settings edo-culture-settings flex-gap-m">
-    <a class="feature-create">Create New Feature</a>
-
-    <div class="flexcol">
-        {{#each system.features as | feature key |}}
-            <div class="feature" style="flex: 1" data-feature-id="{{feature.id}}">
-                <a class="feature-edit">{{feature.label}}</a>
-                <a class="feature-delete">Delete?</a>
-            </div>
-        {{/each}}
+    <div class="edo-wrapper">
+        <b>{{#if isEditMode}}<a data-action="configCore"><i class="fas fa-cog"></i></a>{{/if}} Core Traits:</b>
+        <div class="flexrow flex-gap-s">
+            {{#each system.traits.core as |trait key|}}
+                {{#if (gt trait.value 0)}}
+                    <div class="edo-border-wrapper">{{localize key}} {{numberFormat trait.value sign=true}}</div>
+                {{/if}}
+            {{/each}}
+        </div>
     </div>
 
+    <div class="edo-wrapper">
+        <b>{{#if isEditMode}}<a data-action="configDerived"><i class="fas fa-cog"></i></a>{{/if}} Derived Traits:</b>
+        <div class="flexrow flex-gap-s">
+            {{#each system.traits.derived as |trait key|}}
+                {{#if (gt trait.value 0)}}
+                    <div class="edo-border-wrapper">{{localize key}} {{numberFormat trait.value sign=true}}</div>
+                {{/if}}
+                {{#if (gt trait.mod 0)}}
+                    <div class="edo-border-wrapper">{{localize key}} x{{numberFormat trait.mod decimals=2}}</div>
+                {{/if}}
+            {{/each}}
+        </div>
+    </div>
+
+    <div class="edo-wrapper">
+        <b>{{#if isEditMode}}<a data-action="configSoak"><i class="fas fa-cog"></i></a>{{/if}}Armour Soaks:</b>
+        <div class="flexrow flex-gap-s">
+            {{#each system.armour as |soak key|}}
+                {{#if (gt soak.value 0)}}
+                    <div class="edo-border-wrapper">{{localize key}} {{numberFormat soak.value sign=true}}</div>
+                {{/if}}
+            {{/each}}
+        </div>
+    </div>
+
+    <div class="edo-wrapper" data-list="items">
+        <b>Items:</b>
+        <div class="flexrow flex-gap-s">
+            {{#each system.items as |item key|}}
+                <div class="edo-border-wrapper" data-index="{{key}}" data-uuid="{{item.uuid}}">
+                    {{#if ../isEditMode}}
+                        <a data-action="delete">
+                            <i class="fas fa-trash"></i>
+                        </a>
+                    {{/if}}
+
+                    <a data-action="edit">{{item.data.name}}</a>
+                </div>
+            {{/each}}
+        </div>
+    </div>
 </div>

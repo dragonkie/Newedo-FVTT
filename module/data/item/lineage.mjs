@@ -1,7 +1,7 @@
-import { NEWEDO } from "../../config.mjs";
-import utils from "../../helpers/sysUtil.mjs";
 import { ActorDataModel, ItemDataModel } from "../abstract.mjs";
+import { NEWEDO } from "../../config.mjs";
 import NewedoDialog from "../../applications/dialog.mjs";
+import utils from "../../helpers/sysUtil.mjs";
 
 const {
     ArrayField, BooleanField, IntegerSortField, NumberField, SchemaField, SetField, StringField
@@ -63,7 +63,6 @@ export default class LineageData extends ItemDataModel {
 
         const actor = this.actor;
         if (actor) {
-            const updateData = actor.system.toObject();
             //==================================================================================================
             //>- Limit to one lineage on an actor
             //==================================================================================================
@@ -112,7 +111,6 @@ export default class LineageData extends ItemDataModel {
                                 icon: 'fas fa-xmark'
                             }],
                             submit: async (result) => {
-                                console.log(app_culture);
                                 if (result != 'confirm') return reject();
                                 const ele = app_culture.element;
                                 const uuid = ele.querySelector('.edo-culture-select').value
@@ -150,7 +148,6 @@ export default class LineageData extends ItemDataModel {
                         "-=folder": null,
                         "-=sort": null
                     };
-                    console.log('items', item)
                     foundry.utils.mergeObject(data, modification, { performDeletions: true });
                     itemList.push(data);
                 }
@@ -161,13 +158,11 @@ export default class LineageData extends ItemDataModel {
             //==================================================================================================
             //>- Add core traits
             //==================================================================================================
-            console.log('Adding lineage traits', this.traits);
+            const updateData = actor.system.toObject();;
             for (const [key, trait] of Object.entries(this.traits.core)) {
                 updateData.traits.core[key].value += this.traits.core[key].value;
             }
 
-
-            console.log(updateData);
             await actor.update({ system: updateData });
         }
     }
