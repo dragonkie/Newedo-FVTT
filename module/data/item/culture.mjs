@@ -9,56 +9,25 @@ export default class CultureData extends ItemDataModel {
     static defineSchema() {
         const schema = super.defineSchema();
 
-        schema.traits = new SchemaField({
-            core: new SchemaField({
-                pow: this.AddValueField('value', 0),
-                per: this.AddValueField('value', 0),
-                pre: this.AddValueField('value', 0),
-                hrt: this.AddValueField('value', 0),
-                ref: this.AddValueField('value', 0),
-                sav: this.AddValueField('value', 0),
-                shi: this.AddValueField('value', 0)
+        schema.traits = new SchemaField(this.TraitFields());
+        schema.armour = new SchemaField(this.ArmourFields());
+
+        schema.attributes = new SchemaField({
+            rest: new SchemaField({
+                base: new NumberField({ ...this.RequiredConfig, initial: 0 }),// added before
+                mod: new NumberField({ ...this.RequiredConfig, initial: 0 }),// multiplies the base
+                bonus: new NumberField({ ...this.RequiredConfig, initial: 0 }),// added after
             }),
-            derived: new SchemaField({
-                init: new SchemaField({
-                    value: new NumberField({ initial: 0 }),
-                    mod: new NumberField({ initial: 0 })
-                }),
-                move: new SchemaField({
-                    value: new NumberField({ initial: 0 }),
-                    mod: new NumberField({ initial: 0 })
-                }),
-                def: new SchemaField({
-                    value: new NumberField({ initial: 0 }),
-                    mod: new NumberField({ initial: 0 })
-                }),
-                res: new SchemaField({
-                    value: new NumberField({ initial: 0 }),
-                    mod: new NumberField({ initial: 0 })
-                }),
-                hp: new SchemaField({
-                    value: new NumberField({ initial: 0 }),
-                    mod: new NumberField({ initial: 0 })
-                })
-            })
-        });
+            lift: new SchemaField({
+                base: new NumberField({ ...this.RequiredConfig, initial: 0 }),
+                mod: new NumberField({ ...this.RequiredConfig, initial: 0 })
+            }),
+        })
 
-        schema.lift = new SchemaField({
-            value: new NumberField({ initial: 0 }),
-            mod: new NumberField({ initial: 0 })
-        });
-
-        schema.rest = new SchemaField({
-            value: new NumberField({ initial: 0 }),
-            mod: new NumberField({ initial: 0 })
-        });
-
-        const ArmourData = {};
-        for (const key of Object.keys(NEWEDO.damageTypes)) {
-            ArmourData[key] = new NumberField({ initial: 0, label: NEWEDO.damageTypes[key] });
-        }
-        console.log(ArmourData);
-        schema.armour = new SchemaField(ArmourData);
+        // List of linked items that are granted to an actor with this lineage
+        schema.items = new ArrayField(new SchemaField({
+            uuid: new StringField({ ...this.RequiredConfig, initial: '' })
+        }), { ...this.RequiredConfig, initial: [] })
 
         return schema;
     }
@@ -67,7 +36,11 @@ export default class CultureData extends ItemDataModel {
         const allowed = super.prepareActorData(ActorData) || true;
         if (!allowed) return false;
 
-        for (const key of Object.keys(NEWEDO.damageTypes)) ActorData.bonus[key] += this.armour[key];
+        Object.keys(this.armour).forEach(k => ActorData.bonus.armour[k] += this.armour[k].value);
+        Object.keys(this.traits.derived).forEach(k => {
+            ActorData.bonus.TraitDerived[k].mod += this.traits.derived[k].mod;
+            ActorData.bonus.TraitDerived[k].value += this.traits.derived[k].value;
+        })
     }
 
     prepareDerivedData() {

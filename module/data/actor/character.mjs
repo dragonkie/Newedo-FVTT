@@ -34,11 +34,11 @@ export default class CharacterDataModel extends ActorDataModel {
         });
 
         schema.background = new SchemaField({
-            contacts: this.AddValueField('value', 1),
-            followers: this.AddValueField('value', 1),
-            soul: this.AddValueField('value', 1),
-            status: this.AddValueField('value', 1),
-            wealth: this.AddValueField('value', 1),
+            contacts: this.AddValueField(1),
+            followers: this.AddValueField(1),
+            soul: this.AddValueField(1),
+            status: this.AddValueField(1),
+            wealth: this.AddValueField(1),
         });
 
         return schema;

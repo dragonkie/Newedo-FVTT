@@ -11,38 +11,8 @@ export default class LineageData extends ItemDataModel {
     static defineSchema() {
         const schema = super.defineSchema();
 
-        const traits_core = {};
-        const traits_derived = {};
-        for (const trait of Object.keys(NEWEDO.traitsCore)) traits_core[trait] = new SchemaField({
-            value: new NumberField({ initial: 0, ...this.RequiredIntegerConfig, label: utils.localize(NEWEDO.traitsCore[trait]) })
-        })
-
-        for (const trait of Object.keys(NEWEDO.traitsDerived)) traits_derived[trait] = new SchemaField({
-            value: new NumberField({ initial: 0, ...this.RequiredIntegerConfig, label: utils.localize(NEWEDO.traitsDerived[trait]) }), // Added before multiplier
-            mod: new NumberField({ initial: 0, ...this.RequiredConfig, label: utils.localize(NEWEDO.traitsDerived[trait]) }), // the multiplier
-        })
-
-        schema.traits = new SchemaField({
-            core: new SchemaField(traits_core),
-            derived: new SchemaField(traits_derived)
-        });
-
-        schema.lift = new SchemaField({
-            value: new NumberField({ initial: 0 }),
-            mod: new NumberField({ initial: 0 })
-        });
-
-        schema.rest = new SchemaField({
-            value: new NumberField({ initial: 0 }),
-            mod: new NumberField({ initial: 0 })
-        });
-
-        const ArmourData = {};
-        for (const k of Object.keys(NEWEDO.damageTypes)) {
-            const settings = { initial: 0 };
-            ArmourData[k] = new NumberField({ ...settings, label: NEWEDO.damageTypes[k] });
-        }
-        schema.armour = new SchemaField(ArmourData);
+        schema.traits = new SchemaField(this.TraitFields());
+        schema.armour = new SchemaField(this.ArmourFields());
 
         schema.attributes = new SchemaField({
             rest: new SchemaField({
@@ -54,7 +24,6 @@ export default class LineageData extends ItemDataModel {
                 base: new NumberField({ ...this.RequiredConfig, initial: 0 }),
                 mod: new NumberField({ ...this.RequiredConfig, initial: 0 })
             }),
-
         })
 
         // List of linked items that are granted to an actor with this lineage
@@ -74,15 +43,11 @@ export default class LineageData extends ItemDataModel {
         const allowed = super.prepareActorData(ActorData) || true;
         if (!allowed || !ActorData) return false;
 
-        for (const [key, trait] of Object.entries(this.traits.derived)) {
-
-        }
-
-        for (const k of Object.keys(NEWEDO.damageTypes)) ActorData.armour[k].total += this.armour[k];
-
-        // Attributes
-        ActorData.bonus.RestMod += this.attributes.rest.mod;
-        ActorData.bonus.LiftMod += this.attributes.lift.mod;
+        Object.keys(this.armour).forEach(k => ActorData.bonus.armour[k] += this.armour[k].value);
+        Object.keys(this.traits.derived).forEach(k => {
+            ActorData.bonus.TraitDerived[k].value += this.traits.derived[k].value;
+            ActorData.bonus.TraitDerived[k].mod += this.traits.derived[k].mod;
+        });
     }
 
     //==========================================================================================================
@@ -113,6 +78,7 @@ export default class LineageData extends ItemDataModel {
             if (actor.itemTypes.culture.length == 0) {
                 let confirm = await NewedoDialog.confirm({
                     content: "This actor doesn't have a culture, would you like to select one?",
+                    modal: true
                 });
 
                 if (confirm) {
@@ -135,6 +101,7 @@ export default class LineageData extends ItemDataModel {
                         content += `</div>`
                         let app_culture = await new NewedoDialog({
                             content: content,
+                            modal: true,
                             buttons: [{
                                 label: 'Confirm',
                                 action: 'confirm',
@@ -162,7 +129,8 @@ export default class LineageData extends ItemDataModel {
                                 foundry.utils.mergeObject(itemData, modification, { performDeletions: true });
                                 await actor.createEmbeddedDocuments(culture.documentName, [itemData], {});
                                 resolve();
-                            }
+                            },
+                            close: () => { resolve() }
                         }).render(true);
                     })
                 }
@@ -193,8 +161,7 @@ export default class LineageData extends ItemDataModel {
             //==================================================================================================
             //>- Add core traits
             //==================================================================================================
-            console.log(this.traits);
-            console.log(updateData);
+            console.log('Adding lineage traits', this.traits);
             for (const [key, trait] of Object.entries(this.traits.core)) {
                 updateData.traits.core[key].value += this.traits.core[key].value;
             }

@@ -4,9 +4,8 @@ import LOGGER from "../helpers/logger.mjs";
 import utils from "../helpers/sysUtil.mjs";
 import { NEWEDO } from "../config.mjs";
 
-
 const {
-    ArrayField, BooleanField, IntegerSortField, NumberField, SchemaField, SetField, StringField, ObjectField, HTMLField
+    DataField, ArrayField, BooleanField, IntegerSortField, NumberField, SchemaField, SetField, StringField, ObjectField, HTMLField
 } = foundry.data.fields;
 
 //======================================================================================
@@ -20,11 +19,10 @@ export class SystemDataModel extends foundry.abstract.TypeDataModel {
      * @param {Number} value the initial value of this entry
      * @returns {SchemaField}
      */
-    static AddValueField(key, value) {
-        const field = new SchemaField({
+    static AddValueField(value, key = 'value') {
+        return new SchemaField({
             [key]: new NumberField({ initial: value })
         });
-        return field
     }
 
     static FeatureField() {
@@ -44,8 +42,17 @@ export class SystemDataModel extends foundry.abstract.TypeDataModel {
         })
     }
 
-    static TraitField(init = 'hrt') {
-        if (init !== '' && !Object.keys(NEWEDO.traitsCore).includes(init)) init = Object.keys(NEWEDO.traitsCore)[0];
+    //==================================================================================
+    //>- Trait Fields
+    //==================================================================================
+
+    /**
+     * 
+     * @param {String} init - initial default value for this field
+     * @returns {StringField} StringField
+     */
+    static TraitSelectorField(init = 'hrt') {
+        if (!Object.keys(NEWEDO.traitsCore).includes(init)) init = Object.keys(NEWEDO.traitsCore)[0];
         return new StringField({
             initial: init,
             required: true,
@@ -53,18 +60,64 @@ export class SystemDataModel extends foundry.abstract.TypeDataModel {
             blank: true,
             label: NEWEDO.generic.trait,
             choices: () => {
-                let options = utils.duplicate(NEWEDO.traitsCore);
+                const options = utils.duplicate(NEWEDO.traitsCore);
                 for (const key of Object.keys(options)) options[key] = utils.localize(options[key]);
                 return options;
             }
         });
     }
 
+    /**
+     * 
+     * @returns {Object}
+     */
+    static CoreTraitFields() {
+        const CoreData = {};
+        for (const [k, v] of Object.entries(NEWEDO.traitsCore)) CoreData[k] = new SchemaField({ value: new NumberField({ initial: 0, ...this.RequiredConfig, label: v }) })
+        return CoreData;
+    }
+
+    /**
+     * 
+     * @returns {Object}
+     */
+    static DerivedTraitFields() {
+        // HP is managed outsid of the derived traits and handled as an attribute and in a different area on most sheets
+        // so its specifically redacted from these fields
+        const DerivedData = {};
+        for (const [k, v] of Object.entries(NEWEDO.traitsDerived)) if (k != 'hp') DerivedData[k] = new SchemaField({
+            value: new NumberField({ initial: 0, ...this.RequiredConfig, label: v }), // Added before multiplier
+            mod: new NumberField({ initial: 0, ...this.RequiredConfig, label: v }), // the multiplier
+        })
+        return DerivedData;
+    }
+
+    /**
+     * 
+     * @returns {Object}
+     */
+    static TraitFields() {
+        return {
+            core: new SchemaField(this.CoreTraitFields()),
+            derived: new SchemaField(this.DerivedTraitFields())
+        }
+    }
+
+    //==================================================================================
+    //>- Attribute Fields
+    //==================================================================================
+
+    static ArmourFields() {
+        const ArmourData = {};
+        for (const [k, v] of Object.entries(NEWEDO.damageTypes)) ArmourData[k] = new SchemaField({ value: new NumberField({ initial: 0, label: v }) });
+        return ArmourData;
+    }
+
     static SkillField() {
         return new SchemaField({
             linkID: new StringField({ initial: '', required: false, nullable: true }), // Used by skills to auto link the skill to items that need it
             label: new StringField({ initial: 'NEWEDO.Generic.NewSkill', required: false, nullable: true }), // Localizeable field for the name of this skill
-            trait: this.TraitField(),// the core trait associated with this skill
+            trait: this.TraitSelectorField(),// the core trait associated with this skill
             ranks: new ArrayField(new NumberField(), { initial: [0, 0, 0, 0, 0], nullable: false, required: true, min: 5, max: 5 }) //NPC's can only have d8's by default, this is here so that rule can be homebrewed by DMs
         })
     }
@@ -78,7 +131,7 @@ export class SystemDataModel extends foundry.abstract.TypeDataModel {
     get document() { return this.parent };
 
     //==================================================================================
-    //>- Field config presets
+    //>- Field setting configs
     //==================================================================================
     static RequiredConfig = {
         required: true,
@@ -133,51 +186,19 @@ export class ActorDataModel extends SystemDataModel {
         const schema = {};
 
         schema.hp = new SchemaField({
-            min: new NumberField({ initial: 0 }),
             value: new NumberField({ initial: 20, min: 0 }),
             mod: new NumberField({ initial: 1.5 }),
             flat: new NumberField({ initial: 0 }),
         });
 
-        schema.size = this.AddValueField('value', 5);
+        schema.size = this.AddValueField(5);
         schema.lift = new SchemaField({
             mod: new NumberField({ initial: 3.0 }),
             flat: new NumberField({ initial: 0 }),
         });// mod * pow kg
 
-        const traits_core = {};
-        for (const trait of Object.keys(NEWEDO.traitsCore).sort()) traits_core[trait] = new SchemaField({
-            value: new NumberField({ initial: trait != 'shi' ? 10 : 0, ...this.RequiredIntegerConfig })
-        })
-
-        schema.traits = new SchemaField({
-            core: new SchemaField(traits_core),
-            derived: new SchemaField({
-                init: new SchemaField({
-                    mod: new NumberField({ initial: 1.0 }),
-                    flat: new NumberField({ initial: 0 }),
-                }),
-                move: new SchemaField({
-                    mod: new NumberField({ initial: 1.0 }),
-                    flat: new NumberField({ initial: 0 }),
-                }),
-                def: new SchemaField({
-                    mod: new NumberField({ initial: 0.4 }),
-                    flat: new NumberField({ initial: 0 }),
-                }),
-                res: new SchemaField({
-                    mod: new NumberField({ initial: 0.4 }),
-                    flat: new NumberField({ initial: 0 }),
-                }),
-            })
-        });
-
-        schema.armour = new SchemaField({
-            kin: this.AddValueField('value', 0),
-            ele: this.AddValueField('value', 0),
-            bio: this.AddValueField('value', 0),
-            arc: this.AddValueField('value', 0)
-        });
+        schema.traits = new SchemaField(this.TraitFields());
+        schema.armour = new SchemaField(this.ArmourFields());
 
         return schema;
     }
@@ -190,6 +211,7 @@ export class ActorDataModel extends SystemDataModel {
      * DataModel prepareBaseData();
      * Document prepareBaseData();
      * EmbeddedDocument();
+     * DataModel.item prepareActorData();
      * DataModel prepareDerivedData();
      * Document prepareDerivedData();
      * 
@@ -225,22 +247,18 @@ export class ActorDataModel extends SystemDataModel {
                 init: {
                     mod: 0,
                     value: 0,
-                    total: 0,
                 },
                 move: {
                     mod: 0,
                     value: 0,
-                    total: 0,
                 },
                 def: {
                     mod: 0,
                     value: 0,
-                    total: 0,
                 },
                 res: {
                     mod: 0,
                     value: 0,
-                    total: 0,
                 },
             },
 
@@ -285,6 +303,8 @@ export class ActorDataModel extends SystemDataModel {
         this.armour.ele.total = 0;
         this.armour.bio.total = 0;
         this.armour.arc.total = 0;
+
+        this.hp.min = 0;
         super.prepareBaseData();
     }
 
@@ -307,7 +327,7 @@ export class ActorDataModel extends SystemDataModel {
         //>-- Core trait totals
         //===============================================================================================
         for (const trait of Object.keys(core)) {
-            core[trait].total += core[trait].value + bc[trait];
+            core[trait].total += core[trait].value;
             core[trait].rank += Math.max(Math.floor(core[trait].total / 10), 0);
         }
 
@@ -315,13 +335,13 @@ export class ActorDataModel extends SystemDataModel {
         //>-- Derived trait totals
         //===============================================================================================
         // Calculates derived traits for initative, move, defence, resolve, and max health
-        derived.init.total += derived.init.flat + Math.ceil((core.sav.total + core.ref.total + bd.init.value) * (derived.init.mod + bd.init.mod)) + bd.init.total;
-        derived.move.total += derived.move.flat + Math.ceil((((core.hrt.total + core.ref.total) / this.size.value) + bd.move.value) * (derived.move.mod + bd.move.mod)) + bd.move.total;
-        derived.def.total += derived.def.flat + Math.ceil((core.pow.total + core.ref.total + bd.def.value) * (derived.def.mod + bd.def.mod)) + bd.def.total;
-        derived.res.total += derived.res.flat + Math.ceil((core.hrt.total + core.pre.total + bd.res.value) * (derived.res.mod + bd.res.mod)) + bd.res.total;
+        derived.init.total += Math.ceil((core.sav.total + core.ref.total) * (derived.init.mod + bd.init.mod)) + bd.init.value;
+        derived.move.total += Math.ceil(((core.hrt.total + core.ref.total) / this.size.value) * (derived.move.mod + bd.move.mod)) + bd.move.value;
+        derived.def.total += Math.ceil((core.pow.total + core.ref.total) * (derived.def.mod + bd.def.mod)) + bd.def.value;
+        derived.res.total += Math.ceil((core.hrt.total + core.pre.total) * (derived.res.mod + bd.res.mod)) + bd.res.value;
 
         // Sets health range, MIN is included for use with the token resource bars and is always 0
-        this.hp.max = Math.ceil(core.hrt.total * (this.hp.mod + bonus.HpMod)) + bonus.HpTotal + this.hp.flat;
+        this.hp.max = Math.ceil(core.hrt.total * (this.hp.mod + bonus.hp.mod)) + bonus.hp.total + this.hp.flat;
         this.hp.min = 0;
 
         // calculates the ammount of health healed by resting

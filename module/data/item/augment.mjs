@@ -14,12 +14,7 @@ export default class AugmentData extends ItemDataModel {
         schema.biofeedback = new NumberField({ initial: 0 });
         schema.rank = new ResourceField(1, 1, 5);
 
-        const TraitData = {};
-        for (const key of Object.keys(NEWEDO.traitsCore)) {
-            const settings = { initial: 0, nullable: false, required: true }
-            TraitData[key] = new NumberField({ ...settings, label: NEWEDO.traitsCore[key] });
-        }
-        schema.noise = new SchemaField(TraitData);
+        schema.noise = new SchemaField(this.CoreTraitFields());
 
         return schema;
     }

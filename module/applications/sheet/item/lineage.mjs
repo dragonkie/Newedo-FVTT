@@ -26,18 +26,6 @@ export default class LineageSheet extends NewedoItemSheet {
     async _prepareContext() {
         const context = await super._prepareContext();
 
-        for (const [key, trait] of Object.entries(context.system.traits.core)) {
-            trait.label = utils.localize(NEWEDO.traits[key]);
-        }
-
-        for (const [key, trait] of Object.entries(context.system.traits.derived)) {
-            trait.label = utils.localize(NEWEDO.traits[key]);
-        }
-
-        for (const [key, soak] of Object.entries(context.system.armour)) {
-            soak.label = utils.localize(NEWEDO.damageTypes[key]);
-        }
-
         for (const item of context.system.items) {
             item.data = await fromUuid(item.uuid);
         }
@@ -54,7 +42,7 @@ export default class LineageSheet extends NewedoItemSheet {
         // Add in the derived traits
         let content = '';
         for (const [key, soak] of Object.entries(system.armour)) {
-            content += system.schema.getField(`armour.${key}.value`).toFormGroup({ label: key }, { value: soak.value }).outerHTML;
+            content += system.schema.getField(`armour.${key}.value`).toFormGroup({ localize: true }, { value: soak.value }).outerHTML;
         }
 
         return this._configDialog(content, 'NEWEDO.Dialog.Soak', 'soak');
@@ -79,7 +67,7 @@ export default class LineageSheet extends NewedoItemSheet {
         // Add in the derived traits
         let content = '';
         for (const [key, trait] of Object.entries(system.traits.core)) {
-            content += system.schema.getField(`traits.core.${key}.value`).toFormGroup({}, { value: trait.value }).outerHTML;
+            content += system.schema.getField(`traits.core.${key}.value`).toFormGroup({ localize: true }, { value: trait.value }).outerHTML;
         }
 
         return this._configDialog(content, 'NEWEDO.Dialog.TraitsCore', 'core');

@@ -13,7 +13,7 @@ export default class SkillData extends ItemDataModel {
     static defineSchema() {
         const schema = super.defineSchema();
 
-        schema.trait = this.TraitField();
+        schema.trait = this.TraitSelectorField();
 
         schema.isWeaponSkill = new BooleanField({ initial: false, required: true, nullable: false });
         schema.useTraitRank = new BooleanField({ initial: true, required: true, nullable: false });
