@@ -237,7 +237,7 @@ export class ActorDataModel extends SystemDataModel {
         for (const trait of Object.keys(derived)) derived[trait].total = 0;
 
         //===================================================================================
-        //> Bonus Fields
+        //>-- Bonus Fields
         //===================================================================================
         this.bonus = {
             TraitCore: {
@@ -303,27 +303,27 @@ export class ActorDataModel extends SystemDataModel {
         }
 
         //===================================================================================
-        //> Skill bonuses
+        //>-- Skill bonuses
         //===================================================================================
-        this.bonus.skills = new Map();
+        this.bonus.skills = {};
         const SkillBonusConfig = (item) => {
             return {
                 name: item.name,
                 linkID: item.system.linkID,
                 uuid: item.uuid,
                 value: 0,
-                parts: []
+                parts: ['1d4', '1d6', '1d8', '@traits.core.pow.rank']
             }
         }
 
         for (const skill of this.document.itemTypes.skill) {
-            this.bonus.skills.set(skill.system.linkID, SkillBonusConfig(skill));
+            this.bonus.skills[skill.system.linkID] = SkillBonusConfig(skill);
         }
 
         console.log(this.bonus.skills);
 
         //===================================================================================
-        //> Calculation totals
+        //>-- Calculation totals
         //===================================================================================
         this.armour.kin.total = 0;
         this.armour.ele.total = 0;

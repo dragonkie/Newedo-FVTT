@@ -90,6 +90,41 @@ export default function NewedoSheetMixin(Base) {
         }
 
         //======================================================================================================
+        //> Sheet user focus control
+        //======================================================================================================
+        _lastFocusElement = null;
+
+        _setFocusElement() {
+            if (this.rendered && this.element.contains(document.activeElement)) {
+                const ele = document.activeElement;
+
+                var cList = '';
+                ele.classList.forEach(c => cList += `.${c}`);
+
+                this._lastFocusElement = {
+                    name: ele.name || '',
+                    value: ele.value || '',
+                    class: cList,
+                    tag: ele.tagName.toLowerCase()
+                }
+            }
+        }
+
+        _getFocusElement() {
+            if (this._lastFocusElement !== null) {
+                let selector = this._lastFocusElement.tag + this._lastFocusElement.class;
+                if (this._lastFocusElement.name) selector += `[name="${this._lastFocusElement.name}"]`;
+
+                /** @type {HTMLElement|undefined}*/
+                const targetElement = this.element.querySelector(selector);
+                if (targetElement) {
+                    targetElement.focus();
+                    if (targetElement.tagName == 'INPUT') targetElement.select();
+                }
+            }
+        }
+
+        //======================================================================================================
         //> Sheet Actions
         //======================================================================================================
         getRollData() {
@@ -141,9 +176,16 @@ export default function NewedoSheetMixin(Base) {
         }
 
         //==========================================================================================
+        //> Close sheet
+        //==========================================================================================
+        _onClose(options) {
+            this._lastFocusElement = null;
+            super._onClose();
+        }
+
+        //==========================================================================================
         //> Rendering
         //==========================================================================================
-
         async render(options, _options) {
             return super.render(options, _options);
         }
@@ -151,6 +193,11 @@ export default function NewedoSheetMixin(Base) {
         _configureRenderOptions(options) {
             super._configureRenderOptions(options);
             return;
+        }
+
+        async _preRender(context, options) {
+            this._setFocusElement();
+            return super._preRender(context, options);
         }
 
         _onFirstRender(context, options) {
@@ -164,6 +211,8 @@ export default function NewedoSheetMixin(Base) {
 
             // Disables sheet inputs for non owners
             if (!this.isEditable) this.element.querySelectorAll("input, select, textarea, multi-select").forEach(n => { n.disabled = true; });
+
+            this._getFocusElement();
 
             this._setupDragAndDrop();
             return r;

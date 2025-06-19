@@ -10,20 +10,22 @@
                     </li>
                     <ol class="items-list edo-skill-group">
                         {{#each trait.list as | skill key |}}
-                            <li class="item flexrow edo-skill-item" data-item-uuid="{{skill.uuid}}">
-                                <a class="align-start" data-action="useItem">
-                                    {{skill.name}}
-                                </a>
-                                <div class="flexrow nowrap">
-                                    {{#each skill.system.ranks as | value index |}}
-                                        <button class="edo-skill-dice-button" data-action="skillDice" data-index="{{index}}" value="{{value}}">
-                                            {{#if (not (eq value 0))}}
-                                                {{value}}
-                                            {{/if}}
-                                        </button>
-                                    {{/each}}
-                                </div>
-                            </li>
+                            {{#if (or @root.isEditMode (gt skill.system.rank 0))}}
+                                <li class="item flexrow edo-skill-item" data-item-uuid="{{skill.uuid}}">
+                                    <a class="align-start" data-action="useItem">
+                                        {{skill.name}}
+                                    </a>
+                                    <div class="flexrow nowrap">
+                                        {{#each skill.system.ranks as | value index |}}
+                                            <button class="edo-skill-dice-button" data-action="skillDice" data-index="{{index}}" value="{{value}}">
+                                                {{#if (not (eq value 0))}}
+                                                    {{value}}
+                                                {{/if}}
+                                            </button>
+                                        {{/each}}
+                                    </div>
+                                </li>
+                            {{/if}}
                         {{/each}}
                     </ol>
                 {{/each}}

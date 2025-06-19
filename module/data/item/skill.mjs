@@ -35,6 +35,8 @@ export default class SkillData extends ItemDataModel {
             }
         );
 
+        schema.bonus = new StringField({ initial: '' });
+
         return schema;
     }
 
@@ -177,22 +179,27 @@ export default class SkillData extends ItemDataModel {
         }]);
 
         if (this.actor) {
-            console.log('Actor ksill bonuses', this.actor.system.bonus.skills)
-            const bonus = this.actor.system.bonus.skills.get(this.linkID);
-            console.log('Skill bonus');
-            let value = `${bonus.value != 0 ? bonus.value : ''}`;
+            const bonus = this.actor.system.bonus.skills[this.linkID];
+            console.log(this.actor.system.bonus.skills)
+            if (bonus) {
+                let value = `${bonus.value != 0 ? bonus.value : ''}`;
+                bonus.parts.forEach(element => {
+                    if (value != '') value += '+';
+                    value += element;
+                })
 
-            bonus.parts.forEach(element => {
-                if (value != '') value += '+';
-                value += element;
-            })
-
-            if (value != '') {
                 roll.AddPart({
                     label: 'Bonuses',
                     value: value
                 })
             }
+        }
+
+        if (Roll.validate(this.bonus)) {
+            roll.AddPart({
+                label: 'Skill Bonus',
+                value: this.bonus
+            })
         }
 
         await roll.evaluate();
