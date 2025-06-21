@@ -409,7 +409,7 @@ export default class NewedoActorSheet extends NewedoSheetMixin(foundry.applicati
     }
 
     static async _onConfigureTraitsDerived(event, target) {
-        let system = this.document.system;
+        const system = this.document.system;
         // Add in the derived traits
         let content = `<b>Derived Traits</b>`;
         content += `<div class="items-header flexrow"><div>Trait</div><div>Flat</div><div>Modifier</div></div>`;
@@ -417,7 +417,7 @@ export default class NewedoActorSheet extends NewedoSheetMixin(foundry.applicati
             let field = new foundry.data.fields.NumberField();
 
             content += `<div class="form-group"><label>${utils.localize(NEWEDO.traitsDerived[key])}</label><div class="form-fields">`;
-            content += this.document.system.schema.getField(`traits.derived.${key}.flat`).toInput({ value: trait.flat }).outerHTML;
+            content += this.document.system.schema.getField(`traits.derived.${key}.value`).toInput({ value: trait.value }).outerHTML;
             content += this.document.system.schema.getField(`traits.derived.${key}.mod`).toInput({ value: trait.mod }).outerHTML;
             content += `</div></div>`;
         }

@@ -12,16 +12,19 @@
         height: 100%;
     }
 
-    //Removes padding from
-    .window-content {
-        padding: 0;
-    }
-
     input[type="button"] {
         background-color: var(--input-background-color);
         border: 0;
         border-radius: 2px;
         margin-left: 2px;
         color: var(--input-text-color);
+    }
+
+    prose-mirror {
+        flex: 1;
+    }
+
+    nav.tabs {
+        margin-bottom: 6px;
     }
 }

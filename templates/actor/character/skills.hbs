@@ -15,7 +15,7 @@
                                     <a class="align-start" data-action="useItem">
                                         {{skill.name}}
                                     </a>
-                                    <div class="flexrow nowrap">
+                                    <div class="flexrow nowrap flex-gap-xs">
                                         {{#each skill.system.ranks as | value index |}}
                                             <button class="edo-skill-dice-button" data-action="skillDice" data-index="{{index}}" value="{{value}}">
                                                 {{#if (not (eq value 0))}}

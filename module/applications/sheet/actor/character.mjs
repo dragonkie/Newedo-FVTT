@@ -8,7 +8,7 @@ import { NEWEDO } from "../../../config.mjs";
 export default class CharacterSheet extends NewedoActorSheet {
     static DEFAULT_OPTIONS = {
         classes: ["character"],
-        position: { height: 740, width: 860, top: 60, left: 100 },
+        position: { height: 'auto', width: 860, top: 60, left: 100 },
         actions: {
             rest: this._onRest
         },

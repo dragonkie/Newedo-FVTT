@@ -73,7 +73,7 @@ export class SystemDataModel extends foundry.abstract.TypeDataModel {
      */
     static CoreTraitFields() {
         const CoreData = {};
-        for (const [k, v] of Object.entries(NEWEDO.traitsCore)) CoreData[k] = new SchemaField({ value: new NumberField({ initial: 0, ...this.RequiredConfig, label: v }) })
+        for (const [k, v] of Object.entries(NEWEDO.traitsCore)) CoreData[k] = new SchemaField({ value: new NumberField({ initial: 10, ...this.RequiredConfig, label: v }) })
         return CoreData;
     }
 
@@ -87,7 +87,7 @@ export class SystemDataModel extends foundry.abstract.TypeDataModel {
         const DerivedData = {};
         for (const [k, v] of Object.entries(NEWEDO.traitsDerived)) if (k != 'hp') DerivedData[k] = new SchemaField({
             value: new NumberField({ initial: 0, ...this.RequiredConfig, label: v }), // Added before multiplier
-            mod: new NumberField({ initial: 0, ...this.RequiredConfig, label: v }), // the multiplier
+            mod: new NumberField({ initial: NEWEDO.traitsDerivedMod[k], ...this.RequiredConfig, label: v }), // the multiplier
         })
         return DerivedData;
     }
@@ -312,7 +312,7 @@ export class ActorDataModel extends SystemDataModel {
                 linkID: item.system.linkID,
                 uuid: item.uuid,
                 value: 0,
-                parts: ['1d4', '1d6', '1d8', '@traits.core.pow.rank']
+                parts: []
             }
         }
 
@@ -361,10 +361,10 @@ export class ActorDataModel extends SystemDataModel {
         //>-- Derived trait totals
         //===============================================================================================
         // Calculates derived traits for initative, move, defence, resolve, and max health
-        derived.init.total += Math.ceil((core.sav.total + core.ref.total) * (derived.init.mod + bd.init.mod)) + bd.init.value;
-        derived.move.total += Math.ceil(((core.hrt.total + core.ref.total) / this.size.value) * (derived.move.mod + bd.move.mod)) + bd.move.value;
-        derived.def.total += Math.ceil((core.pow.total + core.ref.total) * (derived.def.mod + bd.def.mod)) + bd.def.value;
-        derived.res.total += Math.ceil((core.hrt.total + core.pre.total) * (derived.res.mod + bd.res.mod)) + bd.res.value;
+        derived.init.total += Math.ceil((core.sav.total + core.ref.total) * (derived.init.mod + bd.init.mod)) + derived.init.value + bd.init.value;
+        derived.move.total += Math.ceil(((core.hrt.total + core.ref.total) / this.size.value) * (derived.move.mod + bd.move.mod)) + derived.move.value + bd.move.value;
+        derived.def.total += Math.ceil((core.pow.total + core.ref.total) * (derived.def.mod + bd.def.mod)) + derived.def.value + bd.def.value;
+        derived.res.total += Math.ceil((core.hrt.total + core.pre.total) * (derived.res.mod + bd.res.mod)) + derived.res.value + bd.res.value;
 
         // Sets health range, MIN is included for use with the token resource bars and is always 0
         this.hp.max = Math.ceil(core.hrt.total * (this.hp.mod + bonus.hp.mod)) + bonus.hp.total + this.hp.flat;

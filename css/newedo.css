@@ -14,8 +14,8 @@
   --edo-colour-light-1: #f7f3e8;
   --edo-colour-light-2: #f1e8d0;
   --edo-colour-light-3: #d6c3a3;
-  --edo-colour-light-4: #b89873;
-  --edo-colour-light-5: #a58e74;
+  --edo-colour-light-4: #ab8b65;
+  --edo-colour-light-5: #967f64;
   --edo-colour-light-6: #836953;
   --edo-colour-dark-1: #111;
   --edo-colour-dark-2: #222;
@@ -23,14 +23,14 @@
   --edo-colour-dark-4: #555;
   --edo-colour-dark-5: #666;
   --edo-colour-dark-6: #777;
-  --edo-colour-warm-1: #e8ca66;
-  --edo-colour-warm-2: #ee9b3a;
-  --edo-colour-warm-3: #ec682f;
-  --edo-colour-warm-4: #a90b19;
-  --edo-colour-cool-5: #813a5e;
-  --edo-colour-cool-4: #82497a;
-  --edo-colour-cool-3: #362733;
-  --edo-colour-cool-2: #272128;
+  --edo-colour-warm-1: hsl(46, 74%, 65%);
+  --edo-colour-warm-2: hsl(32, 84%, 58%);
+  --edo-colour-warm-3: hsl(18, 83%, 55%);
+  --edo-colour-warm-4: hsl(355, 88%, 35%);
+  --edo-colour-cool-5: hsl(330, 38%, 37%);
+  --edo-colour-cool-4: hsl(308, 28%, 40%);
+  --edo-colour-cool-3: hsl(312, 20%, 18%);
+  --edo-colour-cool-2: hsl(295, 18%, 12%);
   --edo-colour-cool-1: rgb(21, 15 24);
   --edo-colour-cool-1-25: rgba(21, 15, 24, 0.25);
   --edo-colour-cool-1-50: rgba(21, 15, 24, 0.5);
@@ -51,25 +51,22 @@
 }
 
 .newedo {
-  --edo-colour-1: var(--edo-colour-light-2);
-  --edo-colour-2: var(--edo-colour-light-4);
-  --edo-colour-3: var(--edo-colour-light-6);
+  --edo-colour-background: var(--edo-colour-light-3, red);
+  --edo-colour-primary: var(--edo-colour-light-4, blue);
+  --edo-colour-secondary: var(--edo-colour-light-5, green);
   --edo-colour-border: var(--edo-colour-light-6);
   --edo-colour-text-selection-bg: var(--edo-colour-warm-4);
   --edo-colour-text-selection: var(--edo-colour-light-3);
   --edo-colour-text-shadow: var(--edo-colour-cool-1-25);
   --edo-colour-text: var(--edo-colour-dark-1);
-  --edo-sheet-background: var(--edo-colour-light-2);
-  --edo-background-1: var(--edo-colour-light-2);
-  --edo-background-2: var(--edo-colour-light-4);
-  --edo-background-3: var(--edo-colour-light-6);
-  --edo-button-background: var(--edo-colour-3);
 }
-.newedo input {
-  --edo-input-background-colour: var(--edo-colour-light-3);
+.newedo input,
+.newedo button {
+  --edo-input-background-colour: var(--edo-colour-primary);
 }
-.newedo input:disabled {
-  --edo-input-background-colour: var(--edo-colour-light-6);
+.newedo input:disabled,
+.newedo button:disabled {
+  --edo-input-background-colour: var(--edo-colour-secondary);
 }
 .newedo img {
   --edo-background-1: var(--edo-colour-light-4);
@@ -79,27 +76,37 @@
 }
 
 .theme-dark .newedo {
-  --edo-colour-1: var(--edo-colour-cool-1);
-  --edo-colour-2: var(--edo-colour-cool-2);
-  --edo-colour-3: var(--edo-colour-cool-3);
-  --edo-colour-text: var(--edo-colour-light-3);
+  --edo-colour-background: var(--edo-colour-cool-1-75);
+  --edo-colour-primary: var(--edo-colour-cool-3);
+  --edo-colour-secondary: var(--edo-colour-cool-2);
+  --edo-colour-border: var(--edo-colour-text);
+  --edo-colour-text-selection-bg: var(--edo-colour-warm-4);
   --edo-colour-text-selection: var(--edo-colour-light-3);
-  --edo-colour-text-selection-bg: var(--edo-colour-cool-2);
-  --edo-colour-border: var(--edo-colour-light-2);
-  --edo-sheet-background: var(--edo-colour-cool-1-90);
-  --edo-background-1: var(--edo-colour-cool-1-90);
-  --edo-background-2: var(--edo-colour-cool-2);
-  --edo-background-3: var(--edo-colour-cool-1);
-  --edo-button-background: var(--edo-colour-3);
+  --edo-colour-text-shadow: var(--edo-colour-cool-1-25);
+  --edo-colour-text: var(--edo-colour-light-1, white);
 }
-.theme-dark .newedo input {
-  --edo-input-background-colour: var(--edo-colour-cool-3);
+
+.newedo .window-content {
+  color: var(--edo-colour-text);
+  background: var(--edo-colour-background);
+  padding: 8px;
+  backdrop-filter: blur(10px);
 }
-.theme-dark .newedo input:disabled {
-  --edo-input-background-colour: var(--edo-colour-cool-2);
+.newedo .window-content ::selection {
+  color: var(--edo-colour-text-selection);
+  color: var(--edo-colour-text-selection-bg);
 }
-.theme-dark .newedo .edo-bar {
-  --edo-bar-bg: var(--edo-colour-cool-1) ;
+.newedo .window-content button,
+.newedo .window-content input,
+.newedo .window-content label,
+.newedo .window-content b,
+.newedo .window-content a {
+  font-size: var(--edo-font-size);
+}
+.newedo .window-content input,
+.newedo .window-content textarea,
+.newedo .window-content button {
+  background-color: var(--edo-input-background-colour);
 }
 
 .edo-xs {
@@ -378,10 +385,6 @@
   flex: 1;
   height: 100%;
 }
-.sheet.actor .window-content,
-.sheet.item .window-content {
-  padding: 0;
-}
 .sheet.actor input[type=button],
 .sheet.item input[type=button] {
   background-color: var(--input-background-color);
@@ -389,6 +392,14 @@
   border-radius: 2px;
   margin-left: 2px;
   color: var(--input-text-color);
+}
+.sheet.actor prose-mirror,
+.sheet.item prose-mirror {
+  flex: 1;
+}
+.sheet.actor nav.tabs,
+.sheet.item nav.tabs {
+  margin-bottom: 6px;
 }
 
 .item-form {
@@ -400,6 +411,7 @@
 }
 .application nav.tabs .item.active {
   color: var(--colour-nav-active);
+  font-weight: bold;
 }
 
 .form-group {
@@ -567,6 +579,7 @@ ol.items-list .item-delete {
   overflow: hidden;
   display: flex;
   flex-direction: row;
+  gap: 10px;
 }
 .sheet.actor .window-content header > * {
   margin-bottom: 5px;
@@ -594,7 +607,6 @@ ol.items-list .item-delete {
   display: flex;
   flex: 0 0 200px;
   flex-direction: column;
-  padding: 10px 10px 10px 10px;
   align-items: center;
   text-align: center;
   overflow: auto;
@@ -659,9 +671,7 @@ ol.items-list .item-delete {
   gap: 8px;
 }
 .sheet.actor .window-content .edo-skill-dice-button {
-  background-color: var(--edo-button-background, white);
   padding: 0;
-  margin-right: 0.25em;
   height: 1.75em;
   min-height: 1.75em;
 }

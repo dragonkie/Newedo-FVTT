@@ -35,8 +35,8 @@ $bg-image: url(/ui/parchment.jpg);
     --edo-colour-light-1: #f7f3e8;
     --edo-colour-light-2: #f1e8d0;
     --edo-colour-light-3: #d6c3a3;
-    --edo-colour-light-4: #b89873;
-    --edo-colour-light-5: #a58e74;
+    --edo-colour-light-4: #ab8b65;
+    --edo-colour-light-5: #967f64;
     --edo-colour-light-6: #836953;
 
     --edo-colour-dark-1: #111;
@@ -46,14 +46,14 @@ $bg-image: url(/ui/parchment.jpg);
     --edo-colour-dark-5: #666;
     --edo-colour-dark-6: #777;
 
-    --edo-colour-warm-1: #e8ca66;
-    --edo-colour-warm-2: #ee9b3a;
-    --edo-colour-warm-3: #ec682f;
-    --edo-colour-warm-4: #a90b19;
-    --edo-colour-cool-5: #813a5e;
-    --edo-colour-cool-4: #82497a;
-    --edo-colour-cool-3: #362733;
-    --edo-colour-cool-2: #272128;
+    --edo-colour-warm-1: hsl(46, 74%, 65%);
+    --edo-colour-warm-2: hsl(32, 84%, 58%);
+    --edo-colour-warm-3: hsl(18, 83%, 55%);
+    --edo-colour-warm-4: hsl(355, 88%, 35%);
+    --edo-colour-cool-5: hsl(330, 38%, 37%);
+    --edo-colour-cool-4: hsl(308, 28%, 40%);
+    --edo-colour-cool-3: hsl(312, 20%, 18%);
+    --edo-colour-cool-2: hsl(295, 18%, 12%);
     --edo-colour-cool-1: rgb(21, 15 24);
 
     --edo-colour-cool-1-25: rgba(21, 15, 24, 0.25);
@@ -67,9 +67,9 @@ $bg-image: url(/ui/parchment.jpg);
     --edo-margin: var(--edo-size-m);
     --edo-padding: var(--edo-size-m);
 
-    //=================================================================
-    // Funny styles for funsies
-    //=================================================================
+    //=====================================================================
+    //> Funny styles for funsies
+    //=====================================================================
     --edo-background-pearlescent:
         radial-gradient(ellipse at 100% 0%, #80e6ff, transparent),
         radial-gradient(ellipse at 100% 90%, #ff63d5, transparent),
@@ -80,30 +80,36 @@ $bg-image: url(/ui/parchment.jpg);
         radial-gradient(ellipse at bottom, #5ed000, transparent);
 }
 
+//=========================================================================
+//> Main style
+//=========================================================================
 .newedo {
-    --edo-colour-1: var(--edo-colour-light-2);
-    --edo-colour-2: var(--edo-colour-light-4);
-    --edo-colour-3: var(--edo-colour-light-6);
+    //=====================================================================
+    //>- Colours
+    //=====================================================================
+    --edo-colour-background: var(--edo-colour-light-3, red);
+    --edo-colour-primary: var(--edo-colour-light-4, blue);
+    --edo-colour-secondary: var(--edo-colour-light-5, green);
 
     --edo-colour-border: var(--edo-colour-light-6);
+
+    //=====================================================================
+    //>- Text
+    //=====================================================================
     --edo-colour-text-selection-bg: var(--edo-colour-warm-4);
     --edo-colour-text-selection: var(--edo-colour-light-3);
     --edo-colour-text-shadow: var(--edo-colour-cool-1-25);
     --edo-colour-text: var(--edo-colour-dark-1);
 
-    --edo-sheet-background: var(--edo-colour-light-2);
-
-    --edo-background-1: var(--edo-colour-light-2);
-    --edo-background-2: var(--edo-colour-light-4);
-    --edo-background-3: var(--edo-colour-light-6);
-
-    --edo-button-background: var(--edo-colour-3);
-
-    input {
-        --edo-input-background-colour: var(--edo-colour-light-3);
+    //=====================================================================
+    //>- Configure variables
+    //=====================================================================
+    input,
+    button {
+        --edo-input-background-colour: var(--edo-colour-primary);
 
         &:disabled {
-            --edo-input-background-colour: var(--edo-colour-light-6);
+            --edo-input-background-colour: var(--edo-colour-secondary);
         }
     }
 
@@ -117,36 +123,54 @@ $bg-image: url(/ui/parchment.jpg);
 }
 
 //======================================================================================
-// Dark mode setup
+//> Dark mode setup
 //======================================================================================
 .theme-dark .newedo {
-    --edo-colour-1: var(--edo-colour-cool-1);
-    --edo-colour-2: var(--edo-colour-cool-2);
-    --edo-colour-3: var(--edo-colour-cool-3);
+    //=====================================================================
+    //>- Colours
+    //=====================================================================
+    --edo-colour-background: var(--edo-colour-cool-1-75);
+    --edo-colour-primary: var(--edo-colour-cool-3);
+    --edo-colour-secondary: var(--edo-colour-cool-2);
 
-    --edo-colour-text: var(--edo-colour-light-3);
+    --edo-colour-border: var(--edo-colour-text);
+
+    //=====================================================================
+    //>- Text
+    //=====================================================================
+    --edo-colour-text-selection-bg: var(--edo-colour-warm-4);
     --edo-colour-text-selection: var(--edo-colour-light-3);
-    --edo-colour-text-selection-bg: var(--edo-colour-cool-2);
-    --edo-colour-border: var(--edo-colour-light-2);
+    --edo-colour-text-shadow: var(--edo-colour-cool-1-25);
+    --edo-colour-text: var(--edo-colour-light-1, white);
+}
 
-    --edo-sheet-background: var(--edo-colour-cool-1-90);
+//=====================================================================
+//> Apply varialbes to elements
+//=====================================================================
+.newedo .window-content {
 
-    --edo-background-1: var(--edo-colour-cool-1-90);
-    --edo-background-2: var(--edo-colour-cool-2);
-    --edo-background-3: var(--edo-colour-cool-1);
+    color: var(--edo-colour-text);
+    background: var(--edo-colour-background);
+    padding: 8px;
+    backdrop-filter: blur(10px);
 
-    --edo-button-background: var(--edo-colour-3);
-
-    input {
-        --edo-input-background-colour: var(--edo-colour-cool-3);
-
-        &:disabled {
-            --edo-input-background-colour: var(--edo-colour-cool-2);
-        }
+    ::selection {
+        color: var(--edo-colour-text-selection);
+        color: var(--edo-colour-text-selection-bg);
     }
 
-    .edo-bar {
-        --edo-bar-bg: var(--edo-colour-cool-1)
+    button,
+    input,
+    label,
+    b,
+    a {
+        font-size: var(--edo-font-size);
+    }
+
+    input,
+    textarea,
+    button {
+        background-color: var(--edo-input-background-colour);
     }
 }
 

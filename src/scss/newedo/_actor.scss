@@ -5,6 +5,7 @@
     overflow: hidden;
     display: flex;
     flex-direction: row;
+    gap: 10px;
 
     header>* {
         margin-bottom: 5px;
@@ -38,7 +39,6 @@
         display: flex;
         flex: 0 0 200px;
         flex-direction: column;
-        padding: 10px 10px 10px 10px;
         align-items: center;
         text-align: center;
         overflow: auto;
@@ -101,8 +101,6 @@
             text-align: center;
         }
 
-        .edo-core-trait {}
-
         .edo-trait-value {
             height: 2em;
             font-size: 2em;
@@ -127,18 +125,10 @@
     .skill-lists {
         align-items: start;
         gap: 8px;
-
-        li.item {}
-    }
-
-    .edo-skill-group {
-        li.edo-skill-item {}
     }
 
     .edo-skill-dice-button {
-        background-color: var(--edo-button-background, white);
         padding: 0;
-        margin-right: 0.25em;
         height: 1.75em;
         min-height: 1.75em;
     }

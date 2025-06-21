@@ -25,6 +25,14 @@ NEWEDO.traitsDerived = {
     hp: "NEWEDO.Trait.Derived.Hp.long",
 }
 
+NEWEDO.traitsDerivedMod = {
+    init: 1,
+    move: 1,
+    def: 0.4,
+    res: 0.4,
+    hp: 1.5
+}
+
 NEWEDO.traitsDerivedAbbr = {};
 for (const [k, v] of Object.entries(NEWEDO.traitsDerived)) {
     NEWEDO.traitsDerivedAbbr[k] = v.replace('long', 'abbr')
