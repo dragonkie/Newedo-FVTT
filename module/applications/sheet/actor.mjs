@@ -92,15 +92,6 @@ export default class NewedoActorSheet extends NewedoSheetMixin(foundry.applicati
         // Prepare item contexts
         const settings = game.user.getFlag('newedo', 'settings');
 
-        // Initialize containers.
-        const skills = {};
-        for (const [key, value] of Object.entries(NEWEDO.traitsCore)) {
-            skills[key] = {
-                label: utils.localize(value),
-                list: []
-            }
-        }
-
         // Setup active effect groups
         context.effects = {
             active: {
@@ -128,25 +119,23 @@ export default class NewedoActorSheet extends NewedoSheetMixin(foundry.applicati
             else context.effects.disabled.effects.push(effect);
         }
 
+        // Initialize containers.
+        context.skills = {};
+        for (const [key, value] of Object.entries(NEWEDO.traitsCore)) {
+            context.skills[key] = {
+                label: utils.localize(value),
+                list: [],
+                hasRank: false,
+                hasSkill: false,
+            }
+        }
         // Sort the mega list so the displayed lists are alphabetical
         context.itemTypes.skill.sort((a, b) => ('' + a.name).localeCompare(b.name))
         // Iterate through items, allocating to containers
-        for (let i of context.itemTypes.skill) {
-            i.img = i.img || DEFAULT_TOKEN;
-            skills[i.system.trait].list.push(i);
-        }
-
-        context.skills = {
-            l: {
-                pow: skills.pow,
-                hrt: skills.hrt,
-                ref: skills.ref,
-                pre: skills.pre
-            },
-            r: {
-                per: skills.per,
-                sav: skills.sav
-            }
+        for (const i of context.itemTypes.skill) {
+            context.skills[i.system.trait].list.push(i);
+            context.skills[i.system.trait].hasSkill = true;
+            if (i.system.rank > 0) context.skills[i.system.trait].hasRank = true;
         }
 
         //Proxies the fate list so we don't disorganize it

@@ -1,20 +1,18 @@
 <div class="edo-tab-content">
     {{!-- Data for loading character skills into the sheet tab --}}
-    <div class="flexrow skill-lists">
-        {{#each skills as | side key |}}
-            <ol style="padding: 0; margin: 0;">
-                {{#each side as | trait key |}}
-                    <li class="items-header flexrow">
+    <div class="flexcol skill-lists" style="width: 100%; flex-wrap: wrap;">
+        {{#each @root.skills as | trait key |}}
+            {{#if (and (or @root.isEditMode trait.hasRank) trait.hasSkill) }}
+                <div class="flex1" style="width: 100%;">
+                    <div class="items-header flexrow">
                         <span>{{trait.label}}</span>
                         <span>Dice</span>
-                    </li>
+                    </div>
                     <ol class="items-list edo-skill-group">
-                        {{#each trait.list as | skill key |}}
+                        {{#each list as | skill|}}
                             {{#if (or @root.isEditMode (gt skill.system.rank 0))}}
                                 <li class="item flexrow edo-skill-item" data-item-uuid="{{skill.uuid}}">
-                                    <a class="align-start" data-action="useItem">
-                                        {{skill.name}}
-                                    </a>
+                                    <a class="align-start" data-action="useItem">{{skill.name}}</a>
                                     <div class="flexrow nowrap flex-gap-xs">
                                         {{#each skill.system.ranks as | value index |}}
                                             <button class="edo-skill-dice-button" data-action="skillDice" data-index="{{index}}" value="{{value}}">
@@ -28,8 +26,8 @@
                             {{/if}}
                         {{/each}}
                     </ol>
-                {{/each}}
-            </ol>
+                </div>
+            {{/if}}
         {{/each}}
     </div>
 </div>

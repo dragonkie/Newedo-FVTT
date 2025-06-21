@@ -170,7 +170,7 @@ export default class SkillData extends ItemDataModel {
             rollData: rollData
         });
 
-        roll.AddTrait(this.trait);
+        roll.AddTrait(this.trait, { active: this.useTraitRank });
 
         roll.AddPart([{
             type: '',

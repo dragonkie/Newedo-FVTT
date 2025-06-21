@@ -1,13 +1,15 @@
 <div class="edo-tab-contet edo-item-settings edo-skill-settings flex-gap-m flexcol">
     {{toFieldGroup schema 'trait' value=system.trait}}
     <div class="form-group">
-        <div>Ranks:</div>
-        <div class="flexrow" style="gap: 4px; align-items:flex-start;">
-            {{#each system.ranks as | rank index |}}
-                <span style="background-color: var(--color-cool-4); border-radius: 2px; padding: 4px; text-align: center;" data-action="changeSkillRank" data-index="{{index}}">
-                    {{rank}}
-                </span>
-            {{/each}}
+        <label>Ranks:</label>
+        <div class="form-fields flexrow">
+            <div class="flexrow flexshrink flex-gap-m nowrap">
+                {{#each system.ranks as | rank index |}}
+                    <button style="min-width: 2.4em;" data-action="changeSkillRank" data-index="{{index}}">
+                        {{rank}}
+                    </button>
+                {{/each}}
+            </div>
         </div>
     </div>
     {{toFieldGroup schema 'bonus' value=system.bonus label='Bonus Formula'}}

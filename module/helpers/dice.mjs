@@ -171,43 +171,45 @@ export default class NewedoRoll {
      * Adds a special field for controlling trait dice, requires the traits be provided in object format
      * @argument {String} key - the default trait to use
      * @argument {Object} traits - provided trait data
+     * @argument {Object} options
      */
-    AddTrait(key = 'hrt', traits) {
-        // Ensures that we have the needed trait data
-        if (!traits) {
+    AddTrait(key = 'hrt', config) {
+        // if the traits wern't provided, gather them from the available rolldata
+        if (!config.traits) {
             // default values into empty
-            traits = {};
+            config.traits = {};
 
             // Try and get values from the roll data 
             if (Object.hasOwn(this.rollData, 'traits') && Object.hasOwn(this.rollData.traits, 'core')) {
-                traits = { ...this.rollData.traits.core }
+                config.traits = { ...this.rollData.traits.core }
             } else {
                 for (const k of Object.keys(NEWEDO.traitsCore)) {
-                    traits[k] = { rank: 0 };
-                    if (Object.hasOwn(this.rollData, k)) traits[k] = this.rollData[k];
+                    config.traits[k] = { rank: 0 };
+                    if (Object.hasOwn(this.rollData, k)) config.traits[k] = this.rollData[k];
                 }
             }
         }
 
-        if (Object.keys(traits).length <= 0) throw new Error('Failed to add traits to roll');
+        if (Object.keys(config.traits).length <= 0) throw new Error('Failed to add traits to roll');
 
         // if we succesfulyl found and made our trait data, we can now convert it to the options list and add the part
         const options = [];
-        let value = `${traits[key].rank}d10`;
-        for (const trait of Object.keys(traits)) {
+        let value = `${config.traits[key].rank}d10`;
+        for (const trait of Object.keys(config.traits)) {
             options.push({
                 label: NEWEDO.traits[trait],
-                value: `${traits[trait].rank}d10`,
+                value: `${config.traits[trait].rank}d10`,
                 default: key == trait,
             })
         }
 
         this.AddPart({
+            ...config,
             label: NEWEDO.generic.trait,
             element: 'selector',
             value: value,
             select_options: options,
-            tags: ['trait']
+            tags: ['trait'],
         })
     }
 

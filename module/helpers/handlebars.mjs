@@ -39,6 +39,14 @@ export function registerTemplates() {
 export function registerHelpers() {
     const helpers = [
         { name: 'selected', fn: (value) => { return value ? 'selected' : '' } },
+        {
+            name: 'objectKey',
+            fn: (obj, key) => {
+                if (Object.hasOwn(obj, key)) {
+                    return obj[key];
+                } else throw new Error(`Object does not have key: ${key}`);
+            }
+        },
         //======================================================================================
         //>- String Helpers
         //======================================================================================
@@ -49,7 +57,17 @@ export function registerHelpers() {
         //>- Logic Helpers
         //======================================================================================
         { name: 'choose', fn: (a, b) => a ? a : b },
-        { name: 'objectIsEmpty', fn: (obj) => Object.keys(obj).length <= 0 },
+        {
+            name: 'isEmpty',
+            fn: (obj) => {
+                console.log(obj)
+                let value = 0;
+                if (typeof obj == 'object') value = Object.keys(obj).length <= 0;
+                if (typeof obj == 'array') value = obj.length <= 0;
+                console.log(value)
+                return value
+            }
+        },
 
         //======================================================================================
         //>- Permission Helpers

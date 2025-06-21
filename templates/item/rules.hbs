@@ -7,7 +7,7 @@
         <label style="flex: 1;">Owner:</label>
         <input style="flex: 3;" type="text" disabled value="{{actor.uuid}}">
     </div>
-    {{#unless (objectIsEmpty flags)}}
+    {{#unless (isEmpty flags)}}
         <b>Document Flags:</b>
         {{#each flags as |source key|}}
             <div><b>{{key}}</b></div>

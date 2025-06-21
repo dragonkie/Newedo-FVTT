@@ -51,9 +51,9 @@
 }
 
 .newedo {
-  --edo-colour-background: var(--edo-colour-light-3, red);
-  --edo-colour-primary: var(--edo-colour-light-4, blue);
-  --edo-colour-secondary: var(--edo-colour-light-5, green);
+  --edo-colour-background: var(--edo-colour-light-2, red);
+  --edo-colour-primary: var(--edo-colour-light-3, blue);
+  --edo-colour-secondary: var(--edo-colour-light-4, green);
   --edo-colour-border: var(--edo-colour-light-6);
   --edo-colour-text-selection-bg: var(--edo-colour-warm-4);
   --edo-colour-text-selection: var(--edo-colour-light-3);
@@ -506,11 +506,18 @@ ol.items-list .item-controls a {
 }
 ol.items-list .item {
   align-items: center;
-  padding: 0 2px;
-  border-bottom: 1px solid #c9c7b8;
+  border-bottom: 1px solid var(--edo-colour-text);
+  padding: 0.25rem 0;
+  margin: 0;
 }
 ol.items-list .item:last-child {
   border-bottom: none;
+  padding-bottom: 0;
+  margin-bottom: 0;
+}
+ol.items-list .item:first-child {
+  padding-top: 0;
+  margin-top: 0;
 }
 ol.items-list .item .item-name .item-image {
   flex: 0 0 30px;
@@ -674,6 +681,7 @@ ol.items-list .item-delete {
   padding: 0;
   height: 1.75em;
   min-height: 1.75em;
+  min-width: 2.25em;
 }
 
 .sheet.item .tab {
@@ -723,7 +731,6 @@ ol.items-list .item-delete {
   width: 100%;
   display: grid;
   flex: 0;
-  color: var(--colour-bar-input, rgb(237, 232, 211));
   border-radius: calc(var(--height) / 2 + var(--padding));
   padding: var(--padding);
 }
@@ -732,6 +739,7 @@ ol.items-list .item-delete {
   border-radius: calc(var(--height) / 2 + var(--padding));
   display: grid;
   grid-template-columns: 1fr;
+  color: var(--colour-bar-input, rgb(237, 232, 211));
 }
 .edo-resource-bar .edo-wrapper > * {
   grid-row-start: 1;

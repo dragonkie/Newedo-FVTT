@@ -18,8 +18,6 @@ export default class SkillSheet extends NewedoItemSheet {
 
     async _prepareContext() {
         const context = await super._prepareContext();
-        context.isEquipped = context.system.equipped;
-        context.isRanged = context.system.ranged;
         return context;
     }
 

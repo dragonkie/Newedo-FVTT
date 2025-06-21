@@ -9,8 +9,6 @@
     width: 100%;
     display: grid;
     flex: 0;
-
-    color: var(--colour-bar-input, rgb(237, 232, 211));
     border-radius: calc(var(--height) / 2 + var(--padding));
     padding: var(--padding);
 
@@ -20,6 +18,7 @@
         border-radius: calc(var(--height) / 2 + var(--padding));
         display: grid;
         grid-template-columns: 1fr;
+        color: var(--colour-bar-input, rgb(237, 232, 211));
 
         >* {
             grid-row-start: 1;

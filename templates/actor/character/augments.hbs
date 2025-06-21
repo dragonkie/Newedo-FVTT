@@ -1,15 +1,15 @@
 <div class="edo-tab-content">
     {{!-- Ammount of trait noise the character has gathered --}}
-    <div>
-        <div class="flexrow" style="text-align: center; align-items: center;">
-            {{#each system.traits.core as | trait key |}}
-                <div style="align-items: center; min-width: 70px;">
-                    <label class="edo-resource-label flexlarge align-left" data-action="roll" data-roll="{{trait.rank}}d10x10" data-roll-type="{{trait.abbr}}">{{trait.abbr}}</label>
-                    <div>{{trait.noise}}</div>
-                </div>
-            {{/each}}
-        </div>
+
+    <div class="flexrow flex-gap-m nowrap">
+        {{#each system.traits.core as | trait key |}}
+            <div class="flexcol align-center">
+                <label class="edo-resource-label" data-action="roll" data-roll="{{trait.rank}}d10x10" data-roll-type="{{trait.label}}">{{trait.label}}</label>
+                <input class="align-center" type="number" value="{{trait.noise}}" disabled>
+            </div>
+        {{/each}}
     </div>
+
     {{!-- List of augments the character has --}}
     <ol class="items-list">
         <li class="items-header flexrow collapsible">
