@@ -173,7 +173,7 @@ export default class NewedoRoll {
      * @argument {Object} traits - provided trait data
      * @argument {Object} options
      */
-    AddTrait(key = 'hrt', config) {
+    AddTrait(key = 'hrt', config = {}) {
         // if the traits wern't provided, gather them from the available rolldata
         if (!config.traits) {
             // default values into empty

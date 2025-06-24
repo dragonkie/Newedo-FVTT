@@ -1,14 +1,14 @@
-<div style="height: 100%;">
-    <div class="header flexrow" style="margin-bottom: 12px; gap: 5px;">
+<div style="height: 100%;" class="newedo">
+    <div class="header flexrow flex-gap-xl" style="margin-bottom: 12px;">
 
-        <h1 style="border: 0; margin: 0;">{{localize label}}: {{sum}}</h1>
+        <h1 style="border: 0; margin: 0; flex: 0; white-space: nowrap;">{{localize label}}: {{sum}}</h1>
         <div class="atm flexcol" style="gap: 5px;">
             <div class="currency flexrow">
                 <input name="value" style="flex: 3; margin-right: 4px;" type="number" min="0" placeholder="0" />
                 <div class="flexrow" style="flex: 1; align-items: center; gap: 4px;">
-                    <a data-operation="+"><i class="fa-solid fa-plus"></i></a>
-                    <a data-operation="-"><i class="fa-solid fa-minus"></i></a>
-                    <a data-operation="="><i class="fa-solid fa-equals"></i></a>
+                    <a class="text-center align-center" data-operation="+"><i class="fa-solid fa-plus"></i></a>
+                    <a class="text-center align-center" data-operation="-"><i class="fa-solid fa-minus"></i></a>
+                    <a class="text-center align-center" data-operation="="><i class="fa-solid fa-equals"></i></a>
                 </div>
             </div>
             <input name="note" type="text" placeholder="balance change note" />
@@ -16,11 +16,11 @@
     </div>
     <div class="transactions scrollable" style="flex: 1; height: calc(100% - 100px);">
         <span class="flexrow" style="gap: 8px; border: 2px groove white; padding: 5px 10px;">
-            <span data-action="sortById">ID</span>
-            <span data-action="sortByUser">Value</span>
-            <span data-action="sortByUser">Date</span>
-            <span data-action="sortByUser" style="flex: 4;">Note</span>
-            <span data-action="sortByUser">User</span>
+            <span style="flex: 0;" data-action="sortById">ID</span>
+            <span style="flex: 1;" data-action="sortByUser">Date</span>
+            <span style="" data-action="sortByUser">Value</span>
+            <span style="" data-action="sortByUser">User</span>
+            <span style="" data-action="sortByUser" style="flex: 4;">Note</span>
             {{#if (isGM)}}
                 <span style="flex: 1;">Admin</span>
             {{/if}}
@@ -28,16 +28,20 @@
         <ol style="padding: 0 10px; margin: 10px 0; display: flex; justify-content: flex-end; flex-direction: column;">
             {{#each transactions as | record key |}}
                 <li data-index="{{record.id}}" class="flexrow" style="gap: 8px; align-items:flex-start">
-                    <span style="flex: 1">{{record.id}}</span>
-                    <span style="flex: 1" class="flexrow">
-                        {{record.operation}} {{record.value}}
+                    <span style="flex: 0; margin-right: 10px; min-width: 100px;" class="flexrow flex-gap-xl nowrap">
+                        <span style="flex: 0">{{record.id}}</span>
+                        <span style="flex: 1">{{record.date}}</span>
                     </span>
-                    <span style="flex: 1">{{record.date}}</span>
-                    <span style="flex: 4">{{record.note}}</span>
-                    <span style="flex: 1">{{record.user}}</span>
-                    {{#if (isGM)}}
-                        <a data-action="deleteIndex"><i class="fa-solid fa-trash"></i></a>
-                    {{/if}}
+                    <span class="flexrow flex-gap-l" style="flex: 2;">
+                        <span style="flex: 1" class="flexrow text-center">
+                            {{record.operation}} {{record.value}}
+                        </span>
+                        <span style="flex: 1">{{record.user}}</span>
+                        <span style="flex: 4">{{record.note}}</span>
+                        {{#if (isGM)}}
+                            <a style="flex: 0;" data-action="deleteIndex"><i class="fa-solid fa-trash"></i></a>
+                        {{/if}}
+                    </span>
                 </li>
             {{/each}}
         </ol>
