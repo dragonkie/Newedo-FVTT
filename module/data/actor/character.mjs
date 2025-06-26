@@ -6,7 +6,7 @@ import { ResourceField } from "../fields.mjs";
 import { NEWEDO } from "../../config.mjs";
 
 const {
-    ArrayField, BooleanField, IntegerSortField, NumberField, SchemaField, SetField, StringField
+    ArrayField, BooleanField, IntegerSortField, NumberField, SchemaField, SetField, StringField, HTMLField,
 } = foundry.data.fields;
 
 export default class CharacterDataModel extends ActorDataModel {
@@ -40,6 +40,23 @@ export default class CharacterDataModel extends ActorDataModel {
             status: this.AddValueField(1),
             wealth: this.AddValueField(1),
         });
+
+        const BioConfig = { initial: '', blank: true, required: false, nullable: true };
+        schema.details = new SchemaField({
+            age: new StringField({ ...BioConfig, label: 'NEWEDO.Generic.Age' }),
+            gender: new StringField({ ...BioConfig, label: 'NEWEDO.Generic.Gender' }),
+            height: new StringField({ ...BioConfig, label: 'NEWEDO.Generic.Height' }),
+            weight: new StringField({ ...BioConfig, label: 'NEWEDO.Generic.Weight' }),
+        })
+        schema.description = new HTMLField({ ...BioConfig, label: 'NEWEDO.Generic.Description' });
+
+        schema.priorities = new SchemaField({
+            traits: new StringField({ ...BioConfig, label: 'NEWEDO.Generic.Trait.plrl' }),
+            skills: new StringField({ ...BioConfig, label: 'NEWEDO.Generic.Skill.plrl' }),
+            magic: new StringField({ ...BioConfig, label: 'NEWEDO.Generic.Magic' }),
+            augments: new StringField({ ...BioConfig, label: 'NEWEDO.Generic.Augments' }),
+            background: new StringField({ ...BioConfig, label: 'NEWEDO.Generic.Background.long' }),
+        })
 
         return schema;
     }

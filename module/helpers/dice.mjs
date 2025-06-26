@@ -76,7 +76,7 @@ export default class NewedoRoll {
      * @prop {String} element - Type of element to create on the roll popup [input, selector, stepper]
      * @prop {Number} sort - Value used to sort the list of parts on display, happens inside groups BIGGER = LOWER
      * @prop {Boolean} active - Whether this will actually be used in the roll
-     * @prop {Array<SelectData>} select_options - Whether this will actually be used in the roll
+     * @prop {SelectData[]} select_options - Whether this will actually be used in the roll
      * @prop {Object} step_options - Whether this will actually be used in the roll
      * @prop {Number} step_options.size - Whether this will actually be used in the roll
      * @prop {String} id - random id value which can be used to identify specific parts, mostly here for debugging 
@@ -249,7 +249,7 @@ export default class NewedoRoll {
         });
 
         //==========================================================================================
-        //> Creates Roll dialog, returning a promise
+        //>- Creates Roll dialog, returning a promise
         //==========================================================================================
         return new Promise(async (resolve, reject) => {
             const app = await new NewedoDialog({
@@ -272,7 +272,7 @@ export default class NewedoRoll {
                 close: () => resolve({ cancelled: true }),
                 submit: (result) => {
                     //===================================================================
-                    //> Roll submission handler
+                    //>-- Roll submission handler
                     //===================================================================
 
                     // Gets all the pieces of the formula
@@ -372,6 +372,8 @@ export default class NewedoRoll {
                 })
             }
         }
+
+        if (this.options.cancelled) return null;
 
 
         // Handle the advantage / disadvantage roll first and foremost

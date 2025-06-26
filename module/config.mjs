@@ -87,7 +87,7 @@ NEWEDO.genericAbbr = {};
 NEWEDO.genericPlural = {};
 for (const [key, value] of Object.entries(NEWEDO.generic)) {
     NEWEDO.genericAbbr[key] = value.replace('long', 'abbr');
-    NEWEDO.genericPlural[key] = value.replace('long', 'plural');
+    NEWEDO.genericPlural[key] = value.replace('long', 'plrl');
 }
 
 NEWEDO.time = {

@@ -39,8 +39,8 @@ export default class NewedoActorSheet extends NewedoSheetMixin(foundry.applicati
     }
 
     static TABS = {
-        traits: { id: "traits", group: "primary", label: "NEWEDO.Generic.Trait.plural" },
-        skills: { id: "skills", group: "primary", label: "NEWEDO.Generic.Skill.plural" },
+        traits: { id: "traits", group: "primary", label: "NEWEDO.Generic.Trait.plrl" },
+        skills: { id: "skills", group: "primary", label: "NEWEDO.Generic.Skill.plrl" },
         equipment: { id: "equipment", group: "primary", label: "NEWEDO.Generic.Equipment" },
         augments: { id: "augments", group: "primary", label: "NEWEDO.Generic.Augments" },
         magic: { id: "magic", group: "primary", label: "NEWEDO.Generic.Magic" },

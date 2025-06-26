@@ -1,6 +1,7 @@
 <div class="edo-tab-content">
     {{!-- Data for loading character skills into the sheet tab --}}
     <div class="flexcol skill-lists" style="width: 100%; flex-wrap: wrap;">
+        {{log 'Character skills' this}}
         {{#each @root.skills as | trait key |}}
             {{#if (and (or @root.isEditMode trait.hasRank) trait.hasSkill) }}
                 <div class="flex1" style="width: 100%;">

@@ -27,13 +27,23 @@ export default class utils {
 
     static async getCoreCharDocs() {
         const documents = [];
-        const skills = await this.getCoreSkills();
+        const skills = await this.getSkillDocuments();
         const fates = await this.getCoreFates();
         return documents.concat(skills, fates);
     }
 
-    static async getCoreSkills() {
-        return await this.getPackDocs(`newedo.internal-skills`);
+    static async getSkillDocuments() {
+        const skills = [];
+        // Get world level skills
+        for (const item of game.items.contents) if (item.type == 'skill') skills.push(item);
+
+        // Get compendium skills
+        for (const pack of game.packs.contents) {
+            const items = await pack.getDocuments();
+            for (const item of items) if (item.type == 'skill') skills.push(item);
+        }
+
+        return skills;
     }
 
     static async getCoreFates() {
@@ -276,7 +286,7 @@ export default class utils {
             // test compendium pack data
             console.log('VALIDATING COMPENDIUM REFERENCES');
             if (this.getCoreFates() == undefined) throw new Error('No reference to core fates compendium');
-            if (this.getCoreSkills() == undefined) throw new Error('No reference to core skills compendium');
+            if (this.getSkillDocuments() == undefined) throw new Error('No reference to core skills compendium');
             if (this.getCoreCharDocs() == undefined) throw new Error('Missing reference to core character documents');
         }
         catch (err) {

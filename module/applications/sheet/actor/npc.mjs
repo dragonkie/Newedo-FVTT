@@ -19,7 +19,7 @@ export default class NpcSheet extends NewedoActorSheet {
     }
 
     static TABS = {
-        traits: { id: "traits", group: "primary", label: "NEWEDO.Generic.Trait.plural" },
+        traits: { id: "traits", group: "primary", label: "NEWEDO.Generic.Trait.plrl" },
         equipment: { id: "equipment", group: "primary", label: "NEWEDO.Generic.Equipment" },
         augments: { id: "augments", group: "primary", label: "NEWEDO.Generic.Augments" },
         magic: { id: "magic", group: "primary", label: "NEWEDO.Generic.Magic" },

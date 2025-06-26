@@ -27,4 +27,21 @@
     nav.tabs {
         margin-bottom: 6px;
     }
+
+    .edo-sheet-body {
+        display: flex;
+        flex-direction: column;
+        flex: 1
+    }
+
+    .edo-body-content {
+        flex: 1;
+    }
+
+    .edo-tab-content {
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+        overflow: auto;
+    }
 }

@@ -1,56 +1,26 @@
-<div class="edo-tab-content">
+<div class="edo-tab-content flexcol flex-gap-l">
 
-    {{#with system.biography as | bio key |}}
-        <div class="flexrow flex-align-start">
-            <div>
-                <div class="flexrow"><b>Gender:</b><input type="text" name="system.biography.gender" value="{{bio.gender}}" /></div>
-                <div class="flexrow"><b>Height:</b><input type="text" name="system.biography.height" value="{{bio.height}}" /></div>
-                <div class="flexrow"><b>Age:</b><input type="text" name="system.biography.age" value="{{bio.age}}" /></div>
-            </div>
-
-            <div>
-                <div class="flexrow"><b>Weight:</b><input type="text" name="system.biography.weight" value="{{bio.weight}}" /></div>
-                <div class="flexrow"><b>Eyes:</b><input type="text" name="system.biography.eyes" value="{{bio.eyes}}" /></div>
-            </div>
-
-            <div>
-                <div class="flexrow"><b>Skin:</b><input type="text" name="system.biography.skin" value="{{bio.skin}}" /></div>
-                <div class="flexrow"><b>Hair:</b><input type="text" name="system.biography.hair" value="{{bio.hair}}" /></div>
-            </div>
+    <div class="flexcol flex-gap-s">
+        <label><b>{{localize 'NEWEDO.Generic.Priorities'}}</b></label>
+        <div class="flexrow flex-gap-l nowrap align-center">
+            {{toFieldGroup system.schema 'priorities.traits' value=system.priorities.traits classes='stacked'}}
+            {{toFieldGroup system.schema 'priorities.skills' value=system.priorities.skills classes='stacked'}}
+            {{toFieldGroup system.schema 'priorities.magic' value=system.priorities.magic classes='stacked'}}
+            {{toFieldGroup system.schema 'priorities.augments' value=system.priorities.augments classes='stacked'}}
+            {{toFieldGroup system.schema 'priorities.background' value=system.priorities.background classes='stacked'}}
         </div>
+    </div>
 
+    <div class="flexrow flex-align-start flex-gap-l">
+        {{toFieldGroup system.schema 'details.gender' value=system.details.gender}}
+        {{toFieldGroup system.schema 'details.age' value=system.details.age}}
+    </div>
 
-        <div class="flexrow">
-            <div>
-                <div>
-                    <b class="label">{{localize 'NEWEDO.biography.appearance'}}</b>
-                    <textarea name="system.biography.appearance">{{bio.appearance}}</textarea>
-                </div>
-                <div>
-                    <b class="label">{{localize 'NEWEDO.biography.personality'}}</b>
-                    <textarea name="system.biography.personality">{{bio.personality}}</textarea>
-                </div>
-                <div>
-                    <b class="label">{{localize 'NEWEDO.biography.background'}}</b>
-                    <textarea name="system.biography.background">{{bio.background}}</textarea>
-                </div>
-            </div>
-            <div>
-                <div>
-                    <b class="label">{{localize 'NEWEDO.biography.ambition'}}</b>
-                    <textarea name="system.biography.ambition">{{bio.ambition}}</textarea>
-                </div>
-                <div>
-                    <b class="label">{{localize 'NEWEDO.biography.ideal'}}</b>
-                    <textarea name="system.biography.ideal">{{bio.ideal}}</textarea>
-                </div>
-                <div>
-                    <b class="label">{{localize 'NEWEDO.biography.fear'}}</b>
-                    <textarea name="system.biography.fear">{{bio.fear}}</textarea>
-                </div>
-            </div>
-        </div>
+    <div class="flexrow flex-align-start flex-gap-l">
+        {{toFieldGroup system.schema 'details.height' value=system.details.height}}
+        {{toFieldGroup system.schema 'details.weight' value=system.details.weight}}
+    </div>
 
-    {{/with}}
+    {{toFieldInput system.schema 'description' value=system.description}}
 
 </div>

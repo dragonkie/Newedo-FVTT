@@ -6,9 +6,9 @@
             <div class="currency flexrow">
                 <input name="value" style="flex: 3; margin-right: 4px;" type="number" min="0" placeholder="0" />
                 <div class="flexrow" style="flex: 1; align-items: center; gap: 4px;">
-                    <a class="text-center align-center" data-operation="+"><i class="fa-solid fa-plus"></i></a>
-                    <a class="text-center align-center" data-operation="-"><i class="fa-solid fa-minus"></i></a>
-                    <a class="text-center align-center" data-operation="="><i class="fa-solid fa-equals"></i></a>
+                    <a class="align-center" data-operation="+"><i class="fa-solid fa-plus"></i></a>
+                    <a class="align-center" data-operation="-"><i class="fa-solid fa-minus"></i></a>
+                    <a class="align-center" data-operation="="><i class="fa-solid fa-equals"></i></a>
                 </div>
             </div>
             <input name="note" type="text" placeholder="balance change note" />
@@ -33,7 +33,7 @@
                         <span style="flex: 1">{{record.date}}</span>
                     </span>
                     <span class="flexrow flex-gap-l" style="flex: 2;">
-                        <span style="flex: 1" class="flexrow text-center">
+                        <span style="flex: 1" class="flexrow align-center">
                             {{record.operation}} {{record.value}}
                         </span>
                         <span style="flex: 1">{{record.user}}</span>

@@ -401,6 +401,23 @@
 .sheet.item nav.tabs {
   margin-bottom: 6px;
 }
+.sheet.actor .edo-sheet-body,
+.sheet.item .edo-sheet-body {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+.sheet.actor .edo-body-content,
+.sheet.item .edo-body-content {
+  flex: 1;
+}
+.sheet.actor .edo-tab-content,
+.sheet.item .edo-tab-content {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  overflow: auto;
+}
 
 .item-form {
   font-family: "Roboto", sans-serif;
@@ -715,13 +732,6 @@ ol.items-list .item-delete {
 .sheet.item .sheet-header {
   padding: var(--edo-padding);
 }
-.sheet.item .edo-tab-content {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5em;
-  flex: 1;
-  overflow: auto;
-}
 
 .edo-resource-bar {
   --padding: 2px;
@@ -935,12 +945,6 @@ ol.items-list .item-delete {
 
 .edo-input-bar {
   padding: 5px;
-}
-
-.edo-sheet-body {
-  display: flex;
-  flex-direction: column;
-  flex: 1;
 }
 
 /*# sourceMappingURL=newedo.css.map */

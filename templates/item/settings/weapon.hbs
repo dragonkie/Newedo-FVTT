@@ -1,43 +1,44 @@
-<div class="edo-tab-content edo-item-settings edo-weapon-settings flex-gap-s">
+<div class="edo-tab-content edo-item-settings edo-weapon-settings flex-gap-l">
 
     {{{ selector.skill }}}
 
     <div class="flexcol flex-gap-s">
-        <div><b>Damage Parts:</b></div>
-        {{#each damageParts as | dmg key |}}
-            <div class="flexrow" style="gap: 10px; margin: 3px 0" data-part-index="{{key}}">
-                {{!-- damage formula --}}
-                {{formInput dmg.formula.field value=dmg.formula.value name=dmg.formula.path}}
-                {{!-- damage type --}}
-                <div class="flexrow" style="gap: 5px">
-                    {{formInput dmg.type.field value=dmg.type.value name=dmg.type.path}}
-                    {{#unless (eq key 0)}}
-                        <a data-action="deleteDamagePart" style="flex: 0;">
-                            <i class="fa-solid fa-trash"></i>
-                        </a>
-                    {{/unless}}
+        <label><b>Damage Parts:</b></label>
+        <div class="flexcol flex-gap-xs">
+            {{#each damageParts as | dmg key |}}
+                <div class="flexrow" style="gap: 10px; margin: 3px 0" data-part-index="{{key}}">
+                    {{!-- damage formula --}}
+                    {{formInput dmg.formula.field value=dmg.formula.value name=dmg.formula.path}}
+                    {{!-- damage type --}}
+                    <div class="flexrow" style="gap: 5px">
+                        {{formInput dmg.type.field value=dmg.type.value name=dmg.type.path}}
+                        {{#unless (eq key 0)}}
+                            <a data-action="deleteDamagePart" style="flex: 0;">
+                                <i class="fa-solid fa-trash"></i>
+                            </a>
+                        {{/unless}}
+                    </div>
                 </div>
+            {{/each}}
+            <div>
+                <a class="fa-l" data-action="createDamagePart" style="float: right;">
+                    <i class="fa-solid fa-plus fa-l"></i> Add new damage part
+                </a>
             </div>
-        {{/each}}
-        <div>
-            <a data-action="createDamagePart" style="float: right;">
-                <i class="fa-solid fa-plus fa-l"></i> Add new damage part
-            </a>
         </div>
     </div>
 
-    <div class="flexrow flex-gap-m">
-        <div class="flexcol flex-gap-m">
+    <div class="flexcol flex-gap-xs">
+        <div class="flexrow flex-gap-m">
             {{toFieldGroup schema 'quality.value' value=system.quality.value label='Quality' class='align-center'}}
-            {{toFieldGroup schema 'grit.atk' value=system.grit.atk label='Grit Attack' class='align-center'}}
-        </div>
-        <div class="flexcol flex-gap-m">
             {{toFieldGroup schema 'grit.value' value=system.grit.value label='Grit'}}
+        </div>
+        <div class="flexrow flex-gap-s">
+            {{toFieldGroup schema 'grit.atk' value=system.grit.atk label='Grit Attack' class='align-center'}}
             {{toFieldGroup schema 'grit.dmg' value=system.grit.dmg label='Grit Damage'}}
         </div>
     </div>
 
-    {{toFieldGroup schema 'ranged' value=system.ranged label='Ranged'}}
     <div class="flexrow flex-gap-m">
         {{#if system.ranged}}
             {{toFieldGroup schema 'range.short' value=system.range.short label='Short Range'}}
@@ -48,6 +49,7 @@
         {{/if}}
     </div>
 
+    {{toFieldGroup schema 'ranged' value=system.ranged label='Ranged'}}
     {{#if system.ranged}}
         <div class="flexrow flex-gap-m">
             {{toFieldGroup schema 'range.modShort' value=system.range.modShort label='Short Mod'}}
