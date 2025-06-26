@@ -3,13 +3,9 @@
   "version": "1.0.0",
   "description": "CSS compiler for the Newedo system",
   "scripts": {
-    "build": "gulp build",
-    "compile": "gulp css",
-    "watch": "gulp",
-    "gulp": "gulp",
-    "watch-sass": "sass --watch src/scss/newedo.scss css/newedo.css",
+    "sass": "sass --watch src/scss/newedo.scss css/newedo.css",
     "prepack": "del \"../_packages/newedo.zip\"",
-    "pack": "\"E:/Software/7-Zip/7z.exe\" a -tzip ../_packages/newedo.zip -x!src/ -x!pack*.json -x!*.md -x!*.git* -x!*.lock -x!newedo.code* -r"
+    "pack": "sass src/scss/newedo.scss css/newedo.css && \"E:/Software/7-Zip/7z.exe\" a -tzip ../_packages/newedo.zip -x!src/ -x!pack*.json -x!*.md -x!*.git* -x!*.lock -x!newedo.code* -r && echo 'Package complete!'"
   },
   "browserslist": [
     "last 3 versions"
