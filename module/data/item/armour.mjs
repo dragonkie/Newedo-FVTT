@@ -35,7 +35,7 @@ export default class ArmourData extends ItemDataModel {
         if (!allowed) return false;
         if (!this.isEquipped) return;
 
-        for (const soak of Object.keys(this.soak)) ActorData.bonus.armour[soak] += this.soak[soak];
+        for (const soak of Object.keys(this.soak)) ActorData.bonus.armour[soak] += this.soak[soak].value;
     }
 
     get isEquipped() {
