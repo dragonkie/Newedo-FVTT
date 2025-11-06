@@ -4,6 +4,10 @@
     {{> 'newedo.traits-core'}}
     <div class="flexrow flex-gap-m flex-group-start flex-align-start scrollable">
         <div>
+            <a data-action="configSkills">
+                <i class="fas fa-cog"></i>
+                Configure Skills
+            </a>
             <ol class="edo-skills-list items-list">
                 {{#each items.contents as |item|}}
                     {{#if (eq item.type 'skill')}}
