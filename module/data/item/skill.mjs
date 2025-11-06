@@ -180,7 +180,6 @@ export default class SkillData extends ItemDataModel {
 
         if (this.actor) {
             const bonus = this.actor.system.bonus.skills[this.linkID];
-            console.log(this.actor.system.bonus.skills)
             if (bonus) {
                 let value = `${bonus.value != 0 ? bonus.value : ''}`;
                 bonus.parts.forEach(element => {

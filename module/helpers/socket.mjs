@@ -44,7 +44,6 @@ export default class NewedoSocketManager {
 
         // register the socket handler
         game.socket.on(this.identifier, async (event) => {
-            console.log('Recieved event', event)
             try {
                 // Validate that we are meant to recieve this event
                 if (event.reciever) {

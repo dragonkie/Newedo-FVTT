@@ -13,7 +13,6 @@ export default function registerHooks() {
         //======================================================================================
         // Fix world skill linking if things are messed up
         if (!game.settings.get(game.system.id, 'migrateSkillLinks')) {
-            console.log(`Updating skill linkID's`)
             const WorldSkills = [];
 
             // Get custom world level skills
@@ -43,7 +42,6 @@ export default function registerHooks() {
                     if (item.type == 'skill' && item.system.linkID == "") {
                         WorldSkills.forEach((skill) => {
                             if (skill.name == item.name) {
-                                console.log('Linked: ' + item.name);
                                 item.update({ 'system.linkID': skill.system.linkID });
                             }
                         })
@@ -57,7 +55,6 @@ export default function registerHooks() {
         //>- repair broken fate links
         //======================================================================================
         if (!game.settings.get(game.system.id, 'migrateFateLinks')) {
-            console.log(`Updating Fate linkID's`)
             const WorldFates = [];
 
             // Get custom world level skills
@@ -87,7 +84,6 @@ export default function registerHooks() {
                     if (item.type == 'fate' && item.system.linkID == "") {
                         WorldFates.forEach((fate) => {
                             if (fate.name == item.name) {
-                                console.log('Linked: ' + item.name);
                                 item.update({ 'system.linkID': fate.system.linkID });
                             }
                         })

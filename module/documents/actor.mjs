@@ -17,9 +17,6 @@ export default class NewedoActor extends foundry.documents.Actor {
         const createData = data;
         const newActor = typeof data.system === `undefined`;
 
-        console.log('data', data);
-        console.log('options', options);
-
         if (newActor && data.type == 'character') {
             //==================================================================================
             //>- Give characters found items

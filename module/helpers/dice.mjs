@@ -117,7 +117,6 @@ export default class NewedoRoll {
         if (!Array.isArray(parts)) parts = [parts];
         for (const p of parts) {
             const part = Object.assign(this.constructor.getPartSchema(), p);
-            console.log('adding part', part);
 
             if (part.element && !PART_ELEMENTS.includes(part.element)) throw new Error(`Recieved invalid part element: ${part.element}`);
             if (part.element == 'input') {
@@ -158,7 +157,6 @@ export default class NewedoRoll {
     }
 
     AddRaise(value = 0) {
-        console.log('Adding raises')
         this.AddPart({
             label: NEWEDO.generic.raise,
             value: value,
@@ -232,8 +230,6 @@ export default class NewedoRoll {
         if (this.useLegend) this.AddLegend();
         if (this.useRaises) this.AddRaise();
 
-        console.log('Final Roll parts', this.parts)
-
         // if there is no roll data attached, but we have an option to get it
         if (this.document != null && !this.rollData) this.rollData = this.document?.getRollData() || {};
 
@@ -305,7 +301,6 @@ export default class NewedoRoll {
 
                         // Handles the spending of legend
                         if (tags.includes('legend') && this.actor && +input.value > 0) {
-                            console.log('spending legend');
                             // special handling for the legend option since it spends a resource
                             if (utils.spendLegend(this.actor, utils.parseElementValue(input))) {
                                 // spent legend properly

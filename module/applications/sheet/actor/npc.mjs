@@ -42,7 +42,6 @@ export default class NpcSheet extends NewedoActorSheet {
     static async _onConfigureSkills(event, target) {
         let content = "";
         for (const skill of this.document.system.skills) {
-            console.log('Skill', skill);
             content += new foundry.data.fields.StringField().toFormGroup({label: skill.label}, {value: skill.trait}).outerHTML;
         }
 

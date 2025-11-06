@@ -193,7 +193,6 @@ export default class RoteData extends ItemDataModel {
         `;
         messageData.content += await roll.render();
         messageData.content = await foundry.applications.ux.TextEditor.enrichHTML(messageData.content, { rollData: rollData });
-        console.log(rollData);
         return await roll.toMessage(messageData);
     }
 

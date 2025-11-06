@@ -52,10 +52,7 @@ export async function Skills(linkID) {
     const options = {};
     for (const skill of sorted) options[skill.system.linkID] = skill.name;
 
-    console.log('options', options)
-
     if (linkID == '' || !linkID) linkID = Object.keys(options)[0];
-    console.log('default skill linkID', linkID)
 
     return new foundry.data.fields.StringField({
         initial: linkID,

@@ -320,8 +320,6 @@ export class ActorDataModel extends SystemDataModel {
             this.bonus.skills[skill.system.linkID] = SkillBonusConfig(skill);
         }
 
-        console.log(this.bonus.skills);
-
         //===================================================================================
         //>-- Calculation totals
         //===================================================================================

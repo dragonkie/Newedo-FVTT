@@ -34,8 +34,6 @@ export default class FateData extends ItemDataModel {
         const allowed = await super._preCreate() || true;
         if (!allowed) return false;
 
-        console.log('_preCreate Fate', { data: data, options: options, user: user });
-
         // Check if this object already existed by looking for document stats
         if (!Object.hasOwn(data, '_stats')) {
             await this.updateSource({ linkID: foundry.utils.randomID() });
@@ -45,7 +43,6 @@ export default class FateData extends ItemDataModel {
         if (actor && Object.hasOwn(data, 'system')) {
             for (const fate of actor.itemTypes.fate) {
                 if ((fate.system.linkID != '' && fate.system.linkID == data.system.linkID) || data.name == fate.name) {
-                    console.log(fate);
                     await fate.update({ system: { chance: fate.system.chance + data.system.chance } });
                     return false;
                 }

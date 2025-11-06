@@ -57,10 +57,6 @@ export default class LineageData extends ItemDataModel {
         const allowed = await super._preCreate(data, options, user) || true;
         if (!allowed) return false;
 
-        console.log(data)
-        console.log(options)
-        console.log(user)
-
         const actor = this.actor;
         if (actor) {
             //==================================================================================================

@@ -323,8 +323,6 @@ export default class WeaponData extends ItemDataModel {
             raises: roll.options.raise,
         })
 
-        console.log('Final attack roll', roll);
-
         // if the user called an attack raise, we store the value in a flag so this weapons next damage roll recieves the boost
         // raise can also be stored in the data for an attack rolls message flag
         if (roll.options.raise > 0) this._calledRaise = roll.options.raise;

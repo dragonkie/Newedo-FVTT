@@ -60,11 +60,9 @@ export function registerHelpers() {
         {
             name: 'isEmpty',
             fn: (obj) => {
-                console.log(obj)
                 let value = 0;
                 if (typeof obj == 'object') value = Object.keys(obj).length <= 0;
                 if (typeof obj == 'array') value = obj.length <= 0;
-                console.log(value)
                 return value
             }
         },
@@ -185,7 +183,6 @@ export function registerHelpers() {
             name: 'arrayIndex',
             fn: (array, index, options) => {
                 if (!Array.isArray(array)) throw new Error('Cannot parse non array as array');
-                console.log(`Array accesed, index=${index} value of `, array[index])
                 if (index < 0) index = 0;
                 return array[index];
             }
