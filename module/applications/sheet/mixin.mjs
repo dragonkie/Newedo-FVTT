@@ -194,7 +194,7 @@ export default function NewedoSheetMixin(Base) {
             super._configureRenderOptions(options);
             return;
         }
-
+        
         async _preRender(context, options) {
             this._setFocusElement();
             return super._preRender(context, options);
