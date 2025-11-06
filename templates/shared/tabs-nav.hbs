@@ -1,5 +1,5 @@
 <nav class="sheet-tabs tabs">
     {{#each tabs}}
-        <a class="{{cssClass}}" data-action="tab" data-tab="{{id}}" data-group="primary">{{localize label}}</a>
+        <a class="{{cssClass}} flexrow flex-gap-s" data-action="tab" data-tab="{{id}}" data-group="primary">{{#if icon}}<i class="{{icon}}"></i>{{/if}}{{localize label}}</a>
     {{/each}}
 </nav>
