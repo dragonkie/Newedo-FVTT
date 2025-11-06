@@ -3,17 +3,17 @@
         <label>Biofeedback:</label>
         <input type="number" name="system.biofeedback" value="{{system.biofeedback}}" placeholder="Chance" />
     </div>
-    <div class="form-group">
-        <label>Noise:</label>
-        <div class="flexrow">
-            {{#each system.noise as | value key |}}
-                <div class="flexcol" style="padding: 2px;">
-                    <label>{{key}}</label>
-                    <input type="number" name="system.noise.{{key}}" value="{{value}}">
-                </div>
-            {{/each}}
-        </div>
+    
+    <label><b>Noise:</b></label>
+    <div class="flexrow">
+        {{#each system.noise as | value key |}}
+            <div class="flexcol" style="padding: 2px;">
+                <label>{{key}}</label>
+                <input type="number" name="system.noise.{{key}}" value="{{value}}">
+            </div>
+        {{/each}}
     </div>
+
     <div class="form-group">
         <label>Rank:</label>
         <input type="number" min="1" max="5" value="{{system.rank.value}}" name="system.rank.value">
