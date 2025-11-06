@@ -144,6 +144,10 @@ export default class RoteData extends ItemDataModel {
         }
 
         await roll.evaluate();
+        if (roll.options.cancelled || roll.cancelled) {
+            this.actor.update({ 'system.legend.value': this.actor.system.legend.value + this.casting.cost });
+            return;
+        }
 
         // Pad rolldata out with new values from the roll
         rollData.cs = Math.ceil(roll.total / this.tn);
