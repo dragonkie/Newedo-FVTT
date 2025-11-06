@@ -31,16 +31,14 @@ export default class CharacterSheet extends NewedoActorSheet {
         }
     }
 
-    static get TABS() {
-        return {
-            traits: { id: "traits", group: "primary", label: "NEWEDO.Generic.Trait.plrl" },
-            skills: { id: "skills", group: "primary", label: "NEWEDO.Generic.Skill.plrl" },
-            equipment: { id: "equipment", group: "primary", label: "NEWEDO.Generic.Equipment" },
-            augments: { id: "augments", group: "primary", label: "NEWEDO.Generic.Augments" },
-            magic: { id: "magic", group: "primary", label: "NEWEDO.Generic.Magic" },
-            effects: { id: "effects", group: "primary", label: "NEWEDO.Tab.Effects" },
-            description: { id: "description", group: "primary", label: "NEWEDO.Tab.Description" }
-        }
+    static TABS = {
+        traits: { id: "traits", group: "primary", label: "NEWEDO.Generic.Trait.plrl", icon: "fas fa-circle-user" },
+        skills: { id: "skills", group: "primary", label: "NEWEDO.Generic.Skill.plrl", icon: "fas fa-hand" },
+        equipment: { id: "equipment", group: "primary", label: "NEWEDO.Generic.Equipment", icon: "fas fa-briefcase-blank" },
+        augments: { id: "augments", group: "primary", label: "NEWEDO.Generic.Augments", icon: "fas fa-microchip" },
+        magic: { id: "magic", group: "primary", label: "NEWEDO.Generic.Magic", icon: "fas fa-fire-flame-curved" },
+        effects: { id: "effects", group: "primary", label: "NEWEDO.Tab.Effects", icon: "fas fa-star-shooting" },
+        description: { id: "description", group: "primary", label: "NEWEDO.Tab.Description", icon: "fas fa-book-blank" }
     }
 
     tabGroups = {
