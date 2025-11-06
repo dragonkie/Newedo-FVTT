@@ -269,7 +269,10 @@ export default class NewedoRoll {
                     label: "Disadvantage",
                     action: 'disadvantage',
                 },],
-                close: () => resolve({ cancelled: true }),
+                close: () => {
+                    this.cancelled = true;
+                    resolve({ cancelled: true })
+                },
                 submit: (result) => {
                     //===================================================================
                     //>-- Roll submission handler
@@ -360,7 +363,7 @@ export default class NewedoRoll {
      * Creates and rolls the values gotten here
      */
     async evaluate() {
-        if (this.options.cancelled) return null;
+        if (this.cancelled) return null;
         if (!this._ready && this.prompt) await this.getRollOptions();
         else if (!this._ready) {
             // assemble the roll without prompting the user
@@ -373,7 +376,7 @@ export default class NewedoRoll {
             }
         }
 
-        if (this.options.cancelled) return null;
+        if (this.cancelled) return null;
 
 
         // Handle the advantage / disadvantage roll first and foremost
