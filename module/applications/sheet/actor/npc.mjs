@@ -1,11 +1,15 @@
 import NewedoActorSheet from "../actor.mjs";
+import NewedoDialog from "../../dialog.mjs";
 
 import LOGGER from "../../../helpers/logger.mjs";
 
 export default class NpcSheet extends NewedoActorSheet {
     static DEFAULT_OPTIONS = {
         classes: ["npc"],
-        position: { height: 600, width: 700, top: 100, left: 200 }
+        position: { height: 600, width: 700, top: 100, left: 200 },
+        actions: {
+            configSkills: this._onConfigureSkills
+        }
     }
 
     static PARTS = {
@@ -33,5 +37,40 @@ export default class NpcSheet extends NewedoActorSheet {
         const context = await super._prepareContext();
 
         return context;
+    }
+
+    static async _onConfigureSkills(event, target) {
+        let content = "";
+        for (const skill of this.document.system.skills) {
+            console.log('Skill', skill);
+            content += new foundry.data.fields.StringField().toFormGroup({label: skill.label}, {value: skill.trait}).outerHTML;
+        }
+
+        const app = await new NewedoDialog({
+            content: content,
+            window: {
+                resizeable: false,
+                minimizable: false,
+                title: 'NEWEDO.Dialog.SkillConfig'
+            },
+            buttons: [{
+                action: 'confirm',
+                label: 'Confirm',
+                icon: 'fas fa-check',
+                default: true
+            }, {
+                action: 'cancel',
+                label: 'Cancel',
+                icon: 'fas fa-xmark'
+            }],
+            submit: (result) => {
+                if (result !== 'confirm') return;
+                let data = {};
+                for (const input of app.element.querySelectorAll('input[name]')) {
+                    data[input.name] = input.value;
+                }
+                //this.document.update(data);
+            }
+        }).render(true);
     }
 }    
