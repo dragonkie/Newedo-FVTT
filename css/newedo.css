@@ -60,11 +60,15 @@
   --edo-colour-text-shadow: var(--edo-colour-cool-1-25);
   --edo-colour-text: var(--edo-colour-dark-1);
 }
-.newedo input,
+.newedo input[type=text],
+.newedo input[type=number],
+.newedo input[type=button],
 .newedo button {
   --edo-input-background-colour: var(--edo-colour-primary);
 }
-.newedo input:disabled,
+.newedo input[type=text]:disabled,
+.newedo input[type=number]:disabled,
+.newedo input[type=button]:disabled,
 .newedo button:disabled {
   --edo-input-background-colour: var(--edo-colour-secondary);
 }
@@ -396,6 +400,10 @@
 .sheet.actor prose-mirror,
 .sheet.item prose-mirror {
   flex: 1;
+}
+.sheet.actor prose-mirror menu button,
+.sheet.item prose-mirror menu button {
+  background: transparent;
 }
 .sheet.actor nav.tabs,
 .sheet.item nav.tabs {

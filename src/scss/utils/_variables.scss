@@ -104,7 +104,9 @@ $bg-image: url(/ui/parchment.jpg);
     //=====================================================================
     //>- Configure variables
     //=====================================================================
-    input,
+    input[type=text],
+    input[type=number],
+    input[type=button],
     button {
         --edo-input-background-colour: var(--edo-colour-primary);
 

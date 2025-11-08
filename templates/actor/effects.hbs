@@ -13,9 +13,9 @@
             </li>
             {{#each list.effects as | effect |}}
                 <li class="item flexrow" data-item-uuid="{{effect.uuid}}">
-                    <span data-action="editItem" class="flexrow flexshrink nowrap">
-                        <img src="{{effect.img}}" width="30" height="30">
-                        <a class="flexshrink" style="margin-left: 4px;">{{effect.name}}</a>
+                    <span data-action="editItem" class="flexrow nowrap">
+                        <img class="flexshrink" src="{{effect.img}}" width="30" height="30">
+                        <a class="flexrow nowrap" style="margin-left: 4px;">{{effect.name}}</a>
                     </span>
                     <span class="item-controls">
                         {{#if effect.disabled}}<a data-action="disableEffect"><i class="fa-solid fa-bolt-slash"></i></a>{{/if}}
