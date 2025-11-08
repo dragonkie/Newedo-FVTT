@@ -16,17 +16,19 @@
                 <span class="item-controls">
                     {{#if item.system.isRanged}}
                         {{!-- Reload option appears if weapon isnt at max ammo --}}
-                        {{#if (and (lt item.system.ammo.value item.system.ammo.max) (gt item.system.ammo.max 0))}}
-                            <a data-action="reloadWeapon" title="Reload">
-                                {{item.system.ammo.value}}/{{item.system.ammo.max}}
-                                <i class="fa-solid fa-arrow-rotate-left"></i>
-                            </a>
-                        {{/if}}
+                        <div class="flexrow item-control">
+                            {{#if (and (lt item.system.ammo.value item.system.ammo.max) (gt item.system.ammo.max 0))}}
+                                <a class="fa-solid fa-arrow-rotate-left" data-action="reloadWeapon" title="Reload"></a>
+                                <div>{{item.system.ammo.value}}/{{item.system.ammo.max}}</div>
+                            {{else}}
+                                <div>{{item.system.ammo.value}}/{{item.system.ammo.max}}</div>
+                            {{/if}}
+                        </div>
                         {{!-- Toggle weapon burst fire --}}
-                        <a data-action="toggleWeaponBurst" title="Toggle Burst">
-                            Burst
+                        <a class="flexrow item-control flex-gap-xs" data-action="toggleWeaponBurst" title="Toggle Burst">
                             {{#if item.flags.newedo.burst_fire}}<i class="fa-solid fa-circle-check"></i>{{/if}}
                             {{#unless item.flags.newedo.burst_fire}}<i class="fa-regular fa-circle"></i>{{/unless}}
+                            <div>Burst</div>
                         </a>
                     {{/if}}
                     <a data-action="useItem" data-use="attack" title="Attack"><i class="fa-solid fa-sword"></i></a>

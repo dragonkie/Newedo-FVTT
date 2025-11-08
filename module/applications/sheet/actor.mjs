@@ -28,6 +28,7 @@ export default class NewedoActorSheet extends NewedoSheetMixin(foundry.applicati
             disableEffect: this._onDisableEffect,
             toggleWeaponBurst: this._onToggleWeaponBurst,
             reloadWeapon: this._onReloadWeapon,
+            
             // actions that open configuration windows
             configSoaks: this._onConfigureSoaks,
             configDerived: this._onConfigureTraitsDerived
