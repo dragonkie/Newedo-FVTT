@@ -37,7 +37,7 @@
                                 <a style="margin-left: 4px;" data-action="editItem">{{item.name}}</a>
                             </span>
                             <div class="item-controls">
-                                {{#each item.system.sheet_actions as | button |}}
+                                {{#each item.system.sheetActions as | button |}}
                                     {{#if button.condition}}
                                         <a data-action="useItem" data-use="{{button.action}}" class="flexrow"><i class="{{button.icon}}"></i></a>
                                     {{/if}}

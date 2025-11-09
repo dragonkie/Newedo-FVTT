@@ -1,25 +1,14 @@
 <div class="edo-tab-content edo-item-settings edo-augment-settings flex-gap-m">
-    <div class="form-group">
-        <label>Biofeedback:</label>
-        <input type="number" name="system.biofeedback" value="{{system.biofeedback}}" placeholder="Chance" />
-    </div>
-    
     <label><b>Noise:</b></label>
-    <div class="flexrow">
-        {{#each system.noise as | value key |}}
-            <div class="flexcol" style="padding: 2px;">
-                <label>{{key}}</label>
-                <input type="number" name="system.noise.{{key}}" value="{{value}}">
-            </div>
-        {{/each}}
+    <div class="flexrow flex-gap-m">
+        {{systemFieldGroup system 'noise.hrt.value' stacked=true classes="centered"}}
+        {{systemFieldGroup system 'noise.per.value' stacked=true classes="centered"}}
+        {{systemFieldGroup system 'noise.pow.value' stacked=true classes="centered"}}
+        {{systemFieldGroup system 'noise.pre.value' stacked=true classes="centered"}}
+        {{systemFieldGroup system 'noise.ref.value' stacked=true classes="centered"}}
+        {{systemFieldGroup system 'noise.sav.value' stacked=true classes="centered"}}
     </div>
 
-    <div class="form-group">
-        <label>Rank:</label>
-        <input type="number" min="1" max="5" value="{{system.rank.value}}" name="system.rank.value">
-    </div>
-    <div class="form-group">
-        <label>Locked:</label>
-        <input type="checkbox" value="{{system.locked}}" />
-    </div>
+    {{systemFieldGroup system 'rank.value' label="Rank"}}
+    {{systemFieldGroup system 'biofeedback' label="Rank"}}
 </div>

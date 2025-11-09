@@ -3,10 +3,12 @@
 
     <div class="flexrow flex-gap-m nowrap">
         {{#each system.traits.core as | trait key |}}
-            <div class="flexcol align-center">
-                <label class="edo-resource-label" data-action="roll" data-roll="{{trait.rank}}d10x10" data-roll-type="{{trait.label}}">{{trait.label}}</label>
-                <input class="align-center" type="number" value="{{trait.noise}}" disabled>
-            </div>
+            {{#unless (eq key 'shi')}}
+                <div class="flexcol align-center">
+                    <label class="edo-resource-label" data-action="roll" data-roll="{{trait.rank}}d10x10" data-roll-type="{{trait.label}}">{{trait.label}}</label>
+                    <input class="align-center" type="number" value="{{trait.noise}}" disabled>
+                </div>
+            {{/unless}}
         {{/each}}
     </div>
 
@@ -28,11 +30,11 @@
                 </span>
                 <span class="item-detail">{{augment.system.biofeedback}}%</span>
 
-                <span class="item-controls">
-
-                    {{#if (not augment.installed) }} <span data-action="useItem" data-use="install"><i class="fa-solid fa-microchip"></i></span> {{/if}}
-                    {{#if augment.installed}} <span data-action="useItem" data-use="install"><i class="fa-solid fa-microchip"></i></span> {{/if}}
-                    {{#if ../isEditMode}} <span class="item-delete"><i class="fa-solid fa-trash"></i></span> {{/if}}
+                <span class="item-controls flex-gap-s">
+                    {{log 'rendering aug entry' augment}}
+                    {{#if (not augment.system.installed) }} <span data-action="useItem" data-use="install"><i class="fa-solid fa-microchip"></i></span> {{/if}}
+                    {{#if augment.system.installed}} <span data-action="useItem" data-use="install"><i class="fa-solid fa-circle-minus"></i></span> {{/if}}
+                    {{#if @root.isEditMode}} <span class="item-delete"><i class="fa-solid fa-trash"></i></span> {{/if}}
                 </span>
             </li>
 

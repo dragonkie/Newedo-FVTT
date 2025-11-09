@@ -455,6 +455,10 @@
 .form-group.stacked {
   flex-direction: column;
 }
+.form-group.stacked.centered {
+  align-items: center;
+  text-align: center;
+}
 
 .edo-border-wrapper {
   flex: 0;

@@ -30,6 +30,11 @@
 
   &.stacked {
     flex-direction: column;
+
+    &.centered {
+      align-items: center;
+      text-align: center;
+    }
   }
 }
 

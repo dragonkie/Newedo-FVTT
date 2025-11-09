@@ -140,7 +140,7 @@ export default class WeaponData extends ItemDataModel {
     }
 
     // List of item controls to be added to their list on actor sheets
-    sheet_actions = () => {
+    sheetActions() {
         return [{
             label: NEWEDO.generic.reload,
             action: 'reload',

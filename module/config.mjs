@@ -1,14 +1,18 @@
 // Exported object
 export const NEWEDO = {};
 
-// Base data
-NEWEDO.traitsCore = {
+NEWEDO.traitsBase = {
     hrt: "NEWEDO.Trait.Core.Hrt.long",
     per: "NEWEDO.Trait.Core.Per.long",
     pow: "NEWEDO.Trait.Core.Pow.long",
     pre: "NEWEDO.Trait.Core.Pre.long",
     ref: "NEWEDO.Trait.Core.Ref.long",
     sav: "NEWEDO.Trait.Core.Sav.long",
+}
+
+// Base data
+NEWEDO.traitsCore = {
+    ...NEWEDO.traitsBase,
     shi: "NEWEDO.Trait.Core.Shi.long",
 }
 
@@ -311,9 +315,50 @@ NEWEDO.sheetParts = {
 }
 
 NEWEDO.ContextMenu = {
-    Item: {
-        Edit: "NEWEDO.ContextMenu.Item.Edit",
-        Equip: "NEWEDO.ContextMenu.Item.Equip",
-        Delete: "NEWEDO.ContextMenu.Item.Delete",
+    edit: "NEWEDO.ContextMenu.Edit",
+    delete: "NEWEDO.ContextMenu.Delete",
+    gift: "NEWEDO.ContextMenu.Gift",
+    equip: "NEWEDO.ContextMenu.Equip",
+    unequip: "NEWEDO.ContextMenu.Unequip",
+    install: "NEWEDO.ContextMenu.Install",
+    uninstall: "NEWEDO.ContextMenu.Uninstall",
+    attack: "NEWEDO.ContextMenu.Attack",
+    damage: "NEWEDO.ContextMenu.Damage",
+}
+
+NEWEDO.template = {
+    app: {
+
+    },
+    dialog: {
+
+    },
+    sheet: {
+        actor: {
+            character: {
+
+            },
+            npc: {
+
+            },
+            pet: {
+
+            },
+            vehicle: {
+
+            }
+        },
+        item: {
+            augment: {},
+            armour: {},
+            culture: {},
+            fate: {},
+            kami: {},
+            lineage: {},
+            paht: {},
+            rote: {},
+            skill: {},
+            weapon: {},
+        }
     }
 }

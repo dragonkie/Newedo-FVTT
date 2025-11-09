@@ -42,7 +42,7 @@ export default class ArmourData extends ItemDataModel {
         return this.equipped == true;
     }
 
-    sheet_actions = () => {
+    sheetActions() {
         return [{
             label: NEWEDO.generic.equip,
             action: 'equip',

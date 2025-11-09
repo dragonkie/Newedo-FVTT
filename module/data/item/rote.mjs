@@ -98,7 +98,7 @@ export default class RoteData extends ItemDataModel {
     }
 
     // List of item controls to be added to their list on actor sheets
-    sheet_actions = () => {
+    sheetActions() {
         return [{
             label: NEWEDO.generic.cast,
             action: 'cast',

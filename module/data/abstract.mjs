@@ -228,12 +228,14 @@ export class ActorDataModel extends SystemDataModel {
     prepareBaseData() {
         const { core, derived } = this.traits;
 
+        // adds data fields for traits
         for (const trait of Object.keys(core)) {
             core[trait].total = 0;
             core[trait].rank = 0;
             core[trait].noise = 0;
         }
 
+        // adds data fields for derived traits
         for (const trait of Object.keys(derived)) derived[trait].total = 0;
 
         //===================================================================================
@@ -420,6 +422,24 @@ export class ItemDataModel extends SystemDataModel {
 
     }
 
+    sheetActions() {
+        return [{
+            label: NEWEDO.ContextMenu.edit,
+            action: 'edit',
+            group: 'general',
+            icon: 'fas fa-edit',
+            condition: true,
+            callback: () => {}
+        }, {
+            label: NEWEDO.ContextMenu.delete,
+            action: 'delete',
+            group: 'general',
+            icon: 'fas fa-trash',
+            condition: true,
+            callback: () => {}
+        }]
+    }
+
     /**
      * Called as part of prepareDer
      * @param {ActorDataModel} ActorData 
@@ -447,6 +467,6 @@ export class ItemDataModel extends SystemDataModel {
     }
 
     async use(action) {
-
+        console.warn('Unset used action called')
     }
 }
