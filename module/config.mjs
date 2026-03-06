@@ -324,6 +324,11 @@ NEWEDO.ContextMenu = {
     uninstall: "NEWEDO.ContextMenu.Uninstall",
     attack: "NEWEDO.ContextMenu.Attack",
     damage: "NEWEDO.ContextMenu.Damage",
+    reload: "NEWEDO.ContextMenu.Reload",
+    cast: "NEWEDO.ContextMenu.Cast",
+    activate: "NEWEDO.ContextMenu.Activate",
+    disable: "NEWEDO.ContextMenu.Disable",
+    suppress: "NEWEDO.ContextMenu.Suppress"
 }
 
 NEWEDO.template = {
