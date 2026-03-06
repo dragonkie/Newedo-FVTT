@@ -194,7 +194,7 @@ export default function NewedoSheetMixin(Base) {
             super._configureRenderOptions(options);
             return;
         }
-        
+
         async _preRender(context, options) {
             this._setFocusElement();
             return super._preRender(context, options);
@@ -395,50 +395,37 @@ export default function NewedoSheetMixin(Base) {
 
         _getItemContextOptions(item) {
             const isOwner = item.isOwner;
+            if (!isOwner) return [];
 
-            // lists of item types for specifying different item types
-            const giftable = ['ammo', 'augment', 'armour', 'weapon', 'upgrade'];
-            const equippable = ['armour', 'augment', 'weapon'];
-
-            // Generic options available to all item types
-            let options = [{
-                name: "NEWEDO.ContextMenu.Item.Edit",
-                icon: "<i class='fa-solid fa-edit'></i>",
-                group: "common",
-                condition: isOwner,
-                callback: () => item.sheet.render(true)
-            }, {
-                name: "NEWEDO.ContextMenu.Item.Delete",
-                icon: "<i class='fa-solid fa-trash'></i>",
-                group: "common",
-                condition: isOwner,
-                callback: () => item.delete()
-            }, {
-                name: "NEWEDO.ContextMenu.Item.Gift",
-                icon: '<i class="fa-solid fa-gift"></i>',
-                group: 'gear',
-                condition: isOwner && giftable.includes(item.type),
-                callback: () => LOGGER.debug('sending away item')
-            }, {
-                name: "NEWEDO.ContextMenu.Item.Equip",
-                icon: '<i class="fa-solid fa-hand-rock"></i>',
-                group: 'gear',
-                condition: isOwner && equippable.includes(item.type) && !item.system.equipped,
-                callback: () => { item.update({ system: { equipped: !item.system.equipped } }) }
-            }, {
-                name: "NEWEDO.ContextMenu.Item.Unequip",
-                icon: '<i class="fa-solid fa-hand-paper"></i>',
-                group: 'gear',
-                condition: isOwner && equippable.includes(item.type) && item.system.equipped,
-                callback: () => { item.update({ system: { equipped: !item.system.equipped } }) }
-            }]
+            const options = item.system.sheetActions({});
 
             return options;
         }
 
         _getEffectContextOptions(item) {
+            const isOwner = item.isOwner;
             let options = [{
-                name: "NEWEDO.ContextMenu.item.delete",
+                name: NEWEDO.ContextMenu.activate,
+                icon: "<i class='fa-solid fa-bolt'></i>",
+                condition: item.disabled,
+                callback: () => item.update({ disabled: false })
+            }, {
+                name: NEWEDO.ContextMenu.suppress,
+                icon: "<i class='fa-solid fa-bolt-slash'></i>",
+                condition: !item.isSuppressed && !item.disabled,
+                callback: () => item.sheet.render({ force: true })
+            }, {
+                name: NEWEDO.ContextMenu.disable,
+                icon: "<i class='fa-solid fa-xmark'></i>",
+                condition: !item.disabled,
+                callback: () => item.update({ disabled: true })
+            }, {
+                name: NEWEDO.ContextMenu.edit,
+                icon: "<i class='fa-solid fa-edit'></i>",
+                condition: true,
+                callback: () => item.sheet.render({ force: true })
+            }, {
+                name: NEWEDO.ContextMenu.delete,
                 icon: "<i class='fa-solid fa-trash'></i>",
                 condition: () => isOwner,
                 callback: () => item.delete()
