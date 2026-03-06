@@ -36,23 +36,23 @@ export default class AugmentData extends ItemDataModel {
         for (const trait of Object.keys(this.noise)) ActorData.traits.core[trait].noise += this.noise[trait].value;
     }
 
-    sheetActions() {
+    sheetActions(context) {
         return [{
-            label: NEWEDO.ContextMenu.install,
-            action: 'edit',
-            group: 'general',
-            icon: 'fas fa-edit',
+            name: NEWEDO.ContextMenu.install,
+            action: 'install',
+            group: 'augment',
+            icon: '<i class="fas fa-microchip"></i>',
             condition: !this.installed,
             callback: () => { }
         }, {
-            label: NEWEDO.ContextMenu.uninstall,
-            action: 'delete',
-            group: 'general',
-            icon: 'fas fa-trash',
+            name: NEWEDO.ContextMenu.uninstall,
+            action: 'install',
+            group: 'augment',
+            icon: '<i class="fas fa-circle-minus"></i>',
             condition: this.installed,
             callback: () => { }
         },
-        ...super.sheetActions]
+        ...super.sheetActions(context)]
     }
 
     async use(action) {

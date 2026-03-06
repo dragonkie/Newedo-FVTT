@@ -42,18 +42,22 @@ export default class ArmourData extends ItemDataModel {
         return this.equipped == true;
     }
 
-    sheetActions() {
+    sheetActions(context) {
         return [{
-            label: NEWEDO.generic.equip,
+            name: NEWEDO.ContextMenu.equip,
             action: 'equip',
-            icon: 'fas fa-briefcase-blank',
+            group: 'equipment',
+            icon: '<i class="fas fa-shirt"></i>',
             condition: !this.equipped,
+            callback: () => this.parent.update({ system: { equipped: true } })
         }, {
-            label: 'Unequip',
+            name: NEWEDO.ContextMenu.unequip,
             action: 'equip',
-            icon: 'fas fa-briefcase-blank',
+            group: 'equipment',
+            icon: '<i class="fas fa-briefcase-blank"></i>',
             condition: this.equipped,
-        }]
+            callback: () => this.parent.update({ system: { equipped: false } })
+        }, ...super.sheetActions(context)]
     }
 
     async use(action) {

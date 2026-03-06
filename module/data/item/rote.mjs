@@ -98,13 +98,17 @@ export default class RoteData extends ItemDataModel {
     }
 
     // List of item controls to be added to their list on actor sheets
-    sheetActions() {
+    sheetActions(context) {
         return [{
-            label: NEWEDO.generic.cast,
+            name: NEWEDO.ContextMenu.cast,
             action: 'cast',
-            icon: 'fas fa-book',
+            group: 'magic',
+            icon: '<i class="fas fa-book"></i>',
             condition: true,
-        }]
+            callback: () => {
+                this.use();
+            }
+        }, ...super.sheetActions(context)]
     }
 
     async use(action) {

@@ -140,33 +140,43 @@ export default class WeaponData extends ItemDataModel {
     }
 
     // List of item controls to be added to their list on actor sheets
-    sheetActions() {
+    sheetActions(context) {
         return [{
-            label: NEWEDO.generic.reload,
-            action: 'reload',
-            icon: 'fas fa-arrow-rotate-left',
-            condition: this.ammo.max > 0 && this.ranged
-        }, {
-            label: NEWEDO.generic.attack,
+            name: NEWEDO.ContextMenu.attack,
             action: 'attack',
-            icon: 'fas fa-sword',
+            group: 'combat',
+            icon: '<i class="fas fa-sword"></i>',
             condition: true,
+            callback: () => { }
         }, {
-            label: NEWEDO.generic.damage,
+            name: NEWEDO.ContextMenu.damage,
             action: 'damage',
-            icon: 'fas fa-droplet',
+            group: 'combat',
+            icon: '<i class="fas fa-droplet"></i>',
             condition: true,
+            callback: () => { }
         }, {
-            label: NEWEDO.generic.equip,
+            name: NEWEDO.ContextMenu.reload,
+            action: 'reload',
+            group: 'combat',
+            icon: '<i class="fas fa-arrow-rotate-left"></i>',
+            condition: this.ammo.max > 0 && this.ranged && this.ammo.value < this.ammo.max,
+            callback: () => { }
+        }, {
+            name: NEWEDO.ContextMenu.equip,
             action: 'equip',
-            icon: 'fas fa-briefcase-blank',
+            group: 'equipment',
+            icon: '<i class="fas fa-hand"></i>',
             condition: !this.equipped,
+            callback: () => { }
         }, {
-            label: 'Unequip',
+            name: NEWEDO.ContextMenu.unequip,
             action: 'equip',
-            icon: 'fas fa-briefcase-blank',
+            group: 'equipment',
+            icon: '<i class="fas fa-briefcase-blank"></i>',
             condition: this.equipped,
-        }]
+            callback: () => { }
+        }, ...super.sheetActions(context)]
     }
 
     async use(action) {
@@ -174,7 +184,7 @@ export default class WeaponData extends ItemDataModel {
             case 'equip': return this._onEquip();
             case 'attack': return this._onAttack();
             case 'damage': return this._onDamage();
-            case 'reload': return;
+            case 'reload': return this._onReload();
             default:
                 LOGGER.error('Unknown weapon action: ', action);
                 return null;
@@ -445,6 +455,10 @@ export default class WeaponData extends ItemDataModel {
         messageData.content += await roll.render();
 
         return await roll.toMessage(messageData);
+    }
+
+    static async _onReload(event, target, action) {
+
     }
 
     static TEMPLATES = {

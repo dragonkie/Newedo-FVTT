@@ -422,21 +422,29 @@ export class ItemDataModel extends SystemDataModel {
 
     }
 
-    sheetActions() {
+    /**
+     * Returns a list of actions that can be taken with this item
+     * context can be provided to customize which actions are visible
+     * @param {Object} context - data used when rendering the menu options
+     * @returns {Object[]}
+     */
+    sheetActions(context) {
         return [{
-            label: NEWEDO.ContextMenu.edit,
-            action: 'edit',
-            group: 'general',
-            icon: 'fas fa-edit',
-            condition: true,
-            callback: () => {}
+            name: NEWEDO.ContextMenu.edit, // Localized label for the action
+            action: 'edit',                 // the actual action to use
+            group: 'general',               // Group for tge action
+            icon: '<i class="fas fa-edit"></i>',            // Icon to use for the action
+            condition: true,                // A condition required to show this option
+            callback: () => {               // A function to use when this action is called
+                this.parent.sheet.render({ force: true });
+            }
         }, {
-            label: NEWEDO.ContextMenu.delete,
+            name: NEWEDO.ContextMenu.delete,
             action: 'delete',
             group: 'general',
-            icon: 'fas fa-trash',
+            icon: '<i class="fas fa-trash"></i>',
             condition: true,
-            callback: () => {}
+            callback: () => this.parent.delete()
         }]
     }
 
