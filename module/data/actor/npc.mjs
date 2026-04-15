@@ -17,8 +17,27 @@ export default class NpcDataModel extends ActorDataModel {
 
         // Npc's need a rank for some abilities and spells, this gives us a place to store rank
         schema.rank = new NumberField({ initial: 1 });
-
         schema.skills = new ArrayField(this.SkillField(), { initial: [], ...this.RequiredConfig });
+
+        /**
+         * BIG CHANGES TO HOW WE HANDLE NPC SHEETS
+         * so previously Npc sheets were just dummed down versions of the player sheets
+         * they would use items, could install augments, cast spells, etc.
+         * This was inefficient.
+         * 
+         * Npc sheets will now have all their details built into the data schemas
+         * their spells, attacks, and features are now kept as items inside the scehma rather than
+         * needing them to accomodate for all the different styles of item handling, especially
+         * with the legend costs required on certain powers, or requirements for augments,
+         * and changes in how the traits and baselines work between different actors
+         * 
+         * A lot of this sheet and scehma are based on the work done for the official daggerheart adaptation,
+         * thanks to them for all their hard work!
+         */
+
+        //schema.skills = new ArrayField();
+        //schema.attacks = new ArrayField();
+        //schema.spells = new ArrayField();
 
         return schema;
     }

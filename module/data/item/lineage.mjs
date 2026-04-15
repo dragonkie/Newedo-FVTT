@@ -57,6 +57,13 @@ export default class LineageData extends ItemDataModel {
         const allowed = await super._preCreate(data, options, user) || true;
         if (!allowed) return false;
 
+        const dataModification = {
+            _id: foundry.data.operators.ForcedDeletion,
+            ownership: foundry.data.operators.ForcedDeletion,
+            folder: foundry.data.operators.ForcedDeletion,
+            sort: foundry.data.operators.ForcedDeletion
+        };
+
         const actor = this.actor;
         if (actor) {
             //==================================================================================================
@@ -114,13 +121,7 @@ export default class LineageData extends ItemDataModel {
                                 if (!culture) return;
 
                                 const itemData = culture.toObject();
-                                const modification = {
-                                    "-=_id": null,
-                                    "-=ownership": null,
-                                    "-=folder": null,
-                                    "-=sort": null
-                                };
-                                foundry.utils.mergeObject(itemData, modification, { performDeletions: true });
+                                foundry.utils.applyDataOperators(itemData, dataModification, { performDeletions: true });
                                 await actor.createEmbeddedDocuments(culture.documentName, [itemData], {});
                                 resolve();
                             },
@@ -138,13 +139,7 @@ export default class LineageData extends ItemDataModel {
                 for (const i of this.items) {
                     const item = await fromUuid(i.uuid);
                     const data = item.toObject();
-                    const modification = {
-                        "-=_id": null,
-                        "-=ownership": null,
-                        "-=folder": null,
-                        "-=sort": null
-                    };
-                    foundry.utils.mergeObject(data, modification, { performDeletions: true });
+                    foundry.utils.applyDataOperators(data, dataModification, { performDeletions: true });
                     itemList.push(data);
                 }
 

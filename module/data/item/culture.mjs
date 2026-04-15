@@ -67,12 +67,12 @@ export default class CultureData extends ItemDataModel {
                     const item = await fromUuid(i.uuid);
                     const data = item.toObject();
                     const modification = {
-                        "-=_id": null,
-                        "-=ownership": null,
-                        "-=folder": null,
-                        "-=sort": null
+                        _id: foundry.data.operators.ForcedDeletion,
+                        ownership: foundry.data.operators.ForcedDeletion,
+                        folder: foundry.data.operators.ForcedDeletion,
+                        sort: foundry.data.operators.ForcedDeletion
                     };
-                    foundry.utils.mergeObject(data, modification, { performDeletions: true });
+                    foundry.utils.applyDataOperators(data, modification, { performDeletions: true });
                     itemList.push(data);
                 }
 

@@ -141,6 +141,7 @@ export default class WeaponData extends ItemDataModel {
 
     // List of item controls to be added to their list on actor sheets
     sheetActions(context) {
+        console.log("Get weapon actions", this)
         return [{
             name: NEWEDO.ContextMenu.attack,
             action: 'attack',

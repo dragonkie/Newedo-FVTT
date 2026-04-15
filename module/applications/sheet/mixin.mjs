@@ -302,12 +302,12 @@ export default function NewedoSheetMixin(Base) {
             if (!Object.keys(this.document.constructor.metadata.embedded).includes(item.documentName)) return;
             const itemData = item.toObject();
             const modification = {
-                "-=_id": null,
-                "-=ownership": null,
-                "-=folder": null,
-                "-=sort": null
+                _id: foundry.data.operators.ForcedDeletion,
+                ownership: foundry.data.operators.ForcedDeletion,
+                folder: foundry.data.operators.ForcedDeletion,
+                sort: foundry.data.operators.ForcedDeletion
             };
-            foundry.utils.mergeObject(itemData, modification, { performDeletions: true });
+            foundry.utils.applyDataOperators(itemData, modification, { performDeletions: true });
             foundry.documents.Item.create(itemData, { parent: this.document });
         }
 
@@ -397,7 +397,7 @@ export default function NewedoSheetMixin(Base) {
             const isOwner = item.isOwner;
             if (!isOwner) return [];
 
-            const options = item.system.sheetActions({});
+            const options = item.system.sheetActions();
 
             return options;
         }

@@ -429,6 +429,7 @@ export class ItemDataModel extends SystemDataModel {
      * @returns {Object[]}
      */
     sheetActions(context) {
+        console.log("getting sheet actions", this)
         return [{
             name: NEWEDO.ContextMenu.edit, // Localized label for the action
             action: 'edit',                 // the actual action to use
@@ -447,6 +448,8 @@ export class ItemDataModel extends SystemDataModel {
             callback: () => this.parent.delete()
         }]
     }
+
+    get actions() { return this.sheetActions() }
 
     /**
      * Called as part of prepareDer
