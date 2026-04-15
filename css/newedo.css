@@ -324,11 +324,17 @@
   display: flex;
   flex-direction: column;
 }
-.newedo .flexshrink {
+.newedo .flexshrink,
+.newedo .flex0 {
   flex: 0;
 }
-.newedo .flex {
+.newedo .flex,
+.newedo .flex1 {
   flex: 1;
+}
+.newedo .flexlarge,
+.newedo .flex2 {
+  flex: 2;
 }
 .newedo .flex-between {
   justify-content: space-between;
@@ -336,27 +342,27 @@
 .newedo .flex-start {
   justify-content: flex-start;
 }
-.newedo .flex-align-start {
-  align-items: flex-start;
-}
 .newedo .flex-end {
   justify-content: flex-end;
 }
-.newedo .flex-align-end {
+.newedo .align-end {
   align-items: flex-end;
 }
-.newedo .flexlarge {
-  flex: 2;
+.newedo .align-center {
+  align-items: center;
 }
-.newedo .align-left {
+.newedo .align-start {
+  align-items: flex-start;
+}
+.newedo .flex-align-left {
   justify-content: flex-start;
   text-align: left;
 }
-.newedo .align-right {
+.newedo .flex-align-right {
   justify-content: flex-end;
   text-align: right;
 }
-.newedo .align-center {
+.newedo .flex-align-center {
   justify-content: center;
   text-align: center;
 }
@@ -366,7 +372,8 @@
 .newedo .flex-gap-s {
   gap: 6px;
 }
-.newedo .flex-gap-m {
+.newedo .flex-gap-m,
+.newedo .flex-gap {
   gap: 8px;
 }
 .newedo .flex-gap-l {
@@ -378,7 +385,7 @@
 .newedo .flex-reverse {
   flex-wrap: wrap-reverse;
 }
-.newedo .nowrap {
+.newedo .nowrap, .newedo .flex-nowrap {
   flex-wrap: nowrap;
 }
 
@@ -425,6 +432,26 @@
   flex-direction: column;
   flex: 1;
   overflow: auto;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-left {
+  text-align: left;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.text-start {
+  text-align: start;
+}
+
+.text-end {
+  text-align: end;
 }
 
 .item-form {
@@ -685,6 +712,11 @@ ol.items-list .item-delete {
 .sheet.actor .window-content .edo-sheet-panel .fate-card .fate-list :last-child {
   border: 0;
 }
+.sheet.actor .window-content .edo-actor-image {
+  object-fit: cover;
+  border: 0;
+  object-position: 50% 0%;
+}
 .sheet.actor .window-content .edo-traits-list input {
   text-align: center;
 }
@@ -711,6 +743,17 @@ ol.items-list .item-delete {
   height: 1.75em;
   min-height: 1.75em;
   min-width: 2.25em;
+}
+.sheet.actor .window-content .edo-npc-header,
+.sheet.actor .window-content .edo-actor-header {
+  border: 0;
+  margin-bottom: 0;
+}
+.sheet.actor .window-content .edo-npc-header .edo-actor-name,
+.sheet.actor .window-content .edo-actor-header .edo-actor-name {
+  background-color: rgba(255, 255, 255, 0.1);
+  font-size: 1em;
+  height: 100%;
 }
 
 .sheet.item .tab {
@@ -743,6 +786,20 @@ ol.items-list .item-delete {
 }
 .sheet.item .sheet-header {
   padding: var(--edo-padding);
+}
+.sheet.item .edo-item-image {
+  object-fit: cover;
+  border: 0;
+  object-position: 50% 0%;
+}
+.sheet.item .edo-item-header {
+  border: 0;
+  margin-bottom: 0;
+}
+.sheet.item .edo-item-header .edo-item-name {
+  background-color: rgba(255, 255, 255, 0.1);
+  font-size: 0.7em;
+  height: 100%;
 }
 
 .edo-resource-bar {

@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "description": "CSS compiler for the Newedo system",
   "scripts": {
-    "sass": "sass --watch src/scss/newedo.scss css/newedo.css",
+    "watch": "sass --watch src/scss/newedo.scss css/newedo.css",
+    "build": "sass src/scss/newedo.scss css/newedo.css",
     "prepack": "del \"../_packages/newedo.zip\"",
     "pack": "sass src/scss/newedo.scss css/newedo.css && \"E:/Software/7-Zip/7z.exe\" a -tzip ../_packages/newedo.zip -x!src/ -x!pack*.json -x!*.md -x!*.git* -x!*.lock -x!newedo.code* -r && echo 'Package complete!'"
   },

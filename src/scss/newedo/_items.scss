@@ -41,4 +41,21 @@
     .sheet-header {
         padding: var(--edo-padding);
     }
+
+    .edo-item-image {
+        object-fit: cover;
+        border: 0;
+        object-position: 50% 0%;
+    }
+
+    .edo-item-header {
+        border: 0;
+        margin-bottom: 0;
+
+        .edo-item-name {
+            background-color: rgba(255, 255, 255, 0.1);
+            font-size: 0.7em;
+            height: 100%;
+        }
+    }
 }

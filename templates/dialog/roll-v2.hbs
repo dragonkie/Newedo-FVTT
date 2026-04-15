@@ -25,7 +25,7 @@ TODO:
                 <label>{{localize part.label}}</label>
                 <div class="flexrow clicker flex-group-center flex-gap-s" name="clicker">
                     <button type="button" name="decrease" class="flexshrink"><i class="fa-solid fa-minus"></i></button>
-                    <input type="number" name="value" class="align-center" value="{{part.value}}" disabled />
+                    <input type="number" name="value" class="flex-align-center" value="{{part.value}}" disabled />
                     <button type="button" name="increase" class="flexshrink"><i class="fa-solid fa-plus"></i></button>
                 </div>
             </div>
@@ -34,7 +34,7 @@ TODO:
         {{!-- Select inputs --}}
         {{#if (eq part.element 'selector')}}
             <div class="edo-formula-group form-group" data-part="{{part.element}}" data-tags="{{#each part.tags as |tag|}}{{tag}}|{{/each}}">
-                <select style="flex: 1">
+                <select class="flex">
                     {{#each part.select_options as | option |}}
                         <option value="{{option.value}}" {{selected option.default}}>{{localize option.label}}</option>
                     {{/each}}

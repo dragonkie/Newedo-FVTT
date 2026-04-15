@@ -2,7 +2,7 @@
 
     {{!-- Core Stats --}}
     {{> 'newedo.traits-core'}}
-    <div class="flexrow flex-gap-m flex-group-start flex-align-start scrollable">
+    <div class="flexrow flex-gap-m flex-group-start align-start scrollable">
         <div>
             <a data-action="configSkills">
                 <i class="fas fa-cog"></i>
@@ -32,7 +32,7 @@
                 {{#each items.contents as |item|}}
                     {{#if (not (eq item.type 'skill'))}}
                         <li class="item flexrow" data-item-uuid="{{item.uuid}}">
-                            <span style="display: flex; flex-direction: row; align-items: center; justify-content: flex-start;">
+                            <span class="flexrow align-center flex-start">
                                 <img src="{{item.img}}" width="30" height="30">
                                 <a style="margin-left: 4px;" data-action="editItem">{{item.name}}</a>
                             </span>

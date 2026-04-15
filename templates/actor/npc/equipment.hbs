@@ -8,14 +8,14 @@
 
         {{#each itemTypes.weapon as | weapon key |}}
 
-            <li class="item flexrow" style="text-align: center;" data-item-uuid="{{weapon.uuid}}">
+            <li class="item flexrow text-center" data-item-uuid="{{weapon.uuid}}">
 
-                <span style="display: flex; flex-direction: row; align-items: center; justify-content: flex-start;">
+                <span class="flexrow align-center flex-start">
                     <img src="{{weapon.img}}" width="30" height="30">
                     <a style="margin-left: 4px;" data-action="editItem">{{weapon.name}}</a>
                 </span>
 
-                <span style="text-align: left;">
+                <span class="text-left">
                     {{localize weapon.system.skill.label}}
                 </span>
 

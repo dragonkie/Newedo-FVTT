@@ -1,8 +1,8 @@
 <section class="edo-sheet-panel">
     {{!-- Newedo banner rendered at the top of the screen--}}
     <img class="banner-newedo" src="systems/newedo/assets/images/banner-newedo.svg">
-    <div class="portrait" style="border: 0;" data-action="editImage">
-        <img class="profile-img" src="{{document.img}}" title="{{actor.name}}" height="175px" width="175px" style="object-fit: cover; border: 0; object-position: 50% 0%" />
+    <div class="portrait" data-action="editImage">
+        <img class="edo-actor-image" src="{{document.img}}" title="{{actor.name}}" height="175px" width="175px"/>
     </div>
 
     {{!-- Health container--}}
@@ -32,7 +32,7 @@
 
     {{#if (eq document.type 'character')}}
         {{!-- Character XP tracker --}}
-        <div class="flexrow" style="gap: 4px;">
+        <div class="flexrow flex-gap-xs">
             <div class="flexrow">
                 {{{ledger 'system.xp.value' 'xp' 'NEWEDO.ledger.exp'}}}
                 <span>{{localize 'NEWEDO.Generic.Experience.abbr'}}:</span>
@@ -41,7 +41,7 @@
         </div>
 
         {{!-- Character money tracker --}}
-        <div class="flexrow" style="gap: 4px;">
+        <div class="flexrow flex-gap-xs">
             <div class="flexrow">
                 {{{ledger 'system.money.value' 'money' 'NEWEDO.ledger.money'}}}
                 <span>{{localize 'NEWEDO.Generic.Money.long'}}:</span>

@@ -22,7 +22,7 @@
                 <div style="font-size: 1.2em;">
                     <b>{{localize group.label}}</b>
                 </div>
-                <div class="flexrow" style="text-align: center;">
+                <div class="flexrow text-center">
                     {{#each ../feature.data.traits as | trait key |}}
                         {{#if (eq trait.group ../name)}}
                             <div>
@@ -35,7 +35,7 @@
             </div>
         {{/each}}
     {{/if}}
-    <div class="flexrow" style="gap: 10px;">
+    <div class="flexrow flex-gap">
         <button data-action="confirm" type="button" value="Confirm">Confirm</button>
         <button data-action="cancel" type="button" value="Cancel">Cancel</button>
     </div>

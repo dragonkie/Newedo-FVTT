@@ -1,0 +1,58 @@
+<section class="edo-sheet-content flexrow">
+    <section class="edo-sheet-panel">
+        {{!-- Newedo banner rendered at the top of the screen--}}
+        <img class="banner-newedo" src="systems/newedo/assets/images/banner-newedo.svg">
+        <div class="portrait" style="border: 0;" data-action="editImage">
+            <img class="edo-actor-image" src="{{document.img}}" title="{{actor.name}}" height="150px" width="150px"/>
+        </div>
+
+        {{!-- Health container--}}
+        {{> 'newedo.resource-bar-inline' newContext 
+            classes='edo-green'
+            label=system.wound.label 
+            value=system.hp.value 
+            valueName='system.hp.value' 
+            maxValue=system.hp.max
+        }}
+
+        {{!-- Armour values --}}
+        {{> 'newedo.armour-soaks'}}
+
+        {{!-- Attacks --}}
+        <div class="edo-seperator">
+            <label>Attacks</label>
+            {{#each system.attacks as |attack|}}
+
+            {{/each}}
+        </div>
+    </section>
+
+    <section class="edo-sheet-body">
+
+        {{!-- Character main content --}}
+        <h1 class="edo-npc-header">
+            <input class="edo-actor-name" type="text" name="name" value="{{name}}" placeholder="Name">
+        </h1>
+        {{!-- Header --}}
+        {{!-- Actor name --}}
+        {{!-- Rank --}}
+        {{> "newedo.tabs-nav"}}
+        {{!-- Traits tab --}}
+        {{!-- Core traits --}}
+        {{!-- Heart power pressence perception reflex savvy , NO SHINPI FOR NPCS--}}
+        {{!-- Derived traits --}}
+        {{!-- Defence, Move, Resolve, Initiative --}}
+        {{!-- Extra traits --}}
+        {{!-- Size, number of actions? --}}
+        {{!-- Skills tab --}}
+        {{!-- User created list of skills --}}
+        {{!-- Effects tab --}}
+        {{!-- Passive effects --}}
+        {{!-- Active effects --}}
+        {{!-- Suppressed effects --}}
+        {{!-- Inactive effects --}}
+        {{!-- Notes tab --}}
+        {{!-- Description, viewable by players with view permissions --}}
+        {{!-- GM notes, only visible to assistant GM or above --}}
+    </section>
+</section>

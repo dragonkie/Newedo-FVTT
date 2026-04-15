@@ -1,9 +1,9 @@
-<section class="body flexrow flex-start flex-align-start">
+<section class="body flexrow flex-start align-start">
 
     <div class="edo-sheet-panel flexshrink">
         <img class="banner-newedo" src="systems/newedo/assets/images/banner-newedo.svg">
-        <div class="portrait" style="border: 0;" data-action="editImage">
-            <img class="profile-img" src="{{document.img}}" title="{{actor.name}}" height="175px" width="175px" style="object-fit: cover; border: 0; object-position: 50% 0%" />
+        <div class="portrait" data-action="editImage">
+            <img class="edo-actor-image" src="{{document.img}}" title="{{actor.name}}" height="175px" width="175px"/>
         </div>
 
         {{toFieldInput schema 'lineage' value=system.lineage}}

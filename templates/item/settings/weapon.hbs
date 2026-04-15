@@ -6,14 +6,14 @@
         <label><b>Damage Parts:</b></label>
         <div class="flexcol flex-gap-xs">
             {{#each damageParts as | dmg key |}}
-                <div class="flexrow" style="gap: 10px; margin: 3px 0" data-part-index="{{key}}">
+                <div class="flexrow flex-gap-l" style="margin: 3px 0" data-part-index="{{key}}">
                     {{!-- damage formula --}}
                     {{formInput dmg.formula.field value=dmg.formula.value name=dmg.formula.path}}
                     {{!-- damage type --}}
-                    <div class="flexrow" style="gap: 5px">
+                    <div class="flexrow flex-gap-xs">
                         {{formInput dmg.type.field value=dmg.type.value name=dmg.type.path}}
                         {{#unless (eq key 0)}}
-                            <a data-action="deleteDamagePart" style="flex: 0;">
+                            <a data-action="deleteDamagePart" class="flexshrink">
                                 <i class="fa-solid fa-trash"></i>
                             </a>
                         {{/unless}}
@@ -30,11 +30,11 @@
 
     <div class="flexcol flex-gap-xs">
         <div class="flexrow flex-gap-m">
-            {{toFieldGroup schema 'quality.value' value=system.quality.value label='Quality' class='align-center'}}
+            {{toFieldGroup schema 'quality.value' value=system.quality.value label='Quality' class='flex-align-center'}}
             {{toFieldGroup schema 'grit.value' value=system.grit.value label='Grit'}}
         </div>
         <div class="flexrow flex-gap-s">
-            {{toFieldGroup schema 'grit.atk' value=system.grit.atk label='Grit Attack' class='align-center'}}
+            {{toFieldGroup schema 'grit.atk' value=system.grit.atk label='Grit Attack' class='flex-align-center'}}
             {{toFieldGroup schema 'grit.dmg' value=system.grit.dmg label='Grit Damage'}}
         </div>
     </div>

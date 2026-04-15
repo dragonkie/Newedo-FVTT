@@ -5,6 +5,7 @@
 @use 'global/grid' as *;
 @use 'global/flex' as *;
 @use 'global/sheet' as *;
+@use 'global/text' as *;
 
 //anything imported into this group will require its PARENT have the newedo class, if it needs to share the newedo class it should start with &
 @use 'components/forms' as form;

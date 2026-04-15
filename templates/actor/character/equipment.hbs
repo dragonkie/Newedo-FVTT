@@ -7,8 +7,8 @@
             <span>Controls</span>
         </li>
         {{#each itemTypes.weapon as | item key |}}
-            <li class="item flexrow" style="text-align: center;" data-item-uuid="{{item.uuid}}">
-                <span style="display: flex; flex-direction: row; align-items: center; justify-content: flex-start;">
+            <li class="item flexrow text-center" data-item-uuid="{{item.uuid}}">
+                <span class="flexrow align-center flex-start">
                     <img src="{{item.img}}" width="30" height="30">
                     <a style="margin-left: 4px;" data-action="editItem">{{item.name}}</a>
                 </span>
@@ -48,12 +48,12 @@
             <span>Controls</span>
         </li>
         {{#each itemTypes.armour as | item key |}}
-            <li class="item flexrow" style="text-align: center;" data-item-uuid="{{item.uuid}}">
-                <span style="display: flex; flex-direction: row; align-items: center; justify-content: flex-start;">
+            <li class="item flexrow text-center" data-item-uuid="{{item.uuid}}">
+                <span class="flexrow align-center flex-start">
                     <img src="{{item.img}}" width="30" height="30">
                     <a style="margin-left: 4px;" data-action="editItem">{{item.name}}</a>
                 </span>
-                <span class="flexrow" style="text-align: center;">
+                <span class="flexrow align-center">
                     {{#each item.system.soak as | soak key | }}
                         {{#if (gt soak 0)}}
                             <span>{{toTitleCase key}}: {{soak}}</span>

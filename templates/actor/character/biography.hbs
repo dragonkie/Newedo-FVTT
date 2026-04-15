@@ -2,7 +2,7 @@
 
     <div class="flexcol flex-gap-s">
         <label><b>{{localize 'NEWEDO.Generic.Priorities'}}</b></label>
-        <div class="flexrow flex-gap-l nowrap align-center">
+        <div class="flexrow flex-gap-l nowrap flex-align-center">
             {{toFieldGroup system.schema 'priorities.traits' value=system.priorities.traits classes='stacked'}}
             {{toFieldGroup system.schema 'priorities.skills' value=system.priorities.skills classes='stacked'}}
             {{toFieldGroup system.schema 'priorities.magic' value=system.priorities.magic classes='stacked'}}
@@ -11,12 +11,12 @@
         </div>
     </div>
 
-    <div class="flexrow flex-align-start flex-gap-l">
+    <div class="flexrow align-start flex-gap-l">
         {{toFieldGroup system.schema 'details.gender' value=system.details.gender}}
         {{toFieldGroup system.schema 'details.age' value=system.details.age}}
     </div>
 
-    <div class="flexrow flex-align-start flex-gap-l">
+    <div class="flexrow align-start flex-gap-l">
         {{toFieldGroup system.schema 'details.height' value=system.details.height}}
         {{toFieldGroup system.schema 'details.weight' value=system.details.weight}}
     </div>

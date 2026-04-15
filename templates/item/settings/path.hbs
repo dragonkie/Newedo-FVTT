@@ -1,7 +1,7 @@
 <div class="edo-tab-content edo-item-settings edo-path-settings flex-gap-m">
     <div class="flexrow" style="border: 2px groove white; padding: 8px;">
-        <div style="text-align: left;">Name</div>
-        <a style="text-align: right;" data-action="createFeature">Add Feature</a>
+        <div class="text-left">Name</div>
+        <a class="text-right" data-action="createFeature">Add Feature</a>
     </div>
     <ol class="feature-list">
         {{#each features as | feature key | }}
@@ -14,9 +14,9 @@
                     </a>
                     <span>{{feature.type}}</span>
                     <span>Rank: {{feature.unlock}}</span>
-                    <span class="flexrow" style="flex: 0 0; flex-wrap: nowrap; gap: 5px;">
-                        <a style="flex: 1;" data-action="editFeature"><i class="fas fa-edit"></i></a>
-                        {{#if ../isEditMode}}<a style="flex: 1;" data-action="deleteFeature"><i class="fas fa-trash"></i></a>{{/if}}
+                    <span class="flexrow flexshrink flex-nowrap flex-gap-xs">
+                        <a class="flex" data-action="editFeature"><i class="fas fa-edit"></i></a>
+                        {{#if ../isEditMode}}<a class="flex" data-action="deleteFeature"><i class="fas fa-trash"></i></a>{{/if}}
                     </span>
                 </div>
                 <div class="details">

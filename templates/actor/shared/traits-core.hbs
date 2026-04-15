@@ -2,13 +2,13 @@
 <div class="edo-traits-list flexrow flex-gap-m">
     {{#each system.traits.core as | trait key |}}
 
-        <div class="edo-core-trait align-center" data-roll-type="NEWEDO.Generic.Trait.long" data-roll-label="{{trait.label}}" data-roll="{{trait.rank}}d10">
-            <label class="edo-resource-label flexlarge align-left" data-action="roll">{{trait.label}}</label>
+        <div class="edo-core-trait flex-align-center" data-roll-type="NEWEDO.Generic.Trait.long" data-roll-label="{{trait.label}}" data-roll="{{trait.rank}}d10">
+            <label class="edo-resource-label flexlarge flex-align-left" data-action="roll">{{trait.label}}</label>
             <input class="edo-trait-value" value="{{trait.total}}" disabled type="number" />
             {{#if ../isEditMode}}
                 <input class="edo-trait-rank" name="system.traits.core.{{key}}.value" value="{{trait.value}}" type="number" />
             {{/if}}
-            <a class="align-center" data-action="roll">Rank {{trait.rank}}</a>
+            <a class="flex-align-center" data-action="roll">Rank {{trait.rank}}</a>
         </div>
     {{/each}}
 </div>
