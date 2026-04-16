@@ -10,7 +10,7 @@
             <li class="item flexrow text-center" data-item-uuid="{{item.uuid}}">
                 <span class="flexrow align-center flex-start">
                     <img src="{{item.img}}" width="30" height="30">
-                    <a style="margin-left: 4px;" data-action="editItem">{{item.name}}</a>
+                    <a class="margin-left edo-margin-xs" data-action="edit">{{item.name}}</a>
                 </span>
                 <span>{{localize item.system.skill.label}}</span>
                 <span class="item-controls">
@@ -31,13 +31,13 @@
                             <div>Burst</div>
                         </a>
                     {{/if}}
-                    <a data-action="useItem" data-use="attack" title="Attack"><i class="fa-solid fa-sword"></i></a>
-                    <a data-action="useItem" data-use="damage" title="Damage"><i class="fa-solid fa-droplet"></i></a>
-                    <a data-action="useItem" data-use="equip">
+                    <a data-action="use" data-use="attack" title="Attack"><i class="fa-solid fa-sword"></i></a>
+                    <a data-action="use" data-use="damage" title="Damage"><i class="fa-solid fa-droplet"></i></a>
+                    <a data-action="use" data-use="equip">
                         {{#if item.system.isEquipped}}<i class="fa-solid fa-hand-rock" title="Unequip"></i>{{/if}}
                         {{#if (not item.system.isEquipped)}}<i class="fa-solid fa-hand" title="Equip"></i>{{/if}}
                     </a>
-                    {{#if ../isEditMode}}<a data-action="deleteItem" title="Delete"><i class="fa-solid fa-trash"></i></a>{{/if}}
+                    {{#if ../isEditMode}}<a data-action="delete" title="Delete"><i class="fa-solid fa-trash"></i></a>{{/if}}
                 </span>
             </li>
         {{/each}}
@@ -51,7 +51,7 @@
             <li class="item flexrow text-center" data-item-uuid="{{item.uuid}}">
                 <span class="flexrow align-center flex-start">
                     <img src="{{item.img}}" width="30" height="30">
-                    <a style="margin-left: 4px;" data-action="editItem">{{item.name}}</a>
+                    <a class="margin-left edo-margin-xs" data-action="edit">{{item.name}}</a>
                 </span>
                 <span class="flexrow align-center">
                     {{#each item.system.soak as | soak key | }}
@@ -61,11 +61,11 @@
                     {{/each}}
                 </span>
                 <span class="item-controls">
-                    <a data-action="useItem" data-use="equip">
+                    <a data-action="use" data-use="equip">
                         {{#if item.system.isEquipped}}<i class="fa-solid fa-shirt"></i>{{/if}}
                         {{#if (not item.system.isEquipped)}}<i class="fa-solid fa-suitcase"></i>{{/if}}
                     </a>
-                    {{#if ../isEditMode}}<a data-action="deleteItem"><i class="fa-solid fa-trash"></i></a>{{/if}}
+                    {{#if ../isEditMode}}<a data-action="delete"><i class="fa-solid fa-trash"></i></a>{{/if}}
                 </span>
             </li>
         {{/each}}

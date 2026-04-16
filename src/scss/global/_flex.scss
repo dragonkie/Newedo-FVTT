@@ -98,6 +98,10 @@
   //======================================================================
   //> Flex spacing
   //======================================================================
+  .flex-gap {
+    gap: var(--edo-gap)
+  }
+
   .flex-gap-xs {
     gap: 4px;
   }
@@ -106,8 +110,7 @@
     gap: 6px;
   }
 
-  .flex-gap-m,
-  .flex-gap {
+  .flex-gap-m {
     gap: 8px;
   }
 
@@ -119,11 +122,40 @@
     gap: 16px;
   }
 
+  .flexwrap {
+    flex-wrap: wrap;
+  }
+
   .flex-reverse {
     flex-wrap: wrap-reverse;
   }
 
-  .nowrap, .flex-nowrap {
+  .nowrap,
+  .flex-nowrap {
     flex-wrap: nowrap;
+  }
+
+  .margin-right {
+    margin-right: var(--edo-margin, 6px);
+  }
+
+  .margin-left {
+    margin-left: var(--edo-margin, 6px);
+  }
+
+  .margin-top {
+    margin-top: var(--edo-margin, 6px);
+  }
+
+  .margin-bottom {
+    margin-bottom: var(--edo-margin, 6px);
+  }
+
+  .margin-vertical {
+    margin: var(--edo-margin, 6px) 0 var(--edo-margin, 6px) 0;
+  }
+
+  .margin-horizontal {
+    margin: 0 var(--edo-margin, 6px) 0 var(--edo-margin, 6px);
   }
 }

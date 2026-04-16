@@ -114,33 +114,58 @@
 }
 
 .edo-xs {
+  --edo-gap: var(--edo-size-xs);
   --edo-margin: var(--edo-size-xs);
   --edo-padding: var(--edo-size-xs);
   --edo-font-size: var(--edo-font-size-xs);
 }
 
 .edo-s {
+  --edo-gap: var(--edo-size-s);
   --edo-margin: var(--edo-size-s);
   --edo-padding: var(--edo-size-s);
   --edo-font-size: var(--edo-font-size-s);
 }
 
 .edo-m {
+  --edo-gap: var(--edo-size-m);
   --edo-margin: var(--edo-size-m);
   --edo-padding: var(--edo-size-m);
   --edo-font-size: var(--edo-font-size-m);
 }
 
 .edo-l {
+  --edo-gap: var(--edo-size-l);
   --edo-margin: var(--edo-size-l);
   --edo-padding: var(--edo-size-l);
   --edo-font-size: var(--edo-font-size-l);
 }
 
 .edo-xl {
+  --edo-gap: var(--edo-size-xl);
   --edo-margin: var(--edo-size-xl);
   --edo-padding: var(--edo-size-xl);
   --edo-font-size: var(--edo-font-size-xl);
+}
+
+.edo-margin-xs {
+  --edo-margin: var(--edo-size-xs);
+}
+
+.edo-margin-s {
+  --edo-margin: var(--edo-size-s);
+}
+
+.edo-margin-m {
+  --edo-margin: var(--edo-size-m);
+}
+
+.edo-margin-l {
+  --edo-margin: var(--edo-size-l);
+}
+
+.edo-margin-xl {
+  --edo-margin: var(--edo-size-xl);
 }
 
 /* Global styles */
@@ -366,14 +391,16 @@
   justify-content: center;
   text-align: center;
 }
+.newedo .flex-gap {
+  gap: var(--edo-gap);
+}
 .newedo .flex-gap-xs {
   gap: 4px;
 }
 .newedo .flex-gap-s {
   gap: 6px;
 }
-.newedo .flex-gap-m,
-.newedo .flex-gap {
+.newedo .flex-gap-m {
   gap: 8px;
 }
 .newedo .flex-gap-l {
@@ -382,11 +409,33 @@
 .newedo .flex-gap-xl {
   gap: 16px;
 }
+.newedo .flexwrap {
+  flex-wrap: wrap;
+}
 .newedo .flex-reverse {
   flex-wrap: wrap-reverse;
 }
-.newedo .nowrap, .newedo .flex-nowrap {
+.newedo .nowrap,
+.newedo .flex-nowrap {
   flex-wrap: nowrap;
+}
+.newedo .margin-right {
+  margin-right: var(--edo-margin, 6px);
+}
+.newedo .margin-left {
+  margin-left: var(--edo-margin, 6px);
+}
+.newedo .margin-top {
+  margin-top: var(--edo-margin, 6px);
+}
+.newedo .margin-bottom {
+  margin-bottom: var(--edo-margin, 6px);
+}
+.newedo .margin-vertical {
+  margin: var(--edo-margin, 6px) 0 var(--edo-margin, 6px) 0;
+}
+.newedo .margin-horizontal {
+  margin: 0 var(--edo-margin, 6px) 0 var(--edo-margin, 6px);
 }
 
 .sheet.actor .tab[data-tab].active,

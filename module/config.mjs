@@ -293,7 +293,7 @@ NEWEDO.prompt = {
 
 }
 NEWEDO.confirm = {
-    deleteItem: 'NEWEDO.Dialog.Confirm.Delete.Item',
+    delete: 'NEWEDO.Dialog.Confirm.Delete.Item',
     deleteFeature: 'NEWEDO.Dialog.Confirm.Delete.Feature'
 }
 NEWEDO.dialog = {

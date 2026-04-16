@@ -134,9 +134,9 @@ $bg-image: url(/ui/parchment.jpg);
     --edo-colour-background: var(--edo-colour-cool-1-75);
     --edo-colour-primary: var(--edo-colour-cool-3);
     --edo-colour-secondary: var(--edo-colour-cool-2);
-
+    
     --edo-colour-border: var(--edo-colour-text);
-
+    
     //=====================================================================
     //>- Text
     //=====================================================================
@@ -150,17 +150,17 @@ $bg-image: url(/ui/parchment.jpg);
 //> Apply varialbes to elements
 //=====================================================================
 .newedo .window-content {
-
+    
     color: var(--edo-colour-text);
     background: var(--edo-colour-background);
     padding: 8px;
     backdrop-filter: blur(10px);
-
+    
     ::selection {
         color: var(--edo-colour-text-selection);
         color: var(--edo-colour-text-selection-bg);
     }
-
+    
     button,
     input,
     label,
@@ -168,7 +168,7 @@ $bg-image: url(/ui/parchment.jpg);
     a {
         font-size: var(--edo-font-size);
     }
-
+    
     input,
     textarea,
     button {
@@ -176,32 +176,63 @@ $bg-image: url(/ui/parchment.jpg);
     }
 }
 
+//======================================================================================
+//> Universal sizing
+//======================================================================================
 .edo-xs {
+    --edo-gap: var(--edo-size-xs);
     --edo-margin: var(--edo-size-xs);
     --edo-padding: var(--edo-size-xs);
     --edo-font-size: var(--edo-font-size-xs);
 }
 
 .edo-s {
+    --edo-gap: var(--edo-size-s);
     --edo-margin: var(--edo-size-s);
     --edo-padding: var(--edo-size-s);
     --edo-font-size: var(--edo-font-size-s);
 }
 
 .edo-m {
+    --edo-gap: var(--edo-size-m);
     --edo-margin: var(--edo-size-m);
     --edo-padding: var(--edo-size-m);
     --edo-font-size: var(--edo-font-size-m);
 }
 
 .edo-l {
+    --edo-gap: var(--edo-size-l);
     --edo-margin: var(--edo-size-l);
     --edo-padding: var(--edo-size-l);
     --edo-font-size: var(--edo-font-size-l);
 }
 
 .edo-xl {
+    --edo-gap: var(--edo-size-xl);
     --edo-margin: var(--edo-size-xl);
     --edo-padding: var(--edo-size-xl);
     --edo-font-size: var(--edo-font-size-xl);
+}
+
+//======================================================================================
+//> Margin sizing
+//======================================================================================
+.edo-margin-xs {
+    --edo-margin: var(--edo-size-xs);
+}
+
+.edo-margin-s {
+    --edo-margin: var(--edo-size-s);
+}
+
+.edo-margin-m {
+    --edo-margin: var(--edo-size-m);
+}
+
+.edo-margin-l {
+    --edo-margin: var(--edo-size-l);
+}
+
+.edo-margin-xl {
+    --edo-margin: var(--edo-size-xl);
 }

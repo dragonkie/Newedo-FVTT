@@ -13,7 +13,7 @@
                 {{!-- Link to the fate opens up the item sheet --}}
                 <span class="flexrow align-center flex-start">
                     <img src="{{rote.img}}" width="30" height="30">
-                    <a style="margin-left: 4px;" data-action="editItem">{{rote.name}}</a>
+                    <a class="margin-left edo-margin-xs" data-action="edit">{{rote.name}}</a>
                 </span>
 
                 <a class="item-detail" data-action="use" data-label="{{rote.name}}">{{rote.system.skill.label}}</a>
@@ -21,8 +21,8 @@
                 <span class="item-detail">{{rote.system.casting.cost}}</span>
 
                 <span class="item-controls">
-                    <a data-action="useItem" data-use="cast"><i class="fa-solid fa-book-blank"></i></a>
-                    {{#if ../isEditMode}}<a data-action="deleteItem"><i class="fa-solid fa-trash"></i></a>{{/if}}
+                    <a data-action="use" data-use="cast"><i class="fa-solid fa-book-blank"></i></a>
+                    {{#if ../isEditMode}}<a data-action="delete"><i class="fa-solid fa-trash"></i></a>{{/if}}
                 </span>
 
             </li>

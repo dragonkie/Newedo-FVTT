@@ -26,14 +26,14 @@
                 {{!-- Link to the fate opens up the item sheet --}}
                 <span class="flexrow align-center flex-start">
                     <img src="{{augment.img}}" width="30" height="30">
-                    <a style="margin-left: 4px;" data-action="editItem">{{augment.name}}</a>
+                    <a class="margin-left edo-margin-xs" data-action="edit">{{augment.name}}</a>
                 </span>
                 <span class="item-detail">{{augment.system.biofeedback}}%</span>
 
                 <span class="item-controls flex-gap-s">
                     {{log 'rendering aug entry' augment}}
-                    {{#if (not augment.system.installed) }} <span data-action="useItem" data-use="install"><i class="fa-solid fa-microchip"></i></span> {{/if}}
-                    {{#if augment.system.installed}} <span data-action="useItem" data-use="install"><i class="fa-solid fa-circle-minus"></i></span> {{/if}}
+                    {{#if (not augment.system.installed) }} <span data-action="use" data-use="install"><i class="fa-solid fa-microchip"></i></span> {{/if}}
+                    {{#if augment.system.installed}} <span data-action="use" data-use="install"><i class="fa-solid fa-circle-minus"></i></span> {{/if}}
                     {{#if @root.isEditMode}} <span class="item-delete"><i class="fa-solid fa-trash"></i></span> {{/if}}
                 </span>
             </li>

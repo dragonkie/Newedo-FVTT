@@ -8,13 +8,13 @@
         <div class="flexrow">
             &#x2022
             {{#if culture}}
-                <a class="item" data-item-uuid="{{culture.uuid}}"><b data-action="editItem">{{culture.name}}</b></a>
+                <a class="item" data-item-uuid="{{culture.uuid}}"><b data-action="edit">{{culture.name}}</b></a>
             {{else}}
                 {{localize 'TYPES.Item.culture'}}
             {{/if}}
             &#x2022
             {{#if lineage}}
-                <a class="item" data-item-uuid="{{lineage.uuid}}"><b data-action="editItem">{{lineage.name}}</b></a>
+                <a class="item" data-item-uuid="{{lineage.uuid}}"><b data-action="edit">{{lineage.name}}</b></a>
             {{else}}
                 {{localize 'TYPES.Item.lineage'}}
             {{/if}}

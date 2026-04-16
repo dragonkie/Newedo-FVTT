@@ -19,7 +19,7 @@
                 {{#each items.contents as |item|}}
                     {{#if (eq item.type 'skill')}}
                         <li class="item flexrow" data-item-uuid="{{item.uuid}}">
-                            <a data-action="useItem">{{item.name}}</a>
+                            <a data-action="use">{{item.name}}</a>
                             <div class="flexrow nowrap">
                                 {{#each item.system.ranks as | value index |}}
                                     <button type="button" data-action="skillDice" data-index="{{index}}" value="{{value}}">
@@ -40,16 +40,16 @@
                         <li class="item flexrow" data-item-uuid="{{item.uuid}}">
                             <span class="flexrow align-center flex-start">
                                 <img src="{{item.img}}" width="30" height="30">
-                                <a style="margin-left: 4px;" data-action="editItem">{{item.name}}</a>
+                                <a style="margin-left: 4px;" data-action="edit">{{item.name}}</a>
                             </span>
                             <div class="item-controls">
                                 {{#each item.system.sheetActions as | button |}}
                                     {{#if button.condition}}
-                                        <a data-action="useItem" data-use="{{button.action}}" class="flexrow"><i class="{{button.icon}}"></i></a>
+                                        <a data-action="use" data-use="{{button.action}}" class="flexrow"><i class="{{button.icon}}"></i></a>
                                     {{/if}}
                                 {{/each}}
-                                <a data-action="editItem"><i class="fas fa-edit"></i></a>
-                                {{#if ../isEditMode}}<a data-action="deleteItem" title="Delete"><i class="fa-solid fa-trash"></i></a>{{/if}}
+                                <a data-action="edit"><i class="fas fa-edit"></i></a>
+                                {{#if ../isEditMode}}<a data-action="delete" title="Delete"><i class="fa-solid fa-trash"></i></a>{{/if}}
                             </div>
                         </li>
                     {{/if}}

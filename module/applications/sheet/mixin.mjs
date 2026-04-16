@@ -15,6 +15,11 @@ export default function NewedoSheetMixin(Base) {
             form: { submitOnChange: true },
             window: { resizable: true },
             actions: {// Default actions must be static functions
+                use: this._onUseItem,
+                edit: this._onEditItem,
+                delete: this._onDeleteItem,
+                roll: this._onRoll,
+
                 editImage: this._onEditImage,
                 toggleSheet: this._onToggleSheet,
                 toggleMode: this._onToggleMode,
@@ -127,6 +132,79 @@ export default function NewedoSheetMixin(Base) {
         //======================================================================================================
         //> Sheet Actions
         //======================================================================================================
+        static async _onEditItem(event, target) {
+            const item = await this.constructor.getTargetItem(target);
+            if (!item.sheet.rendered) item.sheet.render(true);
+            else item.sheet.bringToFront();
+        };
+
+        static async _onDeleteItem(event, target) {
+            const item = await this.constructor.getTargetItem(target);
+            const confirm = await foundry.applications.api.DialogV2.confirm({
+                content: `${utils.localize(NEWEDO.confirm.delete)}: ${item.name}`,
+                rejectClose: false,
+                modal: true
+            });
+            if (confirm) return item.delete();
+        }
+
+        static async getTargetItem(target) {
+            let uuid = target.closest(".item[data-item-uuid]").dataset.itemUuid;
+            if (!uuid) return undefined;
+            return fromUuid(uuid);
+        }
+
+        static async _onUseItem(event, target) {
+            // Get the item were actually targeting
+            const item = await this.constructor.getTargetItem(target);
+            // Grabs an optional argument to pass to the item, useful for when an item has multiple use cases such as weapons attacking / damaging
+            const action = target.closest("[data-use]")?.dataset.use;
+            return item.system.use(action);
+        };
+
+        /**
+         * Generic roll event, prompts user to spend legend and confirm the roll formula
+         * @param {Event} event 
+         * @param {HTMLElement} target 
+         */
+        static async _onRoll(event, target) {
+            LOGGER.debug(`Standard roll action`, target);
+
+            // adds the roll from the html element
+            let ele = target.closest('[data-roll]');
+            if (!ele) return;
+
+            const useLegend = Object.hasOwn(this.document.system, 'legend');
+
+            const roll = new NewedoRoll({
+                legend: useLegend,
+                title: 'NEWEDO.Generic.Trait.long',
+                document: this.document,
+                rollData: this.document.getRollData(),
+                wounds: false,
+            });
+
+            roll.AddPart({
+                type: ele.dataset?.rollLabel,
+                label: ele.dataset?.rollLabel,
+                value: ele.dataset.roll
+            });
+
+            const options = await roll.getRollOptions();
+            if (options.cancelled) return;
+            let r = await roll.evaluate();
+            if (!r) return;
+
+            let msg = r.toMessage({
+                flavor: ele.dataset?.rollLabel || '',
+                speaker: foundry.documents.ChatMessage.getSpeaker({
+                    scene: undefined,
+                    token: this.document.token,
+                    actor: this.document,
+                })
+            });
+        }
+
         getRollData() {
             return this.document.getRollData();
         }

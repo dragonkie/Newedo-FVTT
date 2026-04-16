@@ -12,7 +12,7 @@
 
                 <span class="flexrow align-center flex-start">
                     <img src="{{weapon.img}}" width="30" height="30">
-                    <a style="margin-left: 4px;" data-action="editItem">{{weapon.name}}</a>
+                    <a style="margin-left: 4px;" data-action="edit">{{weapon.name}}</a>
                 </span>
 
                 <span class="text-left">
@@ -21,22 +21,22 @@
 
                 <span class="item-controls">
 
-                    <a data-action="useItem" data-use="equip">
+                    <a data-action="use" data-use="equip">
                         {{#if weapon.isEquipped}}<i class="fa-solid fa-hand-rock"></i>{{/if}}
                         {{#if (not weapon.isEquipped)}}<i class="fa-solid fa-hand"></i>{{/if}}
                     </a>
 
-                    <a data-action="useItem" data-use="attack">
+                    <a data-action="use" data-use="attack">
                         {{#if weapon.isRanged}}<i class="fa-solid fa-gun"></i>{{/if}}
                         {{#if (not weapon.isRanged)}}<i class="fa-solid fa-sword"></i>{{/if}}
                     </a>
 
-                    <a data-action="useItem" data-use="damage">
+                    <a data-action="use" data-use="damage">
                         {{#if weapon.isRanged}}<i class="fa-solid fa-crosshairs"></i>{{/if}}
                         {{#if (not weapon.isRanged)}}<i class="fa-solid fa-droplet"></i>{{/if}}
                     </a>
 
-                    {{#if ../isEditMode}}<a data-action="deleteItem"><i class="fa-solid fa-trash"></i></a>{{/if}}
+                    {{#if ../isEditMode}}<a data-action="delete"><i class="fa-solid fa-trash"></i></a>{{/if}}
 
                 </span>
             </li>

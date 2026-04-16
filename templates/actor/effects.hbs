@@ -5,7 +5,7 @@
                 <span>{{list.label}}</span>
                 <span>Controls</span>
                 <span>
-                    <a class="controls flexshrink" type="button" data-action="createEffect" style="margin-right: 5px;">
+                    <a class="controls flexshrink margin-right edo-margin-xs" type="button" data-action="createEffect">
                         <i class="fa-solid fa-plus"></i>
                         New Effect
                     </a>
@@ -13,14 +13,14 @@
             </li>
             {{#each list.effects as | effect |}}
                 <li class="item flexrow" data-item-uuid="{{effect.uuid}}">
-                    <span data-action="editItem" class="flexrow nowrap">
+                    <span data-action="edit" class="flexrow nowrap">
                         <img class="flexshrink" src="{{effect.img}}" width="30" height="30">
-                        <a class="flexrow nowrap" style="margin-left: 4px;">{{effect.name}}</a>
+                        <a class="flexrow nowrap margin-right edo-margin-xs">{{effect.name}}</a>
                     </span>
                     <span class="item-controls">
                         {{#if effect.disabled}}<a data-action="disableEffect"><i class="fa-solid fa-bolt-slash"></i></a>{{/if}}
                         {{#if (not effect.disabled)}}<a data-action="disableEffect"><i class="fa-solid fa-bolt"></i></a>{{/if}}
-                        {{#if ../../isEditMode}}<a data-action="deleteItem"><i class="fa-solid fa-trash"></i></a>{{/if}}
+                        {{#if ../../isEditMode}}<a data-action="delete"><i class="fa-solid fa-trash"></i></a>{{/if}}
                     </span>
                 </li>
             {{/each}}

@@ -30,11 +30,19 @@
     <section class="edo-sheet-body">
 
         {{!-- Character main content --}}
-        <h1 class="edo-npc-header">
+        <h1 class="edo-actor-header">
             <input class="edo-actor-name" type="text" name="name" value="{{name}}" placeholder="Name">
+            <div class="edo-npc-details">
+                <div class="edo-npc-rank">
+                    <div>Rank:</div>
+                    <input type="number">
+                </div>
+                <div class="edo-npc-lineage">
+                    <div>Lineage:</div>
+                    <input type="text">
+                </div>
+            </div>
         </h1>
-        {{!-- Header --}}
-        {{!-- Actor name --}}
         {{!-- Rank --}}
         {{> "newedo.tabs-nav"}}
         {{!-- Traits tab --}}

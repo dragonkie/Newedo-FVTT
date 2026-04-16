@@ -16,11 +16,7 @@ export default class NewedoActorSheet extends NewedoSheetMixin(foundry.applicati
         classes: ["actor"],
         position: { height: 640, width: 840, top: 100, left: 200 },
         actions: {
-            useItem: this._onUseItem,
-            editItem: this._onEditItem,
-            deleteItem: this._onDeleteItem,
             skillDice: this._onSkillDice,
-            roll: this._onRoll,
             rollFate: this._onRollFate,
             editLedger: this._onEditLedger,
             fateDisplay: this._onChangeFateDisplay,
@@ -160,26 +156,6 @@ export default class NewedoActorSheet extends NewedoSheetMixin(foundry.applicati
     //==========================================================================================
     //> Sheet Actions
     //==========================================================================================
-    static async getTargetItem(target) {
-        let uuid = target.closest(".item[data-item-uuid]").dataset.itemUuid;
-        if (!uuid) return undefined;
-        return fromUuid(uuid);
-    }
-
-    static async _onEditItem(event, target) {
-        const item = await this.constructor.getTargetItem(target);
-        if (!item.sheet.rendered) item.sheet.render(true);
-        else item.sheet.bringToFront();
-    };
-
-    static async _onUseItem(event, target) {
-        // Get the item were actually targeting
-        const item = await this.constructor.getTargetItem(target);
-        // Grabs an optional argument to pass to the item, useful for when an item has multiple use cases such as weapons attacking / damaging
-        const action = target.closest("[data-use]")?.dataset.use;
-        return item.system.use(action);
-    };
-
     static async _onEditLedger(event, target) {
         let path = target.dataset?.target;// the value this ledger is targeting
         let label = target.dataset?.label;// the display name of this ledger, localizeable
@@ -217,64 +193,11 @@ export default class NewedoActorSheet extends NewedoSheetMixin(foundry.applicati
         new NewedoLedger(this.document, ledgers[id]).render(true);
     }
 
-    static async _onDeleteItem(event, target) {
-        const item = await this.constructor.getTargetItem(target);
-        const confirm = await foundry.applications.api.DialogV2.confirm({
-            content: `${utils.localize(NEWEDO.confirm.deleteItem)}: ${item.name}`,
-            rejectClose: false,
-            modal: true
-        });
-        if (confirm) return item.delete();
-    }
-
     static _onChangeFateDisplay() {
         let settings = game.user.getFlag('newedo', 'settings');
         if (!settings) game.user.setFlag('newedo', 'settings', { fateDisplay: 'range' }).then(() => this.render(false));
         else if (settings.fateDisplay == 'range') game.user.setFlag('newedo', 'settings', { fateDisplay: '%' }).then(() => this.render(false));
         else game.user.setFlag('newedo', 'settings', { fateDisplay: 'range' }).then(() => this.render(false));
-    }
-
-    /**
-     * Generic roll event, prompts user to spend legend and confirm the roll formula
-     * @param {Event} event 
-     * @param {HTMLElement} target 
-     */
-    static async _onRoll(event, target) {
-        LOGGER.debug(`Standard roll action`, target);
-
-        // adds the roll from the html element
-        let ele = target.closest('[data-roll]');
-        if (!ele) return;
-
-        const useLegend = Object.hasOwn(this.document.system, 'legend');
-
-        const roll = new NewedoRoll({
-            legend: useLegend,
-            title: 'NEWEDO.Generic.Trait.long',
-            document: this.document,
-            rollData: this.document.getRollData(),
-            wounds: false,
-        });
-
-        roll.AddPart({
-            type: ele.dataset?.rollLabel,
-            label: ele.dataset?.rollLabel,
-            value: ele.dataset.roll
-        });
-
-        const options = await roll.getRollOptions();
-        if (options.cancelled) return;
-        let r = await roll.evaluate();
-        if (!r) return;
-
-        let msg = r.toMessage({
-            flavor: ele.dataset?.rollLabel || '',
-            speaker: foundry.documents.ChatMessage.getSpeaker({
-                scene: undefined,
-                token: this.document.token,
-                actor: this.document,
-            })
-        });
     }
 
     /**Handle fate roll table calls
