@@ -6,7 +6,7 @@
 
 .application nav.tabs .item {
   color: var(--colour-nav);
-
+  flex-wrap: nowrap;
   &.active {
     color: var(--colour-nav-active);
     font-weight: bold;
@@ -45,4 +45,10 @@
   padding: 0.2em 1em;
   flex-wrap: nowrap;
   text-wrap: nowrap;
+}
+
+prose-mirror {
+  button {
+    padding: 0;
+  }
 }

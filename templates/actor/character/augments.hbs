@@ -24,9 +24,9 @@
 
             <li class="item flexrow" data-item-uuid="{{augment.uuid}}">
                 {{!-- Link to the fate opens up the item sheet --}}
-                <span class="flexrow align-center flex-start">
-                    <img src="{{augment.img}}" width="30" height="30">
-                    <a class="margin-left edo-margin-xs" data-action="edit">{{augment.name}}</a>
+                <span class="flexrow align-center flex-start item-name flex-gap-xs" data-action="edit">
+                    <img class="flexshrink" src="{{augment.img}}" width="30" height="30">
+                    <h4>{{augment.name}}</h4>
                 </span>
                 <span class="item-detail">{{augment.system.biofeedback}}%</span>
 

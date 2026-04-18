@@ -8,9 +8,9 @@
         </li>
         {{#each itemTypes.weapon as | item key |}}
             <li class="item flexrow text-center" data-item-uuid="{{item.uuid}}">
-                <span class="flexrow align-center flex-start">
-                    <img src="{{item.img}}" width="30" height="30">
-                    <a class="margin-left edo-margin-xs" data-action="edit">{{item.name}}</a>
+                <span class="item-name flexrow align-center flex-start flex-gap-xs" data-action="edit">
+                    <img class="flexshrink" src="{{item.img}}" width="30" height="30">
+                    <h4>{{item.name}}</h4>
                 </span>
                 <span>{{localize item.system.skill.label}}</span>
                 <span class="item-controls">

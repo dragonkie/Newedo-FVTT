@@ -5,17 +5,17 @@
                 <span>{{list.label}}</span>
                 <span>Controls</span>
                 <span>
-                    <a class="controls flexshrink margin-right edo-margin-xs" type="button" data-action="createEffect">
+                    <a class="controls flexshrink" type="button" data-action="createEffect">
                         <i class="fa-solid fa-plus"></i>
                         New Effect
                     </a>
                 </span>
             </li>
             {{#each list.effects as | effect |}}
-                <li class="item flexrow" data-item-uuid="{{effect.uuid}}">
-                    <span data-action="edit" class="flexrow nowrap">
+                <li class="item flexrow flex-gap-xs" data-item-uuid="{{effect.uuid}}">
+                    <span data-action="edit" class="flexrow nowrap item-name">
                         <img class="flexshrink" src="{{effect.img}}" width="30" height="30">
-                        <a class="flexrow nowrap margin-right edo-margin-xs">{{effect.name}}</a>
+                        <h4>{{effect.name}}</h4>
                     </span>
                     <span class="item-controls">
                         {{#if effect.disabled}}<a data-action="disableEffect"><i class="fa-solid fa-bolt-slash"></i></a>{{/if}}

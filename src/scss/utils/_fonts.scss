@@ -1,4 +1,31 @@
 // Typography
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Anta&family=Audiowide&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Electrolize&family=Geo:ital@0;1&family=Goldman:wght@400;700&family=Iceland&family=Jura:wght@300..700&family=Nova+Square&family=Orbitron:wght@400..900&family=Quantico:ital,wght@0,400;0,700;1,400;1,700&family=Quicksand:wght@300..700&family=Roboto:ital,wght@0,100..900;1,100..900&family=Tektur:wght@400..900&display=swap');
 $font-primary: 'Roboto', sans-serif;
 $font-secondary: 'Roboto', sans-serif;
+
+$anta: 'Anta', sans-serif;
+$audiowide: 'Audiowide', sans-serif;// also a very fun headerfont
+$electrolize: 'Electrolize', sans-serif;// works as common text, not flavourful enough for headers / numbers
+$goldman: 'Goldman', sans-serif;// To wide, not using
+$jura: 'Jura', sans-serif; // Doesnt work on bolded text, dotted zeros
+$orbitron: 'Orbitron', sans-serif; //Blocky, works well as a header font FUCK IT CANT DO ALL THE SPECIAL CHARACTERS
+$roboto: 'Roboto', sans-serif; // easy to read, doesn't match theme but is clear at small scale
+
+.newedo .window-content {
+    --edo-font-header: $orbitron;
+    --edo-font-number: $audiowide;
+    --edo-font-bold: $jura;
+
+    font-family: $anta;
+    h1, h2, h3, h4 {
+        font-family: $audiowide;
+    }
+
+    [type=number] {
+        font-family: $orbitron;
+    }
+
+    .item-name h4 {
+        font-family: $anta;
+    }
+}

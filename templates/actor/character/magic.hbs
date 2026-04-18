@@ -11,9 +11,9 @@
 
             <li class="item flexrow text-center" data-item-uuid="{{rote.uuid}}">
                 {{!-- Link to the fate opens up the item sheet --}}
-                <span class="flexrow align-center flex-start">
-                    <img src="{{rote.img}}" width="30" height="30">
-                    <a class="margin-left edo-margin-xs" data-action="edit">{{rote.name}}</a>
+                <span class="flexrow align-center flex-start item-name flex-gap-xs" data-action="edit">
+                    <img class="flexshrink" src="{{rote.img}}" width="30" height="30">
+                    <h4>{{rote.name}}</h4>
                 </span>
 
                 <a class="item-detail" data-action="use" data-label="{{rote.name}}">{{rote.system.skill.label}}</a>
