@@ -35,11 +35,29 @@ export default class NpcDataModel extends ActorDataModel {
          * thanks to them for all their hard work!
          */
 
-        //schema.skills = new ArrayField();
-        //schema.attacks = new ArrayField();
-        //schema.spells = new ArrayField();
+        schema.skills = new ArrayField(new SchemaField({
+            name: new StringField({ initial: "New Skill", nullable: false, blank: false, placeholder: NEWEDO.generic.skill }),
+            rank: new NumberField({ initial: 1, nullable: false, min: 0, label: NEWEDO.generic.rank })
+        }), { initial: [], nullable: false });
+
+        schema.attacks = new ArrayField(new SchemaField({
+            name: new StringField({ initial: "Attack", nullable: false, blank: true }),
+            skill: new SchemaField(),
+            trait: this.TraitSelectorField(),
+            damage: new ArrayField(),
+
+            // Ranged attacks
+            isRanged: new BooleanField(),
+        }));
+        //schema.spells = new ArrayField(new SchemaField());
 
         return schema;
+    }
+
+    static NpcCoreTraitFields() {
+        const CoreData = {};
+        for (const [k, v] of Object.entries(NEWEDO.traitsCore)) CoreData[k] = new SchemaField({ value: new NumberField({ initial: 10, ...this.RequiredConfig, label: v }) })
+        return CoreData;
     }
 
     get isAlive() {

@@ -1,9 +1,9 @@
-<section class="edo-sheet-content flexrow">
+<section class="edo-sheet-content flexrow flex-start align-start flex-gap-l">
     <section class="edo-sheet-panel">
         {{!-- Newedo banner rendered at the top of the screen--}}
         <img class="banner-newedo" src="systems/newedo/assets/images/banner-newedo.svg">
         <div class="portrait" style="border: 0;" data-action="editImage">
-            <img class="edo-actor-image" src="{{document.img}}" title="{{actor.name}}" height="150px" width="150px"/>
+            <img class="edo-actor-image" src="{{document.img}}" title="{{actor.name}}" height="150px" width="150px" />
         </div>
 
         {{!-- Health container--}}
@@ -27,25 +27,37 @@
         </div>
     </section>
 
-    <section class="edo-sheet-body">
+    <section class="edo-sheet-body flex-gap-m">
 
         {{!-- Character main content --}}
-        <h1 class="edo-actor-header">
+        <h1 class="edo-actor-header flexcol flex-gap-m">
             <input class="edo-actor-name" type="text" name="name" value="{{name}}" placeholder="Name">
             <div class="edo-npc-details">
-                <div class="edo-npc-rank">
-                    <div>Rank:</div>
+                <div class="edo-npc-rank flexrow flex-gap-s">
+                    <div class="flexshrink">Rank:</div>
                     <input type="number">
-                </div>
-                <div class="edo-npc-lineage">
-                    <div>Lineage:</div>
-                    <input type="text">
                 </div>
             </div>
         </h1>
         {{!-- Rank --}}
         {{> "newedo.tabs-nav"}}
         {{!-- Traits tab --}}
+        <div>
+            <div class="edo-traits-list flexrow flex-gap-m">
+                {{#each system.traits.core as | trait key |}}
+                    {{#unless (eq key "shi")}}
+                        <div class="edo-core-trait flex-align-center" data-roll-type="NEWEDO.Generic.Trait.long" data-roll-label="{{trait.label}}" data-roll="{{trait.rank}}d10">
+                            <label class="edo-resource-label flexlarge flex-align-left" data-action="roll">{{trait.label}}</label>
+                            <input class="edo-trait-value" value="{{trait.total}}" disabled type="number" />
+                            {{#if ../isEditMode}}
+                                <input class="edo-trait-rank" name="system.traits.core.{{key}}.value" value="{{trait.value}}" type="number" />
+                            {{/if}}
+                            <a class="flex-align-center" data-action="roll">Rank {{trait.rank}}</a>
+                        </div>
+                    {{/unless}}
+                {{/each}}
+            </div>
+        </div>
         {{!-- Core traits --}}
         {{!-- Heart power pressence perception reflex savvy , NO SHINPI FOR NPCS--}}
         {{!-- Derived traits --}}

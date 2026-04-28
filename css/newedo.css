@@ -342,9 +342,7 @@
   grid-column-end: span 12;
 }
 
-.newedo .flex-group-center,
-.newedo .flex-group-start,
-.newedo .flex-group-end {
+.newedo .flex-group-center {
   justify-content: center;
   align-items: center;
   text-align: center;
@@ -712,35 +710,35 @@ ol.items-list .item-delete {
   border: 0;
 }
 
-.sheet.actor .window-content {
+.sheet.actor.newedo .window-content {
   overflow: hidden;
   display: flex;
   flex-direction: row;
   gap: 10px;
 }
-.sheet.actor .window-content header > * {
+.sheet.actor.newedo .window-content header > * {
   margin-bottom: 5px;
 }
-.sheet.actor .window-content .origins {
+.sheet.actor.newedo .window-content .origins {
   display: block;
   font-size: 1.2em;
 }
-.sheet.actor .window-content .origins > * {
+.sheet.actor.newedo .window-content .origins > * {
   display: inline-block;
 }
-.sheet.actor .window-content .edo-derived-traits {
+.sheet.actor.newedo .window-content .edo-derived-traits {
   display: block;
 }
-.sheet.actor .window-content .edo-derived-traits > * {
+.sheet.actor.newedo .window-content .edo-derived-traits > * {
   display: inline-block;
 }
-.sheet.actor .window-content .edo-derived-traits > * input {
+.sheet.actor.newedo .window-content .edo-derived-traits > * input {
   width: 2.5rem;
   height: 1rem;
   text-align: center;
   padding: 0;
 }
-.sheet.actor .window-content .edo-sheet-panel {
+.sheet.actor.newedo .window-content .edo-sheet-panel {
   display: flex;
   flex: 0 0 200px;
   flex-direction: column;
@@ -748,86 +746,90 @@ ol.items-list .item-delete {
   text-align: center;
   overflow: auto;
 }
-.sheet.actor .window-content .edo-sheet-panel > * {
+.sheet.actor.newedo .window-content .edo-sheet-panel > * {
   margin-bottom: 5px;
 }
-.sheet.actor .window-content .edo-sheet-panel .fate-card {
+.sheet.actor.newedo .window-content .edo-sheet-panel .fate-card {
   flex: 0;
   width: 100%;
   font-size: 14px;
 }
-.sheet.actor .window-content .edo-sheet-panel .fate-card .fate-switch {
+.sheet.actor.newedo .window-content .edo-sheet-panel .fate-card .fate-switch {
   flex: 1 1;
   align-items: right;
   text-align: right;
   padding-right: 12px;
 }
-.sheet.actor .window-content .edo-sheet-panel .fate-card .fate-title {
+.sheet.actor.newedo .window-content .edo-sheet-panel .fate-card .fate-title {
   text-align: left;
   flex: 2;
 }
-.sheet.actor .window-content .edo-sheet-panel .fate-card .fate-list {
+.sheet.actor.newedo .window-content .edo-sheet-panel .fate-card .fate-list {
   width: 100%;
   padding: 0;
   margin: 0;
 }
-.sheet.actor .window-content .edo-sheet-panel .fate-card .fate-list > * {
+.sheet.actor.newedo .window-content .edo-sheet-panel .fate-card .fate-list > * {
   border-bottom: 1px solid gray;
   gap: 5px;
 }
-.sheet.actor .window-content .edo-sheet-panel .fate-card .fate-list > * :first-child {
+.sheet.actor.newedo .window-content .edo-sheet-panel .fate-card .fate-list > * :first-child {
   text-align: right;
   flex: 1;
 }
-.sheet.actor .window-content .edo-sheet-panel .fate-card .fate-list > * :last-child {
+.sheet.actor.newedo .window-content .edo-sheet-panel .fate-card .fate-list > * :last-child {
   text-align: left;
   flex: 2;
 }
-.sheet.actor .window-content .edo-sheet-panel .fate-card .fate-list :last-child {
+.sheet.actor.newedo .window-content .edo-sheet-panel .fate-card .fate-list :last-child {
   border: 0;
 }
-.sheet.actor .window-content .edo-actor-image {
+.sheet.actor.newedo .window-content .edo-actor-image {
   object-fit: cover;
   border: 0;
   object-position: 50% 0%;
 }
-.sheet.actor .window-content .edo-traits-list input {
+.sheet.actor.newedo .window-content .edo-traits-list input {
   text-align: center;
 }
-.sheet.actor .window-content .edo-traits-list .edo-trait-value {
+.sheet.actor.newedo .window-content .edo-traits-list .edo-trait-value {
   height: 2em;
   font-size: 2em;
   font-weight: bold;
 }
-.sheet.actor .window-content .edo-traits-list .edo-trait-rank {
+.sheet.actor.newedo .window-content .edo-traits-list .edo-trait-rank {
   width: 75%;
   height: 1.5em;
   border-radius: 0 0 5px 5px;
 }
-.sheet.actor .window-content .body {
+.sheet.actor.newedo .window-content .body {
   padding: 10px;
   flex: 1;
 }
-.sheet.actor .window-content .skill-lists {
+.sheet.actor.newedo .window-content .skill-lists {
   align-items: start;
   gap: 8px;
 }
-.sheet.actor .window-content .edo-skill-dice-button {
+.sheet.actor.newedo .window-content .edo-skill-dice-button {
   padding: 0;
   height: 1.75em;
   min-height: 1.75em;
   min-width: 2.25em;
 }
-.sheet.actor .window-content .edo-npc-header,
-.sheet.actor .window-content .edo-actor-header {
+.sheet.actor.newedo .window-content .edo-npc-header,
+.sheet.actor.newedo .window-content .edo-actor-header {
   border: 0;
   margin-bottom: 0;
 }
-.sheet.actor .window-content .edo-npc-header .edo-actor-name,
-.sheet.actor .window-content .edo-actor-header .edo-actor-name {
+.sheet.actor.newedo .window-content .edo-npc-header .edo-actor-name,
+.sheet.actor.newedo .window-content .edo-actor-header .edo-actor-name {
   background-color: rgba(255, 255, 255, 0.1);
   font-size: 1em;
   height: 100%;
+}
+
+.sheet.newedo.actor.npc .window-content .edo-actor-header .edo-npc-rank {
+  font-size: 1rem;
 }
 
 .sheet.item .tab {

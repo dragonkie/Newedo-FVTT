@@ -61,6 +61,17 @@ export default class CharacterDataModel extends ActorDataModel {
         return schema;
     }
 
+    /** 
+     * @override
+     * replaces the default trait field call to add in the shinpi trait which is exclusive to player characters
+     * Override works when called by the super to register the traits from ActorDataModel
+     */
+    static CoreTraitFields() {
+        const CoreData = {};
+        for (const [k, v] of Object.entries(NEWEDO.traitsCore)) CoreData[k] = new SchemaField({ value: new NumberField({ initial: 10, ...this.RequiredConfig, label: v }) })
+        return CoreData;
+    }
+
     get isAlive() {
         return this.hp.value >= 0
     }

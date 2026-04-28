@@ -13,6 +13,8 @@ export default class NpcSheet extends NewedoActorSheet {
     }
 
     static PARTS = {
+        main: {template: "systems/newedo/templates/actor/npcv2/main.hbs"}
+        /*
         panel: { template: "systems/newedo/templates/actor/shared/panel.hbs" },
         body: { template: "systems/newedo/templates/actor/npc/body.hbs" },
         header: { template: "systems/newedo/templates/actor/npc/header.hbs" },
@@ -20,6 +22,7 @@ export default class NpcSheet extends NewedoActorSheet {
         equipment: { template: "systems/newedo/templates/actor/npc/equipment.hbs" },
         magic: { template: "systems/newedo/templates/actor/npc/magic.hbs" },
         augments: { template: "systems/newedo/templates/actor/npc/augments.hbs" }
+        */
     }
 
     static TABS = {

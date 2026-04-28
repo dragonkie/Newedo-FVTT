@@ -7,12 +7,6 @@ const {
 } = foundry.data.fields;
 
 export default class AugmentData extends ItemDataModel {
-    static TraitFields() {
-        const CoreData = {};
-        for (const [k, v] of Object.entries(NEWEDO.traitsBase)) CoreData[k] = new SchemaField({ value: new NumberField({ initial: 10, ...this.RequiredConfig, label: v }) });
-        return CoreData;
-    }
-
     static defineSchema() {
         const schema = super.defineSchema();
 

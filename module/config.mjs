@@ -85,6 +85,7 @@ NEWEDO.generic = {
     targetNumber: 'NEWEDO.Generic.TargetNumber',
     trait: "NEWEDO.Generic.Trait.long",
     wound: "NEWEDO.Generic.Wound.long",
+    name: "NEWEDO.Generic.Name"
 };
 
 NEWEDO.genericAbbr = {};
