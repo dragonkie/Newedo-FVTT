@@ -25,15 +25,8 @@ export default class WeaponData extends ItemDataModel {
         schema.grit = new GritField();
 
         schema.damageParts = new ArrayField(new SchemaField({
-            value: new StringField({ required: true, nullable: false, initial: '1d6' }),
-            type: new StringField({
-                required: true, nullable: false, initial: 'kin',
-                choices: () => {
-                    let data = { ...NEWEDO.damageTypes };
-                    for (const a in data) data[a] = utils.localize(data[a]);
-                    return data;
-                }
-            })
+            value: this.FormulaField(),
+            type: this.DamageTypeSelectorField()
         }), {
             nullable: false, required: true, initial: [{
                 value: '1d6',

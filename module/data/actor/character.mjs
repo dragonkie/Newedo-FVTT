@@ -69,7 +69,7 @@ export default class CharacterDataModel extends ActorDataModel {
     static CoreTraitFields() {
         const CoreData = {};
         for (const [k, v] of Object.entries(NEWEDO.traitsCore)) CoreData[k] = new SchemaField({ value: new NumberField({ initial: 10, ...this.RequiredConfig, label: v }) })
-        return CoreData;
+        return new SchemaField(CoreData);
     }
 
     get isAlive() {
@@ -82,6 +82,10 @@ export default class CharacterDataModel extends ActorDataModel {
 
     prepareBaseData() {
         super.prepareBaseData();
+
+        for (const [key, value] of Object.entries(this.traits.core)) {
+            this.traits.core[key].noise = 0;
+        }
     }
 
     prepareDerivedData() {

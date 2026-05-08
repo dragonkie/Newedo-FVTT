@@ -16,7 +16,7 @@ export default class ArmourData extends ItemDataModel {
 
         schema.equipped = new BooleanField({ initial: false, required: true, label: NEWEDO.generic.equipped });
 
-        schema.soak = new SchemaField(this.ArmourFields());
+        schema.soak = this.ArmourFields();
 
         schema.conceal = new BooleanField({ initial: false });
         schema.fragile = new BooleanField({ initial: false });

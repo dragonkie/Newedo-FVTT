@@ -13,7 +13,14 @@ export default class AugmentData extends ItemDataModel {
         schema.installed = new BooleanField({ initial: false });
         schema.biofeedback = new NumberField({ initial: 0 });
         schema.rank = new ResourceField(1, 1, 5);
-        schema.noise = new SchemaField(this.TraitFields());
+        schema.noise = new SchemaField({
+            hrt: new NumberField({ initial: 0 }),
+            per: new NumberField({ initial: 0 }),
+            pow: new NumberField({ initial: 0 }),
+            pre: new NumberField({ initial: 0 }),
+            ref: new NumberField({ initial: 0 }),
+            sav: new NumberField({ initial: 0 })
+        });
 
         return schema;
     }
@@ -26,8 +33,11 @@ export default class AugmentData extends ItemDataModel {
         const allowed = super.prepareActorData(ActorData) || true;
         if (!allowed) return false;
         if (!this.installed) return;
-
-        for (const trait of Object.keys(this.noise)) ActorData.traits.core[trait].noise += this.noise[trait].value;
+        console.log(ActorData)
+        console.log(this.noise)
+        for (const [key, trait] of Object.keys(this.noise)) {
+            ActorData.traits.core[key].noise += trait;
+        }
     }
 
     sheetActions(context) {

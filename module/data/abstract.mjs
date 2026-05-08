@@ -42,17 +42,84 @@ export class SystemDataModel extends foundry.abstract.TypeDataModel {
         })
     }
 
-    /**
-     * Returns a schemafield designed to accept roll formulas
-     * @returns {Object}
-     */
-    static FormulaField() {
+    static FormulaField(options) {
+        const data = Object.assign({
+            initial: "",
+            nullable: false,
+            blank: true,
+            trim: true,
+            required: false,
+            validate: (value, options) => {
+                if (value == "") return true;
+                return Roll.validate(value);
+            },
+            validationError: "FormulaField must be a valid roll formula"
+        }, options);
 
+        return new StringField(data);
+    }
+
+    static DamageTypeSelectorField(options) {
+        const data = Object.assign({
+            initial: 'kin',
+            choices: () => {
+                let data = { ...NEWEDO.damageTypes };
+                for (const a in data) data[a] = utils.localize(data[a]);
+                return data;
+            },
+            nullable: false,
+            blank: true,
+            trim: true,
+            required: false,
+            validate: (value, options) => {
+                if (value == "") return true;
+                return Roll.validate(value);
+            },
+            validationError: "FormulaField must be a valid roll formula"
+        }, options);
+
+        return new StringField(data);
     }
 
     //==================================================================================
     //>- Trait Fields
     //==================================================================================
+
+    /**
+     * Returns a data scehma based off the CONFIG.NEWEDO.traitsBase object
+     * @returns {Object}
+     */
+    static CoreTraitFields() {
+        const CoreData = {};
+        for (const [k, v] of Object.entries(NEWEDO.traitsBase)) CoreData[k] = new SchemaField({
+            value: new NumberField({ initial: 10, ...this.RequiredConfig, label: v })
+        })
+        return new SchemaField(CoreData);
+    }
+
+    /**
+     * Returns a data scehma based off the CONFIG.NEWEDO.traitsDerived object
+     * @returns {Object}
+     */
+    static DerivedTraitFields() {
+        const DerivedData = {};
+        for (const [k, v] of Object.entries(NEWEDO.traitsDerived)) if (k != 'hp') DerivedData[k] = new SchemaField({
+            value: new NumberField({ initial: 0, ...this.RequiredConfig, label: v }), // Added before multiplier
+            mod: new NumberField({ initial: NEWEDO.traitsDerivedMod[k], ...this.RequiredConfig, label: v }), // the multiplier
+        })
+        return new SchemaField(DerivedData);
+    }
+
+    /**
+     * Returns a schema object holding the actors trait schema
+     * @returns {Object}
+     */
+    static TraitFields() {
+        return new SchemaField({
+            core: this.CoreTraitFields(),
+            derived: this.DerivedTraitFields()
+        })
+    }
 
     /**
      * 
@@ -82,7 +149,7 @@ export class SystemDataModel extends foundry.abstract.TypeDataModel {
     static ArmourFields() {
         const ArmourData = {};
         for (const [k, v] of Object.entries(NEWEDO.damageTypes)) ArmourData[k] = new SchemaField({ value: new NumberField({ initial: 0, label: v }) });
-        return ArmourData;
+        return new SchemaField(ArmourData);
     }
 
     static SkillField() {
@@ -175,44 +242,10 @@ export class ActorDataModel extends SystemDataModel {
             flat: new NumberField({ initial: 0 }),
         });// mod * pow kg
 
-        schema.traits = new SchemaField(this.TraitFields());
-        schema.armour = new SchemaField(this.ArmourFields());
+        schema.traits = this.TraitFields();
+        schema.armour = this.ArmourFields();
 
         return schema;
-    }
-
-    /**
-     * Returns a data scehma based off the CONFIG.NEWEDO.traitsBase object
-     * @returns {Object}
-     */
-    static CoreTraitFields() {
-        const CoreData = {};
-        for (const [k, v] of Object.entries(NEWEDO.traitsBase)) CoreData[k] = new SchemaField({ value: new NumberField({ initial: 10, ...this.RequiredConfig, label: v }) })
-        return CoreData;
-    }
-
-    /**
-     * Returns a data scehma based off the CONFIG.NEWEDO.traitsDerived object
-     * @returns {Object}
-     */
-    static DerivedTraitFields() {
-        const DerivedData = {};
-        for (const [k, v] of Object.entries(NEWEDO.traitsDerived)) if (k != 'hp') DerivedData[k] = new SchemaField({
-            value: new NumberField({ initial: 0, ...this.RequiredConfig, label: v }), // Added before multiplier
-            mod: new NumberField({ initial: NEWEDO.traitsDerivedMod[k], ...this.RequiredConfig, label: v }), // the multiplier
-        })
-        return DerivedData;
-    }
-
-    /**
-     * Returns a schema object holding the actors trait schema
-     * @returns {Object}
-     */
-    static TraitFields() {
-        return {
-            core: new SchemaField(this.CoreTraitFields()),
-            derived: new SchemaField(this.DerivedTraitFields())
-        }
     }
 
     //==========================================================================================
@@ -240,6 +273,8 @@ export class ActorDataModel extends SystemDataModel {
             core[trait].rank = 0;
             core[trait].noise = 0;
         }
+
+        console.log('adding base data fields', this.traits)
 
         // adds data fields for derived traits
         for (const trait of Object.keys(derived)) derived[trait].total = 0;
@@ -418,12 +453,6 @@ export class ItemDataModel extends SystemDataModel {
         schema.description = new HTMLField({ initial: "" });
 
         return schema;
-    }
-
-    static TraitFields() {
-        const CoreData = {};
-        for (const [k, v] of Object.entries(NEWEDO.traitsBase)) CoreData[k] = new SchemaField({ value: new NumberField({ initial: 10, ...this.RequiredConfig, label: v }) });
-        return CoreData;
     }
 
     prepareBaseData() {

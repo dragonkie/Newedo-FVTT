@@ -11,8 +11,8 @@ export default class LineageData extends ItemDataModel {
     static defineSchema() {
         const schema = super.defineSchema();
 
-        schema.traits = new SchemaField(this.TraitFields());
-        schema.armour = new SchemaField(this.ArmourFields());
+        schema.traits = this.TraitFields();
+        schema.armour = this.ArmourFields();
 
         schema.attributes = new SchemaField({
             rest: new SchemaField({
@@ -44,6 +44,8 @@ export default class LineageData extends ItemDataModel {
         if (!allowed || !ActorData) return false;
 
         Object.keys(this.armour).forEach(k => ActorData.bonus.armour[k] += this.armour[k].value);
+
+        console.log(this)
         Object.keys(this.traits.derived).forEach(k => {
             ActorData.bonus.TraitDerived[k].value += this.traits.derived[k].value;
             ActorData.bonus.TraitDerived[k].mod += this.traits.derived[k].mod;

@@ -10,8 +10,8 @@ export default class CultureData extends ItemDataModel {
     static defineSchema() {
         const schema = super.defineSchema();
 
-        schema.traits = new SchemaField(this.TraitFields());
-        schema.armour = new SchemaField(this.ArmourFields());
+        schema.traits = this.TraitFields();
+        schema.armour = this.ArmourFields();
 
         schema.attributes = new SchemaField({
             rest: new SchemaField({

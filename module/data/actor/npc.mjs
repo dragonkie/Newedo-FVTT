@@ -8,16 +8,8 @@ const {
 export default class NpcDataModel extends ActorDataModel {
     static defineSchema() {
         const schema = super.defineSchema();
-
-        schema.rest = new SchemaField({
-            mod: new NumberField({ initial: 2.0 }),
-            value: new NumberField({ initial: 5, ...this.RequiredIntegerConfig }),
-            flat: new NumberField({ initial: 0 }),
-        });// 5 * rest hp healed on nap
-
         // Npc's need a rank for some abilities and spells, this gives us a place to store rank
         schema.rank = new NumberField({ initial: 1 });
-        schema.skills = new ArrayField(this.SkillField(), { initial: [], ...this.RequiredConfig });
 
         /**
          * BIG CHANGES TO HOW WE HANDLE NPC SHEETS
@@ -42,22 +34,42 @@ export default class NpcDataModel extends ActorDataModel {
 
         schema.attacks = new ArrayField(new SchemaField({
             name: new StringField({ initial: "Attack", nullable: false, blank: true }),
-            skill: new SchemaField(),
+            skill: new StringField(),
             trait: this.TraitSelectorField(),
-            damage: new ArrayField(),
+            bonus: this.FormulaField(),
+            damage: new ArrayField(new SchemaField({
+                value: this.FormulaField(),
+                type: this.DamageTypeSelectorField()
+            }), {
+                nullable: false, required: true, initial: [{
+                    value: '1d6',
+                    type: 'kin'
+                }]
+            }),
 
             // Ranged attacks
             isRanged: new BooleanField(),
+            ammo: new SchemaField({
+                value: new NumberField({ initial: 8, min: 0, nullable: false, required: false }),
+                max: new NumberField({ initial: 8, min: 0, nullable: false, required: false }),
+            }),
+            range: new SchemaField({
+                melee: new SchemaField({
+                    value: new NumberField(),
+                    mod: new NumberField(),
+                }),
+                short: new SchemaField({
+                    value: new NumberField(),
+                    mod: new NumberField(),
+                }),
+                long: new SchemaField({
+                    value: new NumberField(),
+                    mod: new NumberField(),
+                })
+            })
         }));
-        //schema.spells = new ArrayField(new SchemaField());
 
         return schema;
-    }
-
-    static NpcCoreTraitFields() {
-        const CoreData = {};
-        for (const [k, v] of Object.entries(NEWEDO.traitsCore)) CoreData[k] = new SchemaField({ value: new NumberField({ initial: 10, ...this.RequiredConfig, label: v }) })
-        return CoreData;
     }
 
     get isAlive() {
