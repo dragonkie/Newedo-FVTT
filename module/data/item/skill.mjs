@@ -6,7 +6,7 @@ import { NEWEDO } from "../../config.mjs";
 import utils from "../../helpers/sysUtil.mjs";
 
 const {
-    ArrayField, BooleanField, IntegerSortField, NumberField, SchemaField, SetField, StringField
+    BooleanField, IntegerSortField, NumberField, SchemaField, SetField, StringField
 } = foundry.data.fields;
 
 export default class SkillData extends ItemDataModel {
@@ -22,18 +22,13 @@ export default class SkillData extends ItemDataModel {
         // default skills are populated with these
         schema.linkID = new StringField({ initial: '', required: true, nullable: false, label: 'linkID' });
 
-        schema.ranks = new ArrayField(
-            new NumberField({
-                initial: 0,
-                required: true,
-                nullable: false
-            }),
-            {
-                initial: [0, 0, 0, 0, 0],
-                required: true,
-                nullable: false
-            }
-        );
+        schema.ranks = new SchemaField({
+            _0: new NumberField({ initial: 0, min: 0, max: 12 }),
+            _1: new NumberField({ initial: 0, min: 0, max: 12 }),
+            _2: new NumberField({ initial: 0, min: 0, max: 12 }),
+            _3: new NumberField({ initial: 0, min: 0, max: 12 }),
+            _4: new NumberField({ initial: 0, min: 0, max: 12 })
+        })
 
         schema.bonus = new StringField({ initial: '' });
 
@@ -42,7 +37,7 @@ export default class SkillData extends ItemDataModel {
 
     get rank() {
         let r = 0;
-        this.ranks.forEach(element => {
+        Object.values(this.ranks).forEach(element => {
             if (element > 0) r += 1;
         });
         return r;
@@ -100,7 +95,7 @@ export default class SkillData extends ItemDataModel {
         let dice = [];
 
         // check through all the skill ranks
-        for (const r of this.ranks) {
+        for (const [key, r] of Object.entries(this.ranks)) {
             if (r != 0) { // make sure the rank isnt empty
                 // check existing dice to add to a match if possible
                 let found = false;
@@ -140,19 +135,20 @@ export default class SkillData extends ItemDataModel {
      * @returns 
      */
     async _cycleSkillDice(index, invert = false) {
-        const ranks = this.ranks;
 
+        var val = this.ranks[index];
         if (!invert) {
-            ranks[index] += 2;
-            if (ranks[index] === 2 || ranks[index] === 10) ranks[index] += 2;
-            else if (ranks[index] > 12) ranks[index] = 0;
+            val += 2;
+            if (val === 2 || val === 10) val += 2;
+            else if (val > 12) val = 0;
         } else if (invert) {
-            ranks[index] -= 2;
-            if (ranks[index] === 2 || ranks[index] === 10) ranks[index] -= 2;
-            else if (ranks[index] < 0) ranks[index] = 12;
+            val -= 2;
+            if (val === 2 || val === 10) val -= 2;
+            else if (val < 0) val = 12;
         }
 
-        return await this.parent.update({ system: { ranks: ranks } });
+        console.log('skill value', { val, base: this.ranks[index], index });
+        return this.parent.update({ system: { ranks: { [index]: val } } });
     }
 
     // Creates and rolls a NewedoRoll using this item, giving it the context that this is a skill roll

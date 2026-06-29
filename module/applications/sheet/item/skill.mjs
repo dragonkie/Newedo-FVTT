@@ -24,8 +24,8 @@ export default class SkillSheet extends NewedoItemSheet {
     //==========================================================================================
     //> Sheet Actions
     //==========================================================================================
-    static _onChangeSkillRank(event, target) {
-        if (event.shiftKey) this.document.system._cycleSkillDice(target.dataset.index, true);
-        else this.document.system._cycleSkillDice(target.dataset.index);
+    static async _onChangeSkillRank(event, target) {
+        await this.document.system._cycleSkillDice(target.dataset.index, event.shiftKey);
+        this.render(true);
     }
 }
