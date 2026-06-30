@@ -1,12 +1,12 @@
 import { NEWEDO } from "../../config.mjs";
 import NewedoRoll from "../../helpers/dice.mjs";
 import LOGGER from "../../helpers/logger.mjs";
-import utils from "../../helpers/sysUtil.mjs";
+import utils from "../../helpers/utils.mjs";
 
 import { ItemDataModel } from "../abstract.mjs";
 
 const {
-    ArrayField, BooleanField, IntegerSortField, NumberField, SchemaField, SetField, StringField
+    BooleanField, IntegerSortField, NumberField, SchemaField, SetField, StringField
 } = foundry.data.fields;
 
 export default class RoteData extends ItemDataModel {

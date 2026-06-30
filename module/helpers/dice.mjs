@@ -1,7 +1,7 @@
 import NewedoDialog from "../applications/dialog.mjs";
 import { NEWEDO } from "../config.mjs";
 import LOGGER from "./logger.mjs";
-import utils from "./sysUtil.mjs";
+import utils from "./utils.mjs";
 
 // Declare valid entries for different data types
 const PART_TYPES = ['input', 'selector', 'stepper'];
@@ -238,7 +238,7 @@ export default class NewedoRoll {
 
         const title = utils.localize(NEWEDO.generic.roll) + ": " + utils.localize(this.title);
         const sorted_parts = this.parts.sort((a, b) => { return a.sort - b.sort })
-        const render = await foundry.applications.handlebars.renderTemplate(this.constructor.template, {
+        const render = await utils.renderTemplate(this.constructor.template, {
             ...this.rollData,
             groups: groups,
             parts: sorted_parts

@@ -1,10 +1,10 @@
 import { ActorDataModel, ItemDataModel } from "../abstract.mjs";
 import { NEWEDO } from "../../config.mjs";
 import NewedoDialog from "../../applications/dialog.mjs";
-import utils from "../../helpers/sysUtil.mjs";
+import utils from "../../helpers/utils.mjs";
 
 const {
-    ArrayField, BooleanField, IntegerSortField, NumberField, SchemaField, SetField, StringField
+    TypedObjectField, BooleanField, IntegerSortField, NumberField, SchemaField, SetField, StringField
 } = foundry.data.fields;
 
 export default class LineageData extends ItemDataModel {
@@ -27,11 +27,11 @@ export default class LineageData extends ItemDataModel {
         })
 
         // List of linked items that are granted to an actor with this lineage
-        schema.items = new ArrayField(new SchemaField({
+        schema.items = new TypedObjectField(new SchemaField({
             uuid: new StringField({ ...this.RequiredConfig, initial: '' })
         }), { ...this.RequiredConfig, initial: [] })
 
-        schema.cultures = new ArrayField(new SchemaField({
+        schema.cultures = new TypedObjectField(new SchemaField({
             uuid: new StringField({ ...this.RequiredConfig, initial: '' })
         }), { ...this.RequiredConfig, initial: [] });
 

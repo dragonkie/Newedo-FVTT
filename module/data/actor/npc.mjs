@@ -2,7 +2,7 @@ import { NEWEDO } from "../../config.mjs";
 import { ActorDataModel } from "../abstract.mjs";
 
 const {
-    ArrayField, BooleanField, IntegerSortField, NumberField, SchemaField, SetField, StringField
+    BooleanField, IntegerSortField, NumberField, SchemaField, SetField, StringField, TypedObjectField, FilePathField
 } = foundry.data.fields;
 
 export default class NpcDataModel extends ActorDataModel {
@@ -27,28 +27,33 @@ export default class NpcDataModel extends ActorDataModel {
          * thanks to them for all their hard work!
          */
 
-        schema.skills = new ArrayField(new SchemaField({
+        schema.skills = new TypedObjectField(new SchemaField({
             name: new StringField({ initial: "New Skill", nullable: false, blank: false, placeholder: NEWEDO.generic.skill }),
             rank: new NumberField({ initial: 1, nullable: false, min: 0, label: NEWEDO.generic.rank })
         }), { initial: [], nullable: false });
 
-        schema.attacks = new ArrayField(new SchemaField({
+        schema.attacks = new TypedObjectField(new SchemaField({
             name: new StringField({ initial: "Attack", nullable: false, blank: true }),
+            img: new FilePathField({ categories: ["IMAGE"] }),
             skill: new StringField(),
             trait: this.TraitSelectorField(),
-            bonus: this.FormulaField(),
-            damage: new ArrayField(new SchemaField({
+            accuracy: this.FormulaField(),
+            add_trait: new BooleanField(),
+            damage_parts: new TypedObjectField(new SchemaField({
                 value: this.FormulaField(),
                 type: this.DamageTypeSelectorField()
             }), {
-                nullable: false, required: true, initial: [{
-                    value: '1d6',
-                    type: 'kin'
-                }]
+                initial: {
+                    default: {
+                        value: "2d6",
+                        type: "kin"
+                    }
+                }
             }),
 
             // Ranged attacks
-            isRanged: new BooleanField(),
+            isRanged: new BooleanField({ initial: false }),
+            isThrown: new BooleanField({ initial: false }),
             ammo: new SchemaField({
                 value: new NumberField({ initial: 8, min: 0, nullable: false, required: false }),
                 max: new NumberField({ initial: 8, min: 0, nullable: false, required: false }),
@@ -58,6 +63,10 @@ export default class NpcDataModel extends ActorDataModel {
                     value: new NumberField(),
                     mod: new NumberField(),
                 }),
+                thrown: new SchemaField({
+                    value: new NumberField(),
+                    mod: new NumberField()
+                }),
                 short: new SchemaField({
                     value: new NumberField(),
                     mod: new NumberField(),
@@ -65,7 +74,7 @@ export default class NpcDataModel extends ActorDataModel {
                 long: new SchemaField({
                     value: new NumberField(),
                     mod: new NumberField(),
-                })
+                }),
             })
         }));
 
@@ -139,4 +148,6 @@ export default class NpcDataModel extends ActorDataModel {
 
         return true;
     }
+
+
 }

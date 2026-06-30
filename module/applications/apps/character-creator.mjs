@@ -1,4 +1,4 @@
-import utils from "../../helpers/sysUtil.mjs";
+import utils from "../../helpers/utils.mjs";
 import NewedoApplication from "../application.mjs";
 import NewedoDialog from "../dialog.mjs";
 

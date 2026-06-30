@@ -2,7 +2,7 @@ import NewedoActorSheet from "../actor.mjs";
 
 import LOGGER from "../../../helpers/logger.mjs";
 import NewedoDialog from "../../dialog.mjs";
-import utils from "../../../helpers/sysUtil.mjs";
+import utils from "../../../helpers/utils.mjs";
 import { NEWEDO } from "../../../config.mjs";
 
 export default class CharacterSheet extends NewedoActorSheet {

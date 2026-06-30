@@ -1,7 +1,7 @@
 import { ItemDataModel } from "../abstract.mjs";
 
 const {
-    ArrayField, BooleanField, IntegerSortField, NumberField, SchemaField, SetField, StringField
+    BooleanField, IntegerSortField, NumberField, SchemaField, SetField, StringField
 } = foundry.data.fields;
 
 export default class FateData extends ItemDataModel {

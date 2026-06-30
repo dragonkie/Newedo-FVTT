@@ -1,6 +1,6 @@
 import { NEWEDO } from "../config.mjs";
 import { FeatureEffectData, FeatureItemData, FeatureTraitData } from "../data/feature.mjs";
-import utils from "../helpers/sysUtil.mjs";
+import utils from "../helpers/utils.mjs";
 import NewedoApplication from "./application.mjs";
 import NewedoDialog from "./dialog.mjs";
 
@@ -57,7 +57,7 @@ export class FeatureApplication extends NewedoApplication {
             // creates the dialog input
             const app = await new NewedoDialog({
                 window: { title: 'Create New Feature' },
-                content: await foundry.applications.handlebars.renderTemplate(this.TEMPLATES.CREATE),
+                content: await utils.renderTemplate(this.TEMPLATES.CREATE),
                 buttons: [{
                     label: 'Cancel',
                     action: 'cancel',

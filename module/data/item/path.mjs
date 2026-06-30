@@ -1,13 +1,13 @@
 import { ItemDataModel } from "../abstract.mjs";
 
 const {
-    ArrayField, BooleanField, IntegerSortField, NumberField, SchemaField, SetField, StringField, ObjectField
+    TypedObjectField, BooleanField, IntegerSortField, NumberField, SchemaField, SetField, StringField, ObjectField
 } = foundry.data.fields;
 
 export default class PathData extends ItemDataModel {
     static defineSchema() {
         const schema = super.defineSchema();
-        schema.features = new ArrayField(this.FeatureField(), { initial: [] });
+        schema.features = new TypedObjectField(this.FeatureField(), { initial: [] });
 
         // the active rank of this path, triggers level up prompts
         schema.rank = new NumberField({initial: 1, min: 1, max: 5, required: true, nullable: false});

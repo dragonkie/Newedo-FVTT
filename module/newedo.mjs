@@ -16,7 +16,7 @@ import registerSystemSettings from "./helpers/settings.mjs";
 import * as helpers from "./helpers/_module.mjs";
 import { elements } from "./elements/_module.mjs";
 import LOGGER from "./helpers/logger.mjs";
-import sysUtil from "./helpers/sysUtil.mjs";
+import utils from "./helpers/utils.mjs";
 
 // Import submodules
 import * as applications from "./applications/_module.mjs";
@@ -35,7 +35,7 @@ Hooks.once('init', async function () {
     CONFIG.NEWEDO = NEWEDO;
 
     // adds additional features to the global system reference
-    newedo.utils = Object.assign(sysUtil, foundry.utils);
+    newedo.utils = Object.assign(utils, foundry.utils);
     newedo.application = applications;
     newedo.config = NEWEDO;
     newedo.data = dataModels;

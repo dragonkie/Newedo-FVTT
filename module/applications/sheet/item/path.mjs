@@ -1,5 +1,5 @@
 import { NEWEDO } from "../../../config.mjs";
-import utils from "../../../helpers/sysUtil.mjs";
+import utils from "../../../helpers/utils.mjs";
 
 import NewedoDialog from "../../dialog.mjs";
 import { FeatureApplication } from "../../feature.mjs";

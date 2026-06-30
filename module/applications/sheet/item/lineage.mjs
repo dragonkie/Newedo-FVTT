@@ -1,7 +1,7 @@
 import { NEWEDO } from "../../../config.mjs";
 import NewedoDialog from "../../dialog.mjs";
 import NewedoItemSheet from "../item.mjs";
-import utils from "../../../helpers/sysUtil.mjs";
+import utils from "../../../helpers/utils.mjs";
 
 export default class LineageSheet extends NewedoItemSheet {
     static DEFAULT_OPTIONS = {

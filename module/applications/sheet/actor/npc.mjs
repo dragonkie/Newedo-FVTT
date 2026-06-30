@@ -1,28 +1,21 @@
 import NewedoActorSheet from "../actor.mjs";
 import NewedoDialog from "../../dialog.mjs";
-
-import LOGGER from "../../../helpers/logger.mjs";
+import utils from "../../../helpers/utils.mjs";
 
 export default class NpcSheet extends NewedoActorSheet {
     static DEFAULT_OPTIONS = {
         classes: ["npc"],
         position: { height: 600, width: 700, top: 100, left: 200 },
         actions: {
-            configSkills: this._onConfigureSkills
+            configSkills: this._onConfigureSkills,
+            createAttack: this._onCreateAttack,
+            editAttack: this._onEditAttack,
+            deleteAttack: this._onDeleteAttack
         }
     }
 
     static PARTS = {
-        main: {template: "systems/newedo/templates/actor/npcv2/main.hbs"}
-        /*
-        panel: { template: "systems/newedo/templates/actor/shared/panel.hbs" },
-        body: { template: "systems/newedo/templates/actor/npc/body.hbs" },
-        header: { template: "systems/newedo/templates/actor/npc/header.hbs" },
-        traits: { template: "systems/newedo/templates/actor/npc/traits.hbs" },
-        equipment: { template: "systems/newedo/templates/actor/npc/equipment.hbs" },
-        magic: { template: "systems/newedo/templates/actor/npc/magic.hbs" },
-        augments: { template: "systems/newedo/templates/actor/npc/augments.hbs" }
-        */
+        main: { template: "systems/newedo/templates/actor/npcv2/main.hbs" }
     }
 
     static TABS = {
@@ -38,6 +31,37 @@ export default class NpcSheet extends NewedoActorSheet {
 
     async _prepareContext() {
         const context = await super._prepareContext();
+        for (const [key, attack] of Object.entries(context.system.attacks)) {
+            attack.formula = "";
+            attack.avg_damage = 0;
+            attack.avg_accuracy = 0;
+
+            for (const [key, part] of Object.entries(attack.damage_parts)) {
+                if (part.value && part.value != "") attack.formula += (attack.formula != "" ? "+" : "") + part.value;
+            }
+
+            // compile a simple version of the damage formula
+            attack.formula = attack.formula.replaceAll(/\s+/g, "").replaceAll(/(\+\+|\-\-)/g, "+").replaceAll(/(\-\-|\+\-|\-\+)/g, "-");
+
+            // for fun, check what the average damage roll is
+            const parts = attack.formula.match(/([+-]?[0-9]+d[0-9]+|[-+]?[0-9]+)/g);
+            for (var part of parts) {
+                console.log(part)
+                const negative = part.includes("-");
+                part = part.replace("-", "");
+                if (part.includes("d")) {
+                    var [count, faces] = part.split("d");
+                    var value = (Number(faces) / 2 + 0.5) * Number(count)
+                    console.log({ num: value, count, faces })
+                    if (negative) attack.avg_damage -= value;
+                    else attack.avg_damage += value;
+                } else {
+                    console.log({ num: Number(part) })
+                    attack.avg_damage += Number(part);
+                }
+            }
+
+        }
 
         return context;
     }
@@ -45,7 +69,7 @@ export default class NpcSheet extends NewedoActorSheet {
     static async _onConfigureSkills(event, target) {
         let content = "";
         for (const skill of this.document.system.skills) {
-            content += new foundry.data.fields.StringField().toFormGroup({label: skill.label}, {value: skill.trait}).outerHTML;
+            content += new foundry.data.fields.StringField().toFormGroup({ label: skill.label }, { value: skill.trait }).outerHTML;
         }
 
         const app = await new NewedoDialog({
@@ -73,6 +97,85 @@ export default class NpcSheet extends NewedoActorSheet {
                 }
                 //this.document.update(data);
             }
+        }).render(true);
+    }
+
+    static async _onCreateAttack(event, target) {
+        await this.document.update({
+            system: {
+                attacks: {
+                    [foundry.utils.randomID()]: {
+                        name: "New Attack",
+                        img: "icons/svg/sword.svg",
+                        skill: "",
+                        trait: "pow",
+                        bonus: "",
+                        damage_parts: {
+                            [foundry.utils.randomID()]: {
+                                value: "1d6",
+                                type: "kin"
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        const fn = NpcSheet._onEditAttack.bind(this);
+        return fn(event, target);
+    }
+
+    static async _onDeleteAttack(event, target) {
+        const id = target.closest('[data-attack-id]').dataset.attackId;
+        this.document.update({
+            [`system.attacks.${id}`]: _del
+        }, { recursive: true, applyOperators: true });
+    }
+
+    static async _onEditAttack(event, target) {
+        const id = target.closest('[data-attack-id]').dataset.attackId;
+        const attack = this.document.system.attacks[id];
+        const context = await this._prepareContext();
+        context.attack = attack;
+        context.attack_id = id;
+        context.attack_path = "attacks." + id;
+        context.attack_field = context.system.schema.getField(`attacks.${id}`);
+        const content = await utils.renderTemplate(`systems/${game.system.id}/templates/dialog/npc-attack-editor.hbs`, context);
+        const dialog = await new NewedoDialog({
+            id: "Actor." + this.document.uuid + ".Attacks." + id,
+            content: content,
+            classes: ['newedo'],
+            buttons: [{ label: "##Submit", action: "submit" }],
+            actions: {
+                new: () => {
+                    const list = dialog.element.querySelector('.edo-damage-parts');
+                    const ele = document.createElement("div");
+                    const part_id = foundry.utils.randomID();
+                    ele.innerHTML = `
+                    <div class="form-fields">
+                        <input type="text" name="system.attacks.${id}.damage_parts.${part_id}.value" value="">
+                        <select name="system.attacks.${id}.damage_parts.${part_id}.type">
+                            <option value="">Kinetic</option>
+                            <option value="">Elemental</option>
+                            <option value="">Biological</option>
+                            <option value="">Arcane</option>
+                        </select>
+                    </div>
+                    `;
+
+                    list.appendChild(ele);
+                }
+            },
+            submit: (result, dialog) => {
+                if (result != 'submit') return;
+
+                const update = {};
+                for (const ele of dialog.element.querySelectorAll("[name]")) {
+                    update[ele.name] = ele.value;
+                }
+                console.log(update)
+                this.document.update(update, { recursive: true });
+            },
         }).render(true);
     }
 }    

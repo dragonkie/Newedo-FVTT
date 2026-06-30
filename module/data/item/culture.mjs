@@ -1,9 +1,9 @@
 import { ItemDataModel } from "../abstract.mjs";
 import { NEWEDO } from "../../config.mjs";
-import utils from "../../helpers/sysUtil.mjs";
+import utils from "../../helpers/utils.mjs";
 
 const {
-    ArrayField, BooleanField, IntegerSortField, NumberField, SchemaField, SetField, StringField
+    TypedObjectField, BooleanField, IntegerSortField, NumberField, SchemaField, SetField, StringField
 } = foundry.data.fields;
 
 export default class CultureData extends ItemDataModel {
@@ -26,7 +26,7 @@ export default class CultureData extends ItemDataModel {
         })
 
         // List of linked items that are granted to an actor with this lineage
-        schema.items = new ArrayField(new SchemaField({
+        schema.items = new TypedObjectField(new SchemaField({
             uuid: new StringField({ ...this.RequiredConfig, initial: '' })
         }), { ...this.RequiredConfig, initial: [] })
 

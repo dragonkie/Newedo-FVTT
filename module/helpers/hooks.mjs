@@ -1,5 +1,6 @@
+import NewedoDialog from "../applications/dialog.mjs";
 import LOGGER from "./logger.mjs";
-import utils from "./sysUtil.mjs";
+import utils from "./utils.mjs";
 
 export default function registerHooks() {
 
@@ -199,9 +200,9 @@ export default function registerHooks() {
             banned = false;
         } else if (banned) return;
 
-        new PtaDialog({
-            classes: ['pta'],
-            id: "PTA.Developer.SupportMeGettingMyAccountBackQ_Q",
+        new NewedoDialog({
+            classes: ['edo'],
+            id: "Edo.Developer.SupportMeGettingMyAccountBackQ_Q",
             modal: true,
             buttons: [{
                 action: "finish",
@@ -212,7 +213,7 @@ export default function registerHooks() {
             }],
             content: `
                 <div style="max-width: 500px;">
-                    <p><b>Hello everyone!</b> You may not know me, but I'm <b>&#0193;sta</b>, the developer + maintainer of the PTA3 foundry system!</p>
+                    <p><b>Hello everyone!</b> You may not know me, but I'm <b>&#0193;sta</b>, the developer + maintainer of the Newedo foundry system!</p>
                     <p>I hope you've been having fun and the system hasn't had toooo many bugs ^_^ (Yeah, I know there's a lot... I fixed like 60+ in this update alone)</p>
                     <p><b>Unfortunately, today I'm here to ask for help.</b></p>
                     <p>I've dedicated hundreds of hours over many years to developing multiple different foundry systems such as NewEdo, Tales from Myriad, and PTA3.</p>
@@ -222,8 +223,8 @@ export default function registerHooks() {
                     <p>I didn't ever want to have to ask this of the community, but now it's gotten to the point where my account will go from deactivated to deleted if I can't prove my legitimacy.</p>
                     <p>I'm not a very social person and with no social media backing, so unfortunately my last chance is to ask the community to help tell Patreon that I'm a real person and not a scammer.</p>
                     <p>I'm <b>NOT</b> asking for money, but if you have the time and like what I do, please <b>email Patreon</b> and tell them my page <b>"&#0193;sta's Armoury"</b> is legitimate, I'm just bad at marketing. :< </p>
-                    <b><a href="https://support.patreon.com/hc/en-us/requests/new">Patreon Support Email</a></b>
-                    <b><a href="https://www.patreon.com/cw/AstasArmoury">Link to my now missing page U^U</a></b>
+                    <b><a href="https://support.patreon.com/hc/en-us/requests/new">Patreon Support Email</a></b><br>
+                    <b><a href="https://www.patreon.com/cw/AstasArmoury">Link to my now missing page U^U</a></b><br>
                     <p>Again, I'm so sorry to be asking this, I wish beyond anything else that I didn't have to, and I appreciate all of your support!</p>
                     <p>Happy gaming! - &#0193;sta</p>
                 </div>

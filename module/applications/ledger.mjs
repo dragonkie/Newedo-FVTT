@@ -1,6 +1,6 @@
 import NewedoApplication from "./application.mjs";
 import LOGGER from "../helpers/logger.mjs"
-import utils from "../helpers/sysUtil.mjs";
+import utils from "../helpers/utils.mjs";
 import { NEWEDO } from "../config.mjs";
 
 export default class NewedoLedger extends NewedoApplication {

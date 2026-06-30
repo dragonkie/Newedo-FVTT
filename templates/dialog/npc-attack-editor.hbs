@@ -1,0 +1,44 @@
+<div class="edo-attack-editor">
+    <div class="flexcol flex-gap-m">
+        <div class="flexrow flex-gap-l">
+            <img src="{{attack.img}}" width="60" height="60" style="flex: 0 0 60px;">
+            {{systemFieldInput system (concat attack_path '.name')}}
+        </div>
+
+        {{!-- Skill --}}
+        <div class="form-group">
+            <label>##Skill</label>
+            <div class="form-fields">
+                <select>
+                    {{#each @root.skills as |key skill|}}
+                        <option value="{{skill.name}}">{{skill.name}}</option>
+                    {{/each}}
+                </select>
+                <input type="text" disabled value="{{skill.rank}}">
+            </div>
+        </div>
+        {{!-- trait --}}
+        <div class="flexcol flex-gap-xs">
+            {{systemFieldGroup system (concat attack_path '.trait')}}
+            <i class="field-hint">Use @trait.mod or @trait.value to use the relevant stat number in formulas</i>
+        </div>
+        {{!-- Accuracy --}}
+        {{systemFieldGroup system (concat attack_path '.accuracy') label='##Accuracy'}}
+        {{!-- Damage parts --}}
+        <div class="edo-attack-list flexcol flex-gap-m">
+            <label>##Damage</label>
+            <div class="edo-damage-parts flexcol flex-gap-m">
+                {{#each attack.damage_parts}}
+                    <div class="form-fields">
+                        {{!-- Damage Formula --}}
+                        <input type="text" name="system.attacks.{{@root.attack_id}}.damage_parts.{{@key}}.value" value="{{value}}">
+                        {{!-- Damage Type --}}
+                        {{systemFieldInput @root.system (concat @root.attack_path '.damage_parts.' @key '.type')}}
+                    </div>
+                    {{!-- If not the first one, delete option for part --}}
+                {{/each}}
+            </div>
+            <div><button type="button" data-action="new"><i class="fas fa-plus"></i></button></div>
+        </div>
+    </div>
+</div>

@@ -3,7 +3,7 @@ import { ItemDataModel } from "../abstract.mjs";
 import { NEWEDO } from "../../config.mjs";
 
 const {
-    ArrayField, BooleanField, IntegerSortField, NumberField, SchemaField, SetField, StringField
+    BooleanField, IntegerSortField, NumberField, SchemaField, SetField, StringField
 } = foundry.data.fields;
 
 export default class AugmentData extends ItemDataModel {
@@ -23,6 +23,13 @@ export default class AugmentData extends ItemDataModel {
         });
 
         return schema;
+    }
+
+    static migrateData(source, options) {
+        for (const key in source.noise) {
+            if (!source.noise[key] || typeof source.noise[key] === "number") source.noise[key] = 0;
+        }
+        return super.migrateData(source, options);
     }
 
     prepareDerivedData() {

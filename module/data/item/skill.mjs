@@ -3,7 +3,7 @@ import { ItemDataModel } from "../abstract.mjs";
 import LOGGER from "../../helpers/logger.mjs";
 import NewedoRoll from "../../helpers/dice.mjs";
 import { NEWEDO } from "../../config.mjs";
-import utils from "../../helpers/sysUtil.mjs";
+import utils from "../../helpers/utils.mjs";
 
 const {
     BooleanField, IntegerSortField, NumberField, SchemaField, SetField, StringField

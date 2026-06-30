@@ -1,11 +1,11 @@
 
 import { BonusField, ResourceField } from "./fields.mjs"
 import LOGGER from "../helpers/logger.mjs";
-import utils from "../helpers/sysUtil.mjs";
+import utils from "../helpers/utils.mjs";
 import { NEWEDO } from "../config.mjs";
 
 const {
-    DataField, ArrayField, BooleanField, IntegerSortField, NumberField, SchemaField, SetField, StringField, ObjectField, HTMLField
+    DataField, BooleanField, IntegerSortField, NumberField, SchemaField, SetField, StringField, ObjectField, HTMLField
 } = foundry.data.fields;
 
 //======================================================================================
@@ -157,12 +157,18 @@ export class SystemDataModel extends foundry.abstract.TypeDataModel {
             linkID: new StringField({ initial: '', required: false, nullable: true }), // Used by skills to auto link the skill to items that need it
             label: new StringField({ initial: 'NEWEDO.Generic.NewSkill', required: false, nullable: true }), // Localizeable field for the name of this skill
             trait: this.TraitSelectorField(),// the core trait associated with this skill
-            ranks: new ArrayField(new NumberField(), { initial: [0, 0, 0, 0, 0], nullable: false, required: true, min: 5, max: 5 }) //NPC's can only have d8's by default, this is here so that rule can be homebrewed by DMs
+
+            ranks: new SchemaField({
+                _0: new NumberField({ initial: 0 }),
+                _1: new NumberField({ initial: 0 }),
+                _2: new NumberField({ initial: 0 }),
+                _3: new NumberField({ initial: 0 }),
+                _4: new NumberField({ initial: 0 }),
+            }) //NPC's can only have d8's by default, a setting should allow NPC's to use skill dice
         })
     }
 
     getRollData() {
-        // Get owning documents rolldata
         let data = { ...this };
         return data;
     }
@@ -187,6 +193,10 @@ export class SystemDataModel extends foundry.abstract.TypeDataModel {
         required: true,
         nullable: false,
         integer: true
+    }
+
+    static migrateData(SourceBuffer, options) {
+        return super.migrateData(SourceBuffer, options);
     }
 
     //==================================================================================

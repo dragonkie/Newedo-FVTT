@@ -1,5 +1,5 @@
 <section class="edo-sheet-content flexrow flex-start align-start flex-gap-l">
-    <section class="edo-sheet-panel">
+    <section class="edo-sheet-panel flexcol">
         {{!-- Newedo banner rendered at the top of the screen--}}
         <img class="banner-newedo" src="systems/newedo/assets/images/banner-newedo.svg">
         <div class="portrait" style="border: 0;" data-action="editImage">
@@ -19,11 +19,32 @@
         {{> 'newedo.armour-soaks'}}
 
         {{!-- Attacks --}}
-        <div class="edo-seperator">
-            <label>Attacks</label>
-            {{#each system.attacks as |attack|}}
-
-            {{/each}}
+        <div class="flexcol" style="width: 100%;">
+            <div class="flexrow">
+                <label>Attacks</label>
+                <button data-action="createAttack">
+                    <i class="fas fa-plus"></i>
+                </button>
+            </div>
+            <div class="edo-attacks flexcol flex-group-start flex-gap-s">
+                {{#each system.attacks as |attack|}}
+                    <div class="flexrow flex-gap-xs" data-action="editAttack" data-attack-id="{{@key}}">
+                        {{!-- Image --}}
+                        <img class="flex0" src="{{attack.img}}" alt="" height="30" width="30">
+                        <div class="flexcol flex-gap-xs">
+                            {{!-- name --}}
+                            <div>{{attack.name}}</div>
+                            <div class="flexrow flex-gap-xs">
+                                <div>{{attack.formula}}</div>
+                                <div>Avg. {{attack.avg_damage}}</div>
+                            </div>
+                        </div>
+                        <a class="flex0" data-action="deleteAttack">
+                            <i class="fas fa-trash"></i>
+                        </a>
+                    </div>
+                {{/each}}
+            </div>
         </div>
     </section>
 

@@ -1,6 +1,6 @@
 import { NEWEDO } from "../../config.mjs";
 import LOGGER from "../../helpers/logger.mjs";
-import utils from "../../helpers/sysUtil.mjs";
+import utils from "../../helpers/utils.mjs";
 import NewedoContextMenu from "../context-menu.mjs";
 
 
@@ -210,7 +210,7 @@ export default function NewedoSheetMixin(Base) {
         }
 
         _onClickAction(event, target) {
-
+            return super._onClickAction(event, target);
         }
 
         static _onEditImage(event, target) {

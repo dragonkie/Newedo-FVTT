@@ -4,11 +4,11 @@ import { ItemDataModel } from "../abstract.mjs";
 import { ResourceField, PriceField, GritField } from "../fields.mjs";
 
 import NewedoRoll from "../../helpers/dice.mjs";
-import utils from "../../helpers/sysUtil.mjs";
+import utils from "../../helpers/utils.mjs";
 import { NEWEDO } from "../../config.mjs";
 
 const {
-    ArrayField, BooleanField, IntegerSortField, NumberField, SchemaField, SetField, StringField
+    TypedObjectField, BooleanField, IntegerSortField, NumberField, SchemaField, SetField, StringField
 } = foundry.data.fields;
 
 export default class WeaponData extends ItemDataModel {
@@ -24,7 +24,7 @@ export default class WeaponData extends ItemDataModel {
 
         schema.grit = new GritField();
 
-        schema.damageParts = new ArrayField(new SchemaField({
+        schema.damageParts = new TypedObjectField(new SchemaField({
             value: this.FormulaField(),
             type: this.DamageTypeSelectorField()
         }), {

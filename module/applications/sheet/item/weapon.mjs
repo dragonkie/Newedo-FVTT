@@ -2,7 +2,7 @@ import NewedoItemSheet from "../item.mjs";
 import { elements } from "../../../elements/_module.mjs"
 import NewedoDialog from "../../dialog.mjs";
 import { NEWEDO } from "../../../config.mjs";
-import utils from "../../../helpers/sysUtil.mjs";
+import utils from "../../../helpers/utils.mjs";
 
 export default class WeaponSheet extends NewedoItemSheet {
     static DEFAULT_OPTIONS = {

@@ -1,12 +1,12 @@
 
 import LOGGER from "../../helpers/logger.mjs";
-import utils from "../../helpers/sysUtil.mjs";
+import utils from "../../helpers/utils.mjs";
 import { ActorDataModel } from "../abstract.mjs";
 import { ResourceField } from "../fields.mjs";
 import { NEWEDO } from "../../config.mjs";
 
 const {
-    ArrayField, BooleanField, IntegerSortField, NumberField, SchemaField, SetField, StringField, HTMLField,
+    NumberField, SchemaField, StringField, HTMLField,
 } = foundry.data.fields;
 
 export default class CharacterDataModel extends ActorDataModel {

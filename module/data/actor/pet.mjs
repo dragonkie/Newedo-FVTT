@@ -1,9 +1,9 @@
 import { NEWEDO } from "../../config.mjs";
-import utils from "../../helpers/sysUtil.mjs";
+import utils from "../../helpers/utils.mjs";
 import { ActorDataModel } from "../abstract.mjs";
 
 const {
-    ArrayField, BooleanField, IntegerSortField, NumberField, SchemaField, SetField, StringField
+    TypedObjectField, BooleanField, IntegerSortField, NumberField, SchemaField, SetField, StringField
 } = foundry.data.fields;
 
 export default class PetDataModel extends ActorDataModel {
@@ -50,7 +50,7 @@ export default class PetDataModel extends ActorDataModel {
             })
         });
 
-        schema.skills = new ArrayField(this.SkillField(), { ...this.RequiredConfig, initial: [] });
+        schema.skills = new TypedObjectField(this.SkillField(), { ...this.RequiredConfig, initial: [] });
 
         return schema;
     }

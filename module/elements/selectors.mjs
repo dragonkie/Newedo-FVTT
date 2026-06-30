@@ -1,5 +1,5 @@
 import { NEWEDO } from "../config.mjs";
-import utils from "../helpers/sysUtil.mjs";
+import utils from "../helpers/utils.mjs";
 
 export function DamageTypes(value = '', name = '') {
     const opts = [];

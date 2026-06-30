@@ -1,4 +1,5 @@
 import LOGGER from "../../helpers/logger.mjs";
+import utils from "../../helpers/utils.mjs";
 
 import NewedoSheetMixin from "./mixin.mjs";
 
@@ -55,7 +56,7 @@ export default class NewedoItemSheet extends NewedoSheetMixin(foundry.applicatio
         LOGGER.debug('preparing item sheet context')
         const context = await super._prepareContext(partId, content);
 
-        context.settings = await foundry.applications.handlebars.renderTemplate(`systems/newedo/templates/item/settings/${this.document.type}.hbs`, context);
+        context.settings = await utils.renderTemplate(`systems/newedo/templates/item/settings/${this.document.type}.hbs`, context);
 
         const enrichmentOptions = {
             rollData: context.rollData
