@@ -29,8 +29,8 @@ export default class NpcDataModel extends ActorDataModel {
 
         schema.skills = new TypedObjectField(new SchemaField({
             name: new StringField({ initial: "New Skill", nullable: false, blank: false, placeholder: NEWEDO.generic.skill }),
-            rank: new NumberField({ initial: 1, nullable: false, min: 0, label: NEWEDO.generic.rank })
-        }), { initial: [], nullable: false });
+            rank: new NumberField({ initial: 1, nullable: false, min: 0, max: 5, label: NEWEDO.generic.rank })
+        }), { initial: { name: "##Attack", rank: 1 }, nullable: false });
 
         schema.attacks = new TypedObjectField(new SchemaField({
             name: new StringField({ initial: "Attack", nullable: false, blank: true }),

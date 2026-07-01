@@ -4,23 +4,22 @@
             <img src="{{attack.img}}" width="60" height="60" style="flex: 0 0 60px;">
             {{systemFieldInput system (concat attack_path '.name')}}
         </div>
-
-        {{!-- Skill --}}
-        <div class="form-group">
-            <label>##Skill</label>
-            <div class="form-fields">
-                <select>
-                    {{#each @root.skills as |key skill|}}
-                        <option value="{{skill.name}}">{{skill.name}}</option>
-                    {{/each}}
-                </select>
-                <input type="text" disabled value="{{skill.rank}}">
-            </div>
-        </div>
         {{!-- trait --}}
         <div class="flexcol flex-gap-xs">
             {{systemFieldGroup system (concat attack_path '.trait')}}
             <i class="field-hint">Use @trait.mod or @trait.value to use the relevant stat number in formulas</i>
+        </div>
+        {{!-- Skill --}}
+        <div class="form-group">
+            <label>##Skill</label>
+            <div class="form-fields">
+                <select name="system.attacks.{{attack_id}}.skill">
+                    {{log "this check" this}}
+                    {{#each system.skills as |skill key|}}
+                        <option value="{{key}}" {{selected (eq @root.attack.skill key)}}>{{skill.name}}: {{skill.rank}}d8</option>
+                    {{/each}}
+                </select>
+            </div>
         </div>
         {{!-- Accuracy --}}
         {{systemFieldGroup system (concat attack_path '.accuracy') label='##Accuracy'}}

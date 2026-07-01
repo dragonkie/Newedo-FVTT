@@ -78,6 +78,15 @@
                     {{/unless}}
                 {{/each}}
             </div>
+            <div class="edo-skill-list">
+                <a data-action="editSkills">##Skills</a>
+                {{#each system.skills as |skill key|}}
+                    <div class="flexrow">
+                        <div style="flex: 0 0 6rem;">{{skill.name}}</div>
+                        <div style="flex: 0 0 2rem;" class="text-center">{{skill.rank}}</div>
+                    </div>
+                {{/each}}
+            </div>
         </div>
         {{!-- Core traits --}}
         {{!-- Heart power pressence perception reflex savvy , NO SHINPI FOR NPCS--}}

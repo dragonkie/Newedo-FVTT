@@ -1,13 +1,14 @@
 import NewedoActorSheet from "../actor.mjs";
 import NewedoDialog from "../../dialog.mjs";
 import utils from "../../../helpers/utils.mjs";
+import { NEWEDO } from "../../../config.mjs";
 
 export default class NpcSheet extends NewedoActorSheet {
     static DEFAULT_OPTIONS = {
         classes: ["npc"],
         position: { height: 600, width: 700, top: 100, left: 200 },
         actions: {
-            configSkills: this._onConfigureSkills,
+            editSkills: this._onEditSkills,
             createAttack: this._onCreateAttack,
             editAttack: this._onEditAttack,
             deleteAttack: this._onDeleteAttack
@@ -66,14 +67,13 @@ export default class NpcSheet extends NewedoActorSheet {
         return context;
     }
 
-    static async _onConfigureSkills(event, target) {
-        let content = "";
-        for (const skill of this.document.system.skills) {
-            content += new foundry.data.fields.StringField().toFormGroup({ label: skill.label }, { value: skill.trait }).outerHTML;
-        }
-
+    static async _onEditSkills(event, target) {
+        const context = { doc: this.document, system: this.document.system };
+        const content = await utils.renderTemplate(NEWEDO.templates.dialog.npcSkillEditor, context);
+        const doc = this.document;
         const app = await new NewedoDialog({
             content: content,
+            classes: ['newedo'],
             window: {
                 resizeable: false,
                 minimizable: false,
@@ -89,13 +89,27 @@ export default class NpcSheet extends NewedoActorSheet {
                 label: 'Cancel',
                 icon: 'fas fa-xmark'
             }],
+            actions: {
+                create: () => {
+                    const id = foundry.utils.randomID();
+                    const skill = document.createElement('div');
+                    skill.innerHTML = `
+                        <div class="flexrow flex-gap-m">
+                            <input type="text" name="system.skills.${id}.name" value="New Skill">
+                            <input type="number" name="system.skills.${id}.rank" value="1">
+                        </div>
+                    `;
+                    app.element.querySelector('.edo-skill-list').appendChild(skill);
+                    doc.update({ [`system.skills.${id}`]: { name: "New Skill", rank: 1 } })
+                }
+            },
             submit: (result) => {
                 if (result !== 'confirm') return;
-                let data = {};
-                for (const input of app.element.querySelectorAll('input[name]')) {
+                const data = {};
+                for (const input of app.element.querySelectorAll('[name]')) {
                     data[input.name] = input.value;
                 }
-                //this.document.update(data);
+                this.document.update(data);
             }
         }).render(true);
     }
@@ -140,7 +154,7 @@ export default class NpcSheet extends NewedoActorSheet {
         context.attack_id = id;
         context.attack_path = "attacks." + id;
         context.attack_field = context.system.schema.getField(`attacks.${id}`);
-        const content = await utils.renderTemplate(`systems/${game.system.id}/templates/dialog/npc-attack-editor.hbs`, context);
+        const content = await utils.renderTemplate(NEWEDO.templates.dialog.npcAttackEditor, context);
         const dialog = await new NewedoDialog({
             id: "Actor." + this.document.uuid + ".Attacks." + id,
             content: content,
@@ -177,5 +191,17 @@ export default class NpcSheet extends NewedoActorSheet {
                 this.document.update(update, { recursive: true });
             },
         }).render(true);
+    }
+
+    static async _onCreateSkill() {
+
+    }
+
+    static async _onDeleteSkill() {
+
+    }
+
+    static async _onEditSkill() {
+
     }
 }    
