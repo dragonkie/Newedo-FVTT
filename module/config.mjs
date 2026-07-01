@@ -1,6 +1,7 @@
 // Exported object
 export const NEWEDO = {};
 
+NEWEDO.systemId = "newedo";
 NEWEDO.traitsBase = {
     hrt: "NEWEDO.Trait.Core.Hrt.long",
     per: "NEWEDO.Trait.Core.Per.long",
@@ -332,39 +333,49 @@ NEWEDO.ContextMenu = {
     suppress: "NEWEDO.ContextMenu.Suppress"
 }
 
-NEWEDO.template = {
+function templatePath(str) { return `systems/${NEWEDO.systemId}/templates/${str}.hbs` };
+NEWEDO.templates = {
     app: {
 
     },
     dialog: {
-
+        rolls: {},
+        npcSkillEditor: templatePath("dialog/npc-skill-editor"),
+        npcAttackEditor: templatePath("dialog/npc-attack-editor")
     },
-    sheet: {
-        actor: {
-            character: {
-
-            },
-            npc: {
-
-            },
-            pet: {
-
-            },
-            vehicle: {
-
-            }
+    actor: {
+        character: {
+            augments: templatePath("actor/character/augment"),
+            biography: templatePath("actor/character/biography"),
+            body: templatePath("actor/character/body"),
+            equipment: templatePath("actor/character/equipment"),
+            fates: templatePath("actor/character/fates"),
+            header: templatePath("actor/character/header"),
+            magic: templatePath("actor/character/magic"),
+            skills: templatePath("actor/character/skills"),
+            traits: templatePath("actor/character/traits"),
         },
-        item: {
-            augment: {},
-            armour: {},
-            culture: {},
-            fate: {},
-            kami: {},
-            lineage: {},
-            paht: {},
-            rote: {},
-            skill: {},
-            weapon: {},
+        npc: {
+
+        },
+        pet: {
+
+        },
+        vehicle: {
+
         }
+    },
+    item: {
+        augment: {},
+        armour: {},
+        culture: {},
+        fate: {},
+        kami: {},
+        lineage: {},
+        paht: {},
+        rote: {},
+        skill: {},
+        weapon: {},
     }
+
 }
